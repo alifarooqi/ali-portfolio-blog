@@ -26,19 +26,17 @@
 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --sh-class: #4c97f8;
-    --sh-identifier: white;
-    --sh-keyword: #f47067;
-    --sh-string: #0fa295;
+.dark {
+  --sh-class: #4c97f8;
+  --sh-identifier: white;
+  --sh-keyword: #f47067;
+  --sh-string: #0fa295;
 
-    --bg-primary: #0f131a;
-    --text-primary: #fafafa;
-    --text-secondary: #e0e0e0;
+  --bg-primary: #0f131a;
+  --text-primary: #fafafa;
+  --text-secondary: #e0e0e0;
 
-  }
-  html {
+  body {
     color-scheme: dark;
   }
 }
@@ -47,94 +45,63 @@ html {
   min-width: 360px;
 }
 
-.prose .anchor {
-  @apply absolute invisible no-underline;
-
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 80%;
-  max-width: 700px;
-  cursor: pointer;
+body {
+    padding: 0;
+    margin: 0;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Varela Round', sans-serif;
+    font-size: 16px;
+    /* Transition for dark mode */
+    transition: all 0.2s;
 }
 
-.anchor:hover {
-  @apply visible;
+input, textarea, button {
+    font-family: inherit;
 }
 
-.prose a {
-  @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+.body-wrapper {
+    width: 1100px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
-.prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
-  content: '#';
+h1, h2, h3, h4, h5, h6 {
+    color: var(--brand-color)
 }
 
-.prose *:hover > .anchor {
-  @apply visible;
+a {
+    color: var(--text-primary);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
-.prose pre {
-  @apply bg-neutral-50 dark:bg-neutral-900 rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm;
+.MuiTooltip-tooltip {
+    font-size: 1em !important;
 }
 
-.prose code {
-  @apply px-1 py-0.5 rounded-lg;
+::-webkit-scrollbar {
+    width: 0.3rem;
 }
 
-.prose pre code {
-  @apply p-0;
-  border: initial;
-  line-height: 1.5;
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: var(--text-primary);
+    border-radius: 0.5rem;
 }
 
-.prose code span {
-  @apply font-medium;
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
 
-.prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0;
-}
 
-.prose p {
-  @apply my-4 text-neutral-800 dark:text-neutral-200;
-}
-
-.prose h1 {
-  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h2 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h3 {
-  @apply text-xl font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose h4 {
-  @apply text-lg font-medium tracking-tight mt-6 mb-2;
-}
-
-.prose strong {
-  @apply font-medium;
-}
-
-.prose ul {
-  @apply list-disc pl-6;
-}
-
-.prose ol {
-  @apply list-decimal pl-6;
-}
-
-.prose > :first-child {
-  /* Override removing top margin, causing layout shift */
-  margin-top: 1.25em !important;
-  margin-bottom: 1.25em !important;
-}
-
+/* Hide scrollbar for code blocks */
 pre::-webkit-scrollbar {
   display: none;
 }

@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import MenuToggle from './MenuToggle/MenuToggle';
 import MenuItem from './MenuItem/MenuItem';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
-import SectionConfig, { SectionRefs, Sections } from '../../config/SectionConfig';
+import SectionConfig from '../../config/SectionConfig';
 
 import './Menu.scss';
 
@@ -39,9 +39,10 @@ const Menu: React.FC = () => {
   //   [sectionRefs]
   // );
 
+  // TODO Dark theme at the start
   const toggleTheme = () => {
-    document.body.classList.toggle('dark-mode');
-    if (document.body.classList.contains('dark-mode')) {
+    document.body.classList.toggle('dark');
+    if (document.body.classList.contains('dark')) {
       localStorage.setItem('theme', 'dark');
     } else {
       localStorage.setItem('theme', 'light');
