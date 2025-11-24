@@ -1,21 +1,21 @@
+import { Suspense } from 'react'
 import { BlogPosts } from 'app/components/posts'
+import TopSection from './components/sections/TopSection/TopSection'
+import ProjectSection from './components/sections/ProjectSection/ProjectSection'
+import ReviewSection from './components/sections/ReviewSection/ReviewSection'
+import AboutSection from './components/sections/AboutSection/AboutSection'
+import { Skeleton } from '@mui/material'
 
 export default function Page() {
   return (
-    <section>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        My Portfolio
-      </h1>
-      <p className="mb-4">
-        {`I'm a Vim enthusiast and tab advocate, finding unmatched efficiency in
-        Vim's keystroke commands and tabs' flexibility for personal viewing
-        preferences. This extends to my support for static typing, where its
-        early error detection ensures cleaner code, and my preference for dark
-        mode, which eases long coding sessions by reducing eye strain.`}
-      </p>
-      <div className="my-8">
-        <BlogPosts />
-      </div>
-    </section>
+    <>
+      <TopSection />
+
+      <Suspense fallback={<Skeleton animation="wave" variant="rectangular" width="100%" height={300} sx={{ bgcolor: 'var(--text-secondary)' }} />}>
+        <ProjectSection />
+        <AboutSection />
+        <ReviewSection />
+      </Suspense>
+    </>
   )
 }

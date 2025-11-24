@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { getIcon } from "../assets/icons/Icons";
+import { getIcon } from "../components/icons/Icons";
 
 interface SocialLink {
   name: string;

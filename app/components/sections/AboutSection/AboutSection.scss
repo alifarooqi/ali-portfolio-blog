@@ -1,0 +1,19 @@
+.about-section {
+    h4 {
+        font-size: 2rem;
+    }
+
+    .programming-icons {
+
+        svg {
+            margin-left: 2rem;
+            margin-bottom: 2rem;
+            width: 3.5rem;
+            height: 3.5rem;
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+}
