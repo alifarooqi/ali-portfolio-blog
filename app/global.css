@@ -6,6 +6,7 @@
 }
 
 :root {
+  /* TODO Merge the two */
   --sh-class: #2d5e9d;
   --sh-identifier: #354150;
   --sh-sign: #8996a3;
@@ -15,6 +16,14 @@
   --sh-jsxliterals: #6266d1;
   --sh-property: #e25a1c;
   --sh-entity: #e25a1c;
+
+  --bg-primary: #fafafa;
+  --text-primary: #0f131a;
+  --text-secondary: #e0e0e0;
+  --brand-color: #3c83f6;
+  --brand-color-light: #21e5e5;
+  --brand-color-rgb: 60, 131, 246;
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +32,11 @@
     --sh-identifier: white;
     --sh-keyword: #f47067;
     --sh-string: #0fa295;
+
+    --bg-primary: #0f131a;
+    --text-primary: #fafafa;
+    --text-secondary: #e0e0e0;
+
   }
   html {
     color-scheme: dark;

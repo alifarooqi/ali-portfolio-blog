@@ -1,0 +1,26 @@
+.menu-item {
+    position: fixed;
+    top: 50%;
+    left: 2rem;
+    background-color: var(--bg-primary);
+    transform: translateY(-50%);
+    visibility: hidden;
+    opacity: 0;
+    z-index: 100;
+}
+
+.menu-active {
+    
+    .menu-item {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .menu-item {
+        left: 1rem;
+        top: 1rem;
+        transform: translateY(0);
+    }
+}
