@@ -10,7 +10,7 @@ const Footer: React.FC = () => (
     <p>
       Copyright &copy; {new Date().getFullYear()} All rights reserved
     </p>
-    <p>
+    <div>
       {CommonConfig.social.map((socialDetails, index) => (
         <CircleButton
           key={`footer-social-${index}`}
@@ -24,7 +24,7 @@ const Footer: React.FC = () => (
             : getIcon(socialDetails.name.toLowerCase() as IconKey)}
         </CircleButton>
       ))}
-    </p>
+    </div>
   </footer>
 );
 
