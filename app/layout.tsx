@@ -11,17 +11,41 @@ import { baseUrl } from './sitemap'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Ali Farooqi | Software Engineer | China & Greater Bay Area',
+    template: '%s | Ali Farooqi',
   },
-  description: 'This is my portfolio.',
+  description: 'Ali Farooqi is a software engineer focused on cloud computing, IoT, and infrastructure strategy in China and the Greater Bay Area. View his projects, publications, and contact details.',
+  authors: [{ name: 'Ali Farooqi', url: baseUrl }],
+  creator: 'Ali Farooqi',
+  applicationName: 'Ali Farooqi Portfolio',
+  keywords: [
+    'Ali Farooqi', 
+    'cloud engineer China', 
+    'IoT expert GBA', 
+    'cloud infrastructure China', 
+    'software engineer Hong Kong', 
+    'backend engineer China', 
+    'Greater Bay Area tech consultant',
+  ],
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Ali Farooqi | Cloud & IoT Engineer for China & GBA',
+    description: 'Helping businesses scale cloud-native and IoT solutions in China and the Greater Bay Area. View my portfolio and get in touch.',
     url: baseUrl,
-    siteName: 'My Portfolio',
+    siteName: 'Ali Farooqi Portfolio',
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: baseUrl,
+    title: "Ali Farooqi | Cloud & IoT Engineer for China & GBA",
+    description: "Helping businesses scale cloud-native and IoT solutions in China and the Greater Bay Area. View my portfolio and get in touch.",
+    images: [
+      {
+        url: "/og-image.png",
+        alt: "Ali Portfolio Preview",
+      },
+    ],
   },
   robots: {
     index: true,
@@ -34,6 +58,20 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  other: {
+    // Schema.org Structured Data
+    "script:ld+json": JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Ali Farooqi",
+      description: "Software Engineer specializing in Cloud, IoT, and Security",
+      url: baseUrl,
+      sameAs: [
+        "https://linkedin.com/in/ali-farooqi",
+        "https://github.com/alifarooqi"
+      ]
+    })
+  }
 }
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
