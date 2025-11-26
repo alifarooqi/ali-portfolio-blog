@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 
 // ICONS
-import SvgIcon from '@mui/material/SvgIcon';
 import ComputerIcon from '@mui/icons-material/Computer';
 import InfoIcon from '@mui/icons-material/Info';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -21,25 +20,25 @@ import HandymanIcon from '@mui/icons-material/Handyman';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import Description from '@mui/icons-material/Description';
 import ReviewsIcon from '@mui/icons-material/Reviews';
-import { ReactComponent as FacebookIcon } from './facebook.svg';
-import { ReactComponent as GitHubIcon } from './github.svg';
-import { ReactComponent as LinkedInIcon } from './linkedin.svg';
-import { ReactComponent as CppIcon } from './cplusplus-plain.svg';
-import { ReactComponent as JavaIcon } from './java-plain-wordmark.svg';
-import { ReactComponent as ScalaIcon } from './scala.svg';
-import { ReactComponent as KotlinIcon } from './kotlin.svg';
-import { ReactComponent as AngularIcon } from './angularjs-plain-wordmark.svg';
-import { ReactComponent as JavaScriptIcon } from './javascript-plain.svg';
-import { ReactComponent as MongoDBIcon } from './mongodb-plain-wordmark.svg';
-import { ReactComponent as MySQLIcon } from './mysql-plain-wordmark.svg';
-import { ReactComponent as NodejsIcon } from './nodejs-plain-wordmark.svg';
-import { ReactComponent as PHPIcon } from './php-plain.svg';
-import { ReactComponent as ReactIcon } from './react-original-wordmark.svg';
-import { ReactComponent as TypeScriptIcon } from './typescript-plain.svg';
-import { ReactComponent as GraphQLIcon } from './graphql.svg';
-import { ReactComponent as TerraformIcon } from './terraform.svg';
-import { ReactComponent as PostgresIcon } from './postgresql.svg';
-import { ReactComponent as KubernetesIcon } from './kubernetes.svg';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import CppIcon from './CplusplusPlain';
+import JavaIcon from './JavaPlainWordmark';
+import ScalaIcon from './Scala';
+import KotlinIcon from './Kotlin';
+import AngularIcon from './AngularjsPlainWordmark';
+import JavaScriptIcon from './JavascriptPlain';
+import MongoDBIcon from './MongodbPlainWordmark';
+import MySQLIcon from './MysqlPlainWordmark';
+import NodejsIcon from './NodejsPlainWordmark';
+import PHPIcon from './PhpPlain';
+import ReactIcon from './ReactOriginalWordmark';
+import TypeScriptIcon from './TypescriptPlain';
+import GraphQLIcon from './Graphql';
+import TerraformIcon from './Terraform';
+import PostgresIcon from './Postgresql';
+import KubernetesIcon from './Kubernetes';
 // ICONS END
 
 
@@ -47,24 +46,24 @@ type IconsType = Record<string, ReactElement>;
 
 const Icons: IconsType = {
   email: <MailIcon />,
-  facebook: <SvgIcon component={FacebookIcon} />,
+  facebook: <FacebookIcon />,
   twitter: <Twitter />,
-  github: <SvgIcon component={GitHubIcon} stroke="currentColor" strokeWidth={2} style={{ fill: 'none' }} />,
-  linkedin: <SvgIcon component={LinkedInIcon} />,
+  github: <GitHubIcon />,
+  linkedin: <LinkedInIcon />,
   projectSection: <ComputerIcon />,
   aboutSection: <InfoIcon />,
   reviewSection: <ReviewsIcon />,
-  cpp: <SvgIcon component={CppIcon} viewBox="0 0 128 128" fontSize="large" title="C++" />,
-  java: <SvgIcon component={JavaIcon} viewBox="0 0 128 128" fontSize="large" title="Java" />,
-  typescript: <SvgIcon component={TypeScriptIcon} viewBox="0 0 128 128" fontSize="large" title="TypeScript" />,
-  javascript: <SvgIcon component={JavaScriptIcon} viewBox="0 0 128 128" fontSize="large" title="JavaScript" />,
-  mysql: <SvgIcon component={MySQLIcon} viewBox="0 0 128 128" fontSize="large" title="MySQL" />,
-  php: <SvgIcon component={PHPIcon} viewBox="0 0 128 128" fontSize="large" title="PHP" />,
-  mongodb: <SvgIcon component={MongoDBIcon} viewBox="0 0 128 128" fontSize="large" title="MongoDB" />,
-  nodejs: <SvgIcon component={NodejsIcon} viewBox="0 0 128 128" fontSize="large" title="Node.js" />,
-  react: <SvgIcon component={ReactIcon} viewBox="0 0 128 128" fontSize="large" title="React" />,
-  angular: <SvgIcon component={AngularIcon} viewBox="0 0 128 128" fontSize="large" title="Angular" />,
-  graphql: <SvgIcon component={GraphQLIcon} viewBox="0 0 400 400" fontSize="large" title="GraphQL" />,
+  cpp: <CppIcon />,
+  java: <JavaIcon />,
+  typescript: <TypeScriptIcon />,
+  javascript: <JavaScriptIcon />,
+  mysql: <MySQLIcon />,
+  php: <PHPIcon />,
+  mongodb: <MongoDBIcon />,
+  nodejs: <NodejsIcon />,
+  react: <ReactIcon />,
+  angular: <AngularIcon />,
+  graphql: <GraphQLIcon />,
   helpoutline: <HelpOutlineIcon />,
   map: <MapIcon />,
   code: <CodeIcon />,
@@ -76,18 +75,18 @@ const Icons: IconsType = {
   videoGame: <VideogameAssetIcon/>,
   timer: <TimerIcon/>,
   app: <AppShortcutIcon />,
-  scala: <SvgIcon component={ScalaIcon} viewBox="0 0 590 270" fontSize="large" title="Scala" />,
-  kotlin: <SvgIcon component={KotlinIcon} viewBox="0 0 24 24" fontSize="large" title="Kotlin" />,
+  scala: <ScalaIcon />,
+  kotlin: <KotlinIcon />,
   schedule: <ScheduleIcon />,
   tools: <HandymanIcon />,
-  terraform: <SvgIcon component={TerraformIcon} viewBox="0 0 1024 1024" fontSize="large" title="Terraform" />,
-  postgresql: <SvgIcon component={PostgresIcon} viewBox='0 0 128 128' fontSize="large" title="Postgres" />,
-  kubernetes: <SvgIcon component={KubernetesIcon} viewBox='0 0 16 16' fontSize="large" title="Kubernetes" />,
+  terraform: <TerraformIcon />,
+  postgresql: <PostgresIcon />,
+  kubernetes: <KubernetesIcon />,
   cv: <Description />,
 };
 
 export type IconKey = keyof typeof Icons;
 
 export const getIcon = (key: IconKey): ReactElement => {
-  return Icons[key] || <span>Missing icon: {key}</span>;
+  return Icons[key] ?? <span>Missing icon: {key}</span>;
 };
