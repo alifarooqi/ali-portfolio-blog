@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgKubernetes = (props) => (
+const SvgKubernetes = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 16 16" fill="none" {...props}>
     <path d="M4.5 14.569c.214.278.539.431.874.431h5.251c.335 0 .66-.165.875-.434l3.258-4.178c.214-.278.288-.633.214-.978l-1.165-5.207a1.128 1.128 0 00-.606-.777l-4.714-2.31A1.062 1.062 0 008.002 1c-.168 0-.335.038-.485.115l-4.715 2.32a1.129 1.129 0 00-.605.777L1.032 9.42c-.084.345 0 .7.214.978L4.5 14.568z" />
     <path

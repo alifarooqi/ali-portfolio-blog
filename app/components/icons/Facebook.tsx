@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgFacebook = (props) => (
+const SvgFacebook = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlnsXlink="http://www.w3.org/1999/xlink"
     x="0px"

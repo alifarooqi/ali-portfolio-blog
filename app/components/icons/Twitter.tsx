@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgTwitter = (props) => (
+const SvgTwitter = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlnsXlink="http://www.w3.org/1999/xlink"
     viewBox="0 0 128 128"

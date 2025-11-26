@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgPostgresql = (props) => (
+const SvgPostgresql = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 128 128" {...props}>
     <path
       fillRule="evenodd"

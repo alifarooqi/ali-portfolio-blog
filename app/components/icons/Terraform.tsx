@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgTerraform = (props) => (
+const SvgTerraform = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 1024 1024" {...props}>
     <circle cx={512} cy={512} r={512} fill="var(--text-primary)" />
     <path

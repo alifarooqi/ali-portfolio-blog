@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgNodejsPlainWordmark = (props) => (
+const SvgNodejsPlainWordmark = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 128 128" {...props}>
     <path
       fill="currentColor"

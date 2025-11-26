@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgReactOriginalWordmark = (props) => (
+const SvgReactOriginalWordmark = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 128 128" enableBackground="new 0 0 128 128" {...props}>
     <g fill="currentColor">
       <circle cx={64} cy={47.5} r={9.3} />

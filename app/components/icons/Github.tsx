@@ -1,6 +1,5 @@
 import * as React from "react";
-import { motion, SVGMotionProps } from "motion/react";
-const SvgGithub = (props) => (
+const SvgGithub = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlnsXlink="http://www.w3.org/1999/xlink"
     x="0px"
