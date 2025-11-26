@@ -1,10 +1,7 @@
-import { ReactNode } from "react";
-import { getIcon } from "../components/icons/Icons";
-
 interface SocialLink {
   name: string;
   link: string;
-  icon?: ReactNode;
+  iconKey?: string;
 }
 
 interface SignatureConfig {
@@ -40,20 +37,22 @@ const CommonConfig: CommonConfigType = {
     {
       name: 'GitHub',
       link: 'https://github.com/alifarooqi',
-      icon: getIcon('github'),
+      iconKey: 'github',
     },
     {
       name: 'LinkedIn',
       link: 'https://linkedin.com/in/ali-farooqi',
+      iconKey: 'linkedin',
     },
     {
       name: 'Email',
       link: 'mailto:m.ali_farooqi@hotmail.com',
+      iconKey: 'email',
     },
     {
       name: 'CV',
       link: 'https://drive.google.com/file/d/1NtC22cVw6pDmggtAIOqbKQxPevvWRIrX/view?usp=sharing',
-      icon: getIcon('cv'),
+      iconKey: 'cv',
     },
   ],
 };
