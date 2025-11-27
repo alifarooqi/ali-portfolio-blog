@@ -1,13 +1,13 @@
 import './global.css'
 import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import { GeistMono } from 'geist/font/mono'
+import { Varela_Round } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/Footer/Footer'
 import { baseUrl } from './sitemap'
 import Menu from './components/Menu/Menu'
 
+// Layout Metadata
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -74,6 +74,15 @@ export const metadata: Metadata = {
   }
 }
 
+// Layout Fonts
+// 1. Configure the font loader
+const varelaRound = Varela_Round({
+  weight: '400', // Varela Round typically only has a 400 weight
+  subsets: ['latin'],
+  display: 'swap', // Use 'swap' to ensure text is visible immediately
+  variable: '--font-varela-round', // Assign a CSS variable name
+});
+
 const cx = (...classes) => classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
@@ -86,8 +95,7 @@ export default function RootLayout({
       lang="en"
       className={cx(
         'text-black bg-white dark:text-white dark:bg-black',
-        GeistSans.variable,
-        GeistMono.variable
+        varelaRound.variable
       )}
     >
       <body>

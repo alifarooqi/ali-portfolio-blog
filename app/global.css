@@ -50,7 +50,7 @@ body {
     margin: 0;
     background: var(--bg-primary);
     color: var(--text-primary);
-    font-family: 'Varela Round', sans-serif;
+    font-family: var(--font-varela-round), sans-serif;
     font-size: 16px;
     /* Transition for dark mode */
     transition: all 0.2s;
