@@ -40,7 +40,6 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => (
                             link={link.link}
                             target="_blank"
                             tooltip={link.tooltip}
-                            size={1.3}
                         >
                             {link.icon}
                         </CircleButton>
