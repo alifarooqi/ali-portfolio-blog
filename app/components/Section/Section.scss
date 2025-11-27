@@ -1,5 +1,7 @@
 .section-wrapper {
     width: 100%;
+    max-width: 1100px;
+    margin: auto;
 
     .section-active {
         box-shadow: 0 0 40px var(--brand-color-light);
