@@ -5,9 +5,11 @@ import { useState } from "react";
 export type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
 interface TooltipProps {
-  title: string;
+  title?: string;
   placement?: TooltipPlacement;
   children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 // TODO Figure out why this component is not working as expected
@@ -15,6 +17,8 @@ export default function Tooltip({
   title,
   placement = "top",
   children,
+  className = "",
+  style
 }: TooltipProps) {
   const [visible, setVisible] = useState(false);
 
@@ -27,13 +31,14 @@ export default function Tooltip({
 
   return (
     <div
-      className="relative inline-block"
+      className={`relative inline-block ${className}`}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
+      style={style}
     >
       {children}
 
-      {visible && (
+      {visible && title && (
         <div
           className={`absolute px-2 py-1 text-sm rounded bg-gray-800 text-white whitespace-nowrap shadow-lg ${placementClasses[placement]}`}
         >

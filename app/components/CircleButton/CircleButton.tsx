@@ -1,4 +1,5 @@
 import React, { CSSProperties, ReactNode } from 'react';
+import clsx from 'clsx';
 import Tooltip, { TooltipPlacement } from '../tooltip';
 import './CircleButton.scss';
 
@@ -12,6 +13,7 @@ interface CircleButtonProps {
   tooltip?: string;
   tooltipPlacement?: TooltipPlacement;
   children?: ReactNode;
+  isAnimated?: boolean;
 }
 
 const CircleButton: React.FC<CircleButtonProps> = ({
@@ -20,16 +22,18 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   onClick,
   className,
   style,
-  size = 1,
-  tooltip = '',
+  size = 2.5,
+  tooltip,
   tooltipPlacement,
   children,
+  isAnimated = true,
 }) => {
-  const combinedClassName = className ? `circle-button ${className}` : 'circle-button';
-  const buttonStyle = { width: `${size}rem`, height: `${size}rem`, ...style };
+  const combinedClassName = clsx('circle-button', className, { 'circle-button-animated': isAnimated });
+  const sizeStyle = { width: `${size}rem`, height: `${size}rem` };
+  const buttonStyle = { ...sizeStyle, ...style };
 
   return (
-    <Tooltip title={tooltip} placement={tooltipPlacement}>
+    <Tooltip title={tooltip} placement={tooltipPlacement} style={sizeStyle} className="circle-button-wrapper">
       {link ? (
         <a
           href={link}
@@ -38,6 +42,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
           className={combinedClassName}
           style={buttonStyle}
           rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+          aria-label={tooltip}
         >
           {children}
         </a>

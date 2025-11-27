@@ -40,6 +40,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       tooltipPlacement={tooltipPlacement}
       size={isMobile ? 2.5 : 3.5}
       style={style}
+      isAnimated={false}
     >
       {icon}
     </CircleButton>
