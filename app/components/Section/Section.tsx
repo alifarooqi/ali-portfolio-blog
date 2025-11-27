@@ -5,10 +5,11 @@ import { motion, useInView, Variants } from 'motion/react'
 import './Section.scss';
 import MotionDiv from '../animaiton/MotionDiv';
 import { slideInLeft, slideInRight } from '../animaiton/presets';
+import { getIcon, IconKey } from '../icons/Icons';
 
 interface SectionProps {
   sectionHeader: string;
-  headerIcon: ReactElement;
+  headerIconKey: IconKey;
   isReversed?: boolean; // Optional prop to reverse the section layout
   extraClass?: string;
   children?: ReactNode;
@@ -21,7 +22,7 @@ const staggerContainer: Variants = {
 
 
 const Section = forwardRef<HTMLDivElement, SectionProps>(
-  ({ sectionHeader, headerIcon, extraClass = '', children, isReversed = false }, ref) => {
+  ({ sectionHeader, headerIconKey, extraClass = '', children, isReversed = false }, ref) => {
     const internalRef = useRef<HTMLDivElement>(null);
     const innerDivRef = useRef<HTMLDivElement>(null);
 
@@ -62,9 +63,7 @@ const Section = forwardRef<HTMLDivElement, SectionProps>(
     >
       <div className={`section${isReversed ? ' section-reverse' : '' }`} ref={innerDivRef}>
         <h2 className="section-header">
-          { /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          { /* @ts-ignore */ }
-          {React.cloneElement(headerIcon, { classes: { root: 'section-header-icon' } })}
+          {getIcon(headerIconKey, 'section-header-icon')}
           {sectionHeader}
         </h2>
         <MotionDiv variants={isReversed ? slideInLeft : slideInRight} className="section-content">

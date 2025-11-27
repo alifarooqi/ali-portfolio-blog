@@ -42,51 +42,53 @@ import KubernetesIcon from './Kubernetes';
 // ICONS END
 
 
-type IconsType = Record<string, ReactElement>;
-
-const Icons: IconsType = {
-  email: <MailIcon />,
-  facebook: <FacebookIcon />,
-  twitter: <Twitter />,
-  github: <GitHubIcon />,
-  linkedin: <LinkedInIcon />,
-  projectSection: <ComputerIcon />,
-  aboutSection: <InfoIcon />,
-  reviewSection: <ReviewsIcon />,
-  cpp: <CppIcon />,
-  java: <JavaIcon />,
-  typescript: <TypeScriptIcon />,
-  javascript: <JavaScriptIcon />,
-  mysql: <MySQLIcon />,
-  php: <PHPIcon />,
-  mongodb: <MongoDBIcon />,
-  nodejs: <NodejsIcon />,
-  react: <ReactIcon />,
-  angular: <AngularIcon />,
-  graphql: <GraphQLIcon />,
-  helpoutline: <HelpOutlineIcon />,
-  map: <MapIcon />,
-  code: <CodeIcon />,
-  link: <LinkIcon />,
-  web: <WebIcon />,
-  security: <SecurityIcon />,
-  energy: <EnergySavingsLeafIcon/>,
-  smartToy: <SmartToyIcon/>,
-  videoGame: <VideogameAssetIcon/>,
-  timer: <TimerIcon/>,
-  app: <AppShortcutIcon />,
-  scala: <ScalaIcon />,
-  kotlin: <KotlinIcon />,
-  schedule: <ScheduleIcon />,
-  tools: <HandymanIcon />,
-  terraform: <TerraformIcon />,
-  postgresql: <PostgresIcon />,
-  kubernetes: <KubernetesIcon />,
-  cv: <Description />,
+const Icons = {
+  email: MailIcon,
+  facebook: FacebookIcon,
+  twitter: Twitter,
+  github: GitHubIcon,
+  linkedin: LinkedInIcon,
+  projectSection: ComputerIcon,
+  aboutSection: InfoIcon,
+  reviewSection: ReviewsIcon,
+  cpp: CppIcon,
+  java: JavaIcon,
+  typescript: TypeScriptIcon,
+  javascript: JavaScriptIcon,
+  mysql: MySQLIcon,
+  php: PHPIcon,
+  mongodb: MongoDBIcon,
+  nodejs: NodejsIcon,
+  react: ReactIcon,
+  angular: AngularIcon,
+  graphql: GraphQLIcon,
+  helpoutline: HelpOutlineIcon,
+  map: MapIcon,
+  code: CodeIcon,
+  link: LinkIcon,
+  web: WebIcon,
+  security: SecurityIcon,
+  energy: EnergySavingsLeafIcon,
+  smartToy: SmartToyIcon,
+  videoGame: VideogameAssetIcon,
+  timer: TimerIcon,
+  app: AppShortcutIcon,
+  scala: ScalaIcon,
+  kotlin: KotlinIcon,
+  schedule: ScheduleIcon,
+  tools: HandymanIcon,
+  terraform: TerraformIcon,
+  postgresql: PostgresIcon,
+  kubernetes: KubernetesIcon,
+  cv: Description,
 };
 
 export type IconKey = keyof typeof Icons;
 
-export const getIcon = (key: IconKey): ReactElement => {
-  return Icons[key] ?? <span>Missing icon: {key}</span>;
+export const getIcon = (key: IconKey, className?: string): ReactElement => {
+  const IconComponent = Icons[key];
+  if (IconComponent) {
+    return <IconComponent className={className} />;
+  }
+  return <span>Missing icon: {key}</span>;
 };

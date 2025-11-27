@@ -13,7 +13,7 @@ const ReviewSection = forwardRef<HTMLDivElement>((_, ref) => (
     <Section
         ref={ref}
         sectionHeader={ReviewSectionConfig.name}
-        headerIcon={ReviewSectionConfig.headerIcon}
+        headerIconKey={ReviewSectionConfig.headerIconKey}
         extraClass="review-section"
     >
         <h4 style={{ fontSize: '2em' }}><RateReviewIcon /> What do others say?</h4>

@@ -13,7 +13,7 @@ const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
     <Section 
       ref={ref}
       sectionHeader={AboutSectionConfig.name} 
-      headerIcon={AboutSectionConfig.headerIcon} 
+      headerIconKey={AboutSectionConfig.headerIconKey} 
       isReversed
       extraClass="about-section"
     >

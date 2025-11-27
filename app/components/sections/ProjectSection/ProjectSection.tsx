@@ -17,7 +17,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => (
     <Section
         ref={ref}
         sectionHeader={ProjectSectionConfig.name}
-        headerIcon={ProjectSectionConfig.headerIcon}
+        headerIconKey={ProjectSectionConfig.headerIconKey}
         extraClass="project-section"
     >
         {
