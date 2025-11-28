@@ -9,15 +9,12 @@ import './ProjectSection.scss';
 import MotionDiv from "../../animaiton/MotionDiv";
 import { slideInRight } from "../../animaiton/presets";
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const ProjectSectionConfig = SectionConfig.find(section => section.link === 'projects')!;
-
+const projectSectionConfig = SectionConfig.find(section => section.key === 'projects')!;
 
 const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => (
     <Section
         ref={ref}
-        sectionHeader={ProjectSectionConfig.name}
-        headerIconKey={ProjectSectionConfig.headerIconKey}
+        sectionConfig={projectSectionConfig}
         extraClass="project-section"
     >
         {

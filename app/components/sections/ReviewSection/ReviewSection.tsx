@@ -5,15 +5,13 @@ import SectionConfig from "../../../config/SectionConfig";
 import Quote from './Quote';
 import './ReviewSection.scss';
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const ReviewSectionConfig = SectionConfig.find(section => section.link === 'review')!;
+const reviewSectionConfig = SectionConfig.find(section => section.key === 'review')!;
 
 
 const ReviewSection = forwardRef<HTMLDivElement>((_, ref) => (
     <Section
         ref={ref}
-        sectionHeader={ReviewSectionConfig.name}
-        headerIconKey={ReviewSectionConfig.headerIconKey}
+        sectionConfig={reviewSectionConfig}
         extraClass="review-section"
     >
         <h4 style={{ fontSize: '2em' }}><RateReviewIcon /> What do others say?</h4>

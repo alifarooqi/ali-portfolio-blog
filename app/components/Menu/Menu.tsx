@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import MenuToggle from './MenuToggle/MenuToggle';
 import MenuItem from './MenuItem/MenuItem';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
-import SectionConfig from '../../config/SectionConfig';
+import SectionConfig, { Sections } from '../../config/SectionConfig';
 
 import './Menu.scss';
 import { getIcon } from '../icons/Icons';
@@ -22,23 +22,24 @@ interface MenuItemType {
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
 
-  // const scrollToSection = useCallback(
-  //   (sectionName: Sections) => {
-  //     const ref = sectionRefs[sectionName];
-  //     const offset = window.innerHeight > ref.current?.offsetHeight 
-  //       ? (window.innerHeight - ref.current?.offsetHeight)/2 
-  //       : 0;
-  //     if (ref && ref.current) {
-  //       window.scrollTo({
-  //         top: ref.current.offsetTop - offset,
-  //         left: 0,
-  //         behavior: 'smooth',
-  //       });
-  //       closeMenu();
-  //     }
-  //   },
-  //   [sectionRefs]
-  // );
+  const scrollToSection = useCallback(
+    (sectionName: Sections) => {
+      const element = document.getElementById(sectionName);
+      
+      if(element){
+        const offset = window.innerHeight > element.offsetHeight 
+          ? (window.innerHeight - element.offsetHeight)/2 
+          : 0;
+        window.scrollTo({
+          top: element.offsetTop - offset,
+          left: 0,
+          behavior: 'smooth',
+        });
+      }
+      closeMenu();
+    },
+    []
+  );
 
   // TODO Dark theme at the start
   const toggleTheme = () => {
@@ -66,7 +67,7 @@ const Menu: React.FC = () => {
       .map(section => ({
         icon: getIcon(section.headerIconKey, 'menu-item-icon'),
         tooltip: section.name,
-        action: console.log // TODO scrollToSection(section.section),
+        action: () => scrollToSection(section.key),
       }));
 
     // Add unique keys

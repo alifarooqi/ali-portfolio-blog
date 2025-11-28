@@ -2,18 +2,16 @@ import React, { forwardRef } from 'react';
 import Section from '../../Section/Section';
 import { getIcon } from '../../icons/Icons';
 import SectionConfig from '../../../config/SectionConfig';
-import './AboutSection.scss';
 import MotionDiv from '../../animaiton/MotionDiv';
 import { slideInLeft } from '../../animaiton/presets';
+import './AboutSection.scss';
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const AboutSectionConfig = SectionConfig.find(section => section.link === 'about')!;
+const aboutSectionConfig = SectionConfig.find(section => section.key === 'about')!;
 
 const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
     <Section 
       ref={ref}
-      sectionHeader={AboutSectionConfig.name} 
-      headerIconKey={AboutSectionConfig.headerIconKey} 
+      sectionConfig={aboutSectionConfig} 
       isReversed
       extraClass="about-section"
     >

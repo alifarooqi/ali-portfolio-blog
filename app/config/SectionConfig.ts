@@ -4,7 +4,7 @@ import { IconKey } from "app/components/icons/Icons";
 export type Sections = 'projects' | 'about' | 'review';
 
 export interface SectionConfigType {
-  link: Sections;
+  key: Sections;
   name: string;
   headerIconKey: IconKey;
   notInMenu?: boolean;
@@ -12,17 +12,17 @@ export interface SectionConfigType {
 
 const SectionConfig: SectionConfigType[] = [
   {
-    link: 'projects',
+    key: 'projects',
     name: 'Projects',
     headerIconKey: 'projectSection',
   },
   {
-    link: 'about',
+    key: 'about',
     name: 'About',
     headerIconKey: 'aboutSection',
   },
   {
-    link: 'review',
+    key: 'review',
     name: 'Reviews',
     headerIconKey: 'reviewSection',
   },
