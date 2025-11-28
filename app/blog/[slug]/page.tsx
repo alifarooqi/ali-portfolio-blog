@@ -51,7 +51,7 @@ export function generateMetadata({ params }) {
   }
 }
 
-export default function Blog({ params }) {
+function Blog({ params }) {
   let post = getBlogPosts().find((post) => post.slug === params.slug)
 
   if (!post) {
@@ -96,3 +96,9 @@ export default function Blog({ params }) {
     </section>
   )
 }
+
+function Blog2(props) {
+  return <h2>Coming Soon...</h2>
+}
+
+export default Blog2;

@@ -113,14 +113,14 @@ export default function RootLayout({
       <head>
         <ThemeInitializerScript />
       </head>
-      <body>
-        <main>
+      <body className="flex min-h-screen flex-col">
+        <main className="flex-1">
           <Menu />
           {children}
-          <Footer />
           <Analytics />
           <SpeedInsights />
         </main>
+        <Footer />
       </body>
     </html>
   )
