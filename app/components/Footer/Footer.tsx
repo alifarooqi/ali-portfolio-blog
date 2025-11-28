@@ -19,8 +19,8 @@ const Footer: React.FC = () => (
           link={socialDetails.link}
           target="_blank"
         >
-          {socialDetails.icon
-            ? socialDetails.icon
+          {socialDetails.iconKey
+            ? getIcon(socialDetails.iconKey)
             : getIcon(socialDetails.name.toLowerCase() as IconKey)}
         </CircleButton>
       ))}

@@ -7,6 +7,7 @@ import NightsStayIcon from '@mui/icons-material/NightsStay';
 import SectionConfig from '../../config/SectionConfig';
 
 import './Menu.scss';
+import { getIcon } from '../icons/Icons';
 
 
 
@@ -61,12 +62,11 @@ const Menu: React.FC = () => {
 
 
     const sectionItems: Omit<MenuItemType, 'key'>[] = SectionConfig
-      .filter(section => !section.notInMenu && React.isValidElement(section.headerIcon))
+      .filter(section => !section.notInMenu && section.headerIconKey)
       .map(section => ({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        icon: React.cloneElement(section.headerIcon, { classes: { root: 'menu-item-icon' } }),
+        icon: getIcon(section.headerIconKey, 'menu-item-icon'),
         tooltip: section.name,
+        action: console.log // TODO scrollToSection(section.section),
       }));
 
     // Add unique keys

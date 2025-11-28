@@ -1,7 +1,9 @@
+import { IconKey } from "app/components/icons/Icons";
+
 interface SocialLink {
   name: string;
   link: string;
-  iconKey?: string;
+  iconKey?: IconKey;
 }
 
 interface SignatureConfig {
