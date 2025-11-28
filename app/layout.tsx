@@ -35,6 +35,7 @@ export const metadata: Metadata = {
     siteName: 'Ali Farooqi Portfolio',
     locale: 'en_US',
     type: 'website',
+    images: [{ url: "/preview-card.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
     description: "Helping businesses scale cloud-native and IoT solutions in China and the Greater Bay Area. View my portfolio and get in touch.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/preview-card.jpg",
         alt: "Ali Portfolio Preview",
       },
     ],
