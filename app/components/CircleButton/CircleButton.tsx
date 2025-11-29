@@ -1,6 +1,6 @@
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, ReactNode, use, useMemo } from 'react';
 import clsx from 'clsx';
-import Tooltip, { TooltipPlacement } from '../tooltip';
+import Tooltip from '../tooltip';
 import './CircleButton.scss';
 
 interface CircleButtonProps {
@@ -11,7 +11,6 @@ interface CircleButtonProps {
   style?: CSSProperties;
   size?: number;
   tooltip?: string;
-  tooltipPlacement?: TooltipPlacement;
   children?: ReactNode;
   isAnimated?: boolean;
 }
@@ -24,7 +23,6 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   style,
   size = 2.5,
   tooltip,
-  tooltipPlacement,
   children,
   isAnimated = true,
 }) => {
@@ -32,8 +30,12 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   const sizeStyle = { width: `${size}rem`, height: `${size}rem` };
   const buttonStyle = { ...sizeStyle, ...style };
 
+  const id = useMemo(() => {
+    return `tooltip-${Math.random().toString(36).substring(2, 9)}-${tooltip}`;
+  }, [tooltip]);
+
   return (
-    <Tooltip title={tooltip} placement={tooltipPlacement} style={sizeStyle} className="circle-button-wrapper">
+    <>
       {link ? (
         <a
           href={link}
@@ -43,6 +45,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
           style={buttonStyle}
           rel={target === '_blank' ? 'noopener noreferrer' : undefined}
           aria-label={tooltip}
+          data-tooltip-id={id}
         >
           {children}
         </a>
@@ -53,11 +56,20 @@ const CircleButton: React.FC<CircleButtonProps> = ({
           className={combinedClassName}
           style={buttonStyle}
           aria-label={tooltip}
+          data-tooltip-id={id}
         >
           {children}
         </button>
       )}
-    </Tooltip>
+      {tooltip && (
+        <Tooltip
+          id={id}
+          place="top"
+        >
+          {tooltip}
+        </Tooltip>
+      )}
+    </>
   );
 };
 

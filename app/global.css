@@ -6,17 +6,6 @@
 }
 
 :root {
-  /* TODO Merge the two */
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #8996a3;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
-
   --bg-primary: #fafafa;
   --text-primary: #0f131a;
   --text-secondary: #e0e0e0;
@@ -27,11 +16,6 @@
 }
 
 .dark {
-  --sh-class: #4c97f8;
-  --sh-identifier: white;
-  --sh-keyword: #f47067;
-  --sh-string: #0fa295;
-
   --bg-primary: #0f131a;
   --text-primary: #fafafa;
   --text-secondary: #e0e0e0;
