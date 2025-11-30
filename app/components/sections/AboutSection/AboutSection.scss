@@ -5,16 +5,25 @@
 
     .programming-icons {
         display: flex;
+        flex-wrap: wrap;
+        flex-direction: row-reverse;
 
-        svg {
+        &> svg {
             margin-left: 2rem;
             margin-bottom: 2rem;
             width: 3.5rem;
             height: 3.5rem;
 
-            &:first-child {
+            &:last-child {
                 margin-left: 0;
             }
         }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .programming-icons {
+        align-items: center;
+        justify-content: center;
     }
 }
