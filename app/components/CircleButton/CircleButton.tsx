@@ -1,5 +1,6 @@
 import React, { CSSProperties, ReactNode, use, useMemo } from 'react';
 import clsx from 'clsx';
+import { PlacesType } from 'react-tooltip';
 import Tooltip from '../tooltip';
 import './CircleButton.scss';
 
@@ -11,6 +12,7 @@ interface CircleButtonProps {
   style?: CSSProperties;
   size?: number;
   tooltip?: string;
+  tooltipPlacement?: PlacesType;
   children?: ReactNode;
   isAnimated?: boolean;
 }
@@ -23,6 +25,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   style,
   size = 2.5,
   tooltip,
+  tooltipPlacement = 'top',
   children,
   isAnimated = true,
 }) => {
@@ -61,14 +64,12 @@ const CircleButton: React.FC<CircleButtonProps> = ({
           {children}
         </button>
       )}
-      {tooltip && (
-        <Tooltip
-          id={id}
-          place="top"
-        >
-          {tooltip}
-        </Tooltip>
-      )}
+      <Tooltip
+        id={id}
+        place={tooltipPlacement}
+      >
+        {tooltip}
+      </Tooltip>
     </>
   );
 };

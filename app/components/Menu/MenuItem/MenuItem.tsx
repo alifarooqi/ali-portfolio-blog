@@ -5,8 +5,7 @@ import './MenuItem.scss';
 interface MenuItemProps {
   icon: React.ReactNode;
   tooltip: string;
-  action?: () => void;
-  tooltipPlacement: 'bottom' | 'left' | 'right' | 'top';
+  action?: () => any;
   menuActive: boolean;
   isMobile: boolean;
   rotationAngle: number;
@@ -23,7 +22,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
   icon,
   tooltip,
   action,
-  tooltipPlacement,
   menuActive,
   isMobile,
   rotationAngle,
@@ -37,7 +35,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       className="menu-item"
       tooltip={tooltip}
       onClick={action}
-      tooltipPlacement={tooltipPlacement}
+      tooltipPlacement="right"
       size={isMobile ? 2.5 : 3.5}
       style={style}
       isAnimated={false}

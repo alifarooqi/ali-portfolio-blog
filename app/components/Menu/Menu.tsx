@@ -111,7 +111,6 @@ const Menu: React.FC = () => {
           return (
             <MenuItem
               {...menuItem}
-              tooltipPlacement="right"
               menuActive={menuActive}
               isMobile={isMobile}
               rotationAngle={angle}

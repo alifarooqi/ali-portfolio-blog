@@ -15,7 +15,6 @@ const Footer: React.FC = () => (
         <CircleButton
           key={`footer-social-${index}`}
           tooltip={socialDetails.name}
-          tooltipPlacement="top"
           link={socialDetails.link}
           target="_blank"
         >

@@ -58,10 +58,6 @@ a {
     }
 }
 
-.MuiTooltip-tooltip {
-    font-size: 1em !important;
-}
-
 ::-webkit-scrollbar {
     width: 0.3rem;
 }
@@ -107,4 +103,26 @@ table {
 
 .title {
   text-wrap: balance;
+}
+
+
+@layer base {
+  h1 {
+    @apply mt-6 mb-4;
+  }
+  h2 {
+    @apply mt-5 mb-3;
+  }
+  h3 {
+    @apply mt-4 mb-2;
+  }
+  h4 {
+    @apply mt-3 mb-2;
+  }
+  h5 {
+    @apply mt-2 mb-1;
+  }
+  h6 {
+    @apply mt-2 mb-1;
+  }
 }
