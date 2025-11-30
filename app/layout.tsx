@@ -1,5 +1,6 @@
 import './global.css'
 import type { Metadata } from 'next'
+import clsx from 'clsx';
 import { Varela_Round } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -95,8 +96,6 @@ const varelaRound = Varela_Round({
   variable: '--font-varela-round', // Assign a CSS variable name
 });
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
-
 export default function RootLayout({
   children,
 }: {
@@ -105,7 +104,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cx(
+      className={clsx(
         'text-black bg-white dark:text-white dark:bg-black',
         varelaRound.variable
       )}
