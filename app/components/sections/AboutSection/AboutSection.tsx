@@ -19,7 +19,7 @@ const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
         {getIcon('helpoutline')} Who is this guy?
       </h4>
       
-      <p>
+      <p className='mb-8'>
         Engineer by trade, bridge-builder by nature — I design secure, scalable platforms and help global tech thrive in the Chinese cloud. Off the clock, you’ll find me watching football, probably yelling at the screen like it’s a code review :)
       </p>
 
