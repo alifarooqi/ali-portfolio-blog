@@ -3,3 +3,12 @@
     border: 1px solid var(--text-secondary);
     transition: all 0.3s ease;
 }
+
+.blog-section {
+    background-image: url('/images/bg03.webp');
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: bottom;
+    background-size: contain;
+    background-attachment: fixed;
+}

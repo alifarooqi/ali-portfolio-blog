@@ -59,7 +59,7 @@ async function Blog({ params }: Props) {
   }
 
   return (
-    <section>
+    <section className="blog-post-section">
       <script
         type="application/ld+json"
         suppressHydrationWarning

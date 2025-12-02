@@ -14,7 +14,7 @@ export default async function Page() {
   const posts = await getMediumPosts();
 
   return (
-    <section className="max-w-4xl mx-auto py-16 px-4">
+    <section className="blog-section max-w-4xl mx-auto py-16 px-4">
       <Breadcrumb />
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">My Blog</h1>
       <div className="grid md:grid-cols-2 gap-10">
