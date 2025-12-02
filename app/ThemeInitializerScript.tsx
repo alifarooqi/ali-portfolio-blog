@@ -4,16 +4,15 @@ import Script from 'next/script';
 const themeInitializerScript = `
   (function() {
     // This function must run immediately
-    console.log('Initializing theme...');
     try {
       const theme = localStorage.getItem('theme');
       if (theme) {
         if (theme === 'dark') {
-            document.body.classList.add('dark');
+            document.documentElement.classList.add('dark');
         }
       } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         localStorage.setItem('theme', 'dark');
-        document.body.classList.add('dark');
+        document.documentElement.classList.add('dark');
       }
     } catch (e) {
       // Catch potential security errors if cookies/storage are disabled

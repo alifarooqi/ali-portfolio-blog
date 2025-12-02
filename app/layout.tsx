@@ -105,7 +105,6 @@ export default function RootLayout({
     <html
       lang="en"
       className={clsx(
-        'text-black bg-white dark:text-white dark:bg-black',
         varelaRound.variable
       )}
     >
