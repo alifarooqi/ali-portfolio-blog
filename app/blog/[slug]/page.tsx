@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { formatDate } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { getMediumPost, getMediumPosts } from '@/lib/medium';
+import './style.scss';
 
 export const revalidate = 3600; // revalidate once per hour
 
@@ -78,15 +79,17 @@ async function Blog({ params }: Props) {
           }),
         }}
       />
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.date)}
-        </p>
+      <div className="max-w-3xl mx-auto py-12 px-4">
+        <h1 className="title font-bold text-4xl tracking-tighter">
+          {post.title}
+        </h1>
+        <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            {formatDate(post.date, true)}
+          </p>
+        </div>
+        <article className="medium-content prose max-w-none" dangerouslySetInnerHTML={{ __html: post.content ?? '' }} />
       </div>
-      <article className="prose max-w-none" dangerouslySetInnerHTML={{ __html: post.content ?? '' }} />
     </section>
   )
 }
