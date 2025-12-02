@@ -22,5 +22,10 @@
         left: 1rem;
         top: 1rem;
         transform: translateY(0);
+
+        & > svg {
+            width: 0.8em;
+            height: 0.80em;
+        }
     }
 }

@@ -36,7 +36,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       tooltip={tooltip}
       onClick={action}
       tooltipPlacement="right"
-      size={isMobile ? 2.5 : 3}
+      size={isMobile ? 2 : 3}
       style={style}
       isAnimated={false}
     >

@@ -24,7 +24,7 @@ const Breadcrumb: React.FC = () => {
   });
 
   return (
-    <nav className="breadcrumb flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm">
+    <nav className="breadcrumb flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm whitespace-nowrap overflow-x-auto no-scrollbar">
       {/* Home Button */}
         <Link href='/' className="hover:underline hover:text-blue-600 dark:hover:text-blue-400">
             {getIcon('home', 'inline-block mr-1 mb-0.5 !w-4 !h-4')}
@@ -36,7 +36,7 @@ const Breadcrumb: React.FC = () => {
         <React.Fragment key={index}>
           <span className="mx-1">/</span>
           {index === paths.length - 1 ? (
-            <span className="font-semibold">{path.name}</span>
+            <span className="font-semibold truncate max-w-[200px] block">{path.name}</span>
           ) : (
             <Link
               href={path.href}
