@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import MenuToggle from './MenuToggle/MenuToggle';
 import MenuItem from './MenuItem/MenuItem';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import SectionConfig, { Sections } from '../../config/SectionConfig';
-
 import './Menu.scss';
 import { getIcon } from '../icons/Icons';
 
@@ -21,6 +21,9 @@ interface MenuItemType {
 
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
 
   const scrollToSection = useCallback(
     (sectionName: Sections) => {
@@ -50,31 +53,55 @@ const Menu: React.FC = () => {
     }
   }
 
+  const navigateTo = (path: string) => {
+    router.push(path);
+    closeMenu();
+  }
+
 
   const menuItems: MenuItemType[] = useMemo(() => {
-    const baseItems: Omit<MenuItemType, 'key'>[] = [
+    const baseItems: MenuItemType[] = [
       {
         icon: <NightsStayIcon classes={{ root: 'menu-item-icon' }} />,
         tooltip: 'Toggle dark/light theme',
         action: toggleTheme,
+        key: 'menu-theme-toggle',
       },
     ];
 
 
-    const sectionItems: Omit<MenuItemType, 'key'>[] = SectionConfig
+    const sectionItems: MenuItemType[] = SectionConfig
       .filter(section => !section.notInMenu && section.headerIconKey)
       .map(section => ({
         icon: getIcon(section.headerIconKey, 'menu-item-icon'),
         tooltip: section.name,
         action: () => scrollToSection(section.key),
+        key: `menu-section-${section.key}`,
       }));
 
+    const pageItems: MenuItemType[] = [
+      {
+        icon: getIcon('home', 'menu-item-icon'),
+        tooltip: 'Home',
+        action: () => navigateTo('/'),
+        key: 'menu-page-home',
+      },
+      {
+        icon: getIcon('blog', 'menu-item-icon'),
+        tooltip: 'Blog',
+        action: () => navigateTo('/blog'),
+        key: 'menu-page-blog',
+      },
+    ];
+
+
     // Add unique keys
-    return [...baseItems, ...sectionItems].map((item) => ({
-      ...item,
-      key: `menu-item-${item.tooltip}`,
-    }));
-  }, []);
+    if(pathname === '/'){
+      return [...baseItems, ...pageItems, ...sectionItems]
+    } else {
+      return [...baseItems, ...pageItems]
+    }
+  }, [pathname]);
 
   const [isMobile, setIsMobile] = useState(false);
 
