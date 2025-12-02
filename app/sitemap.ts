@@ -1,18 +1,22 @@
-// import { getBlogPosts } from 'app/blog/utils'
+import { getMediumPosts } from "@/lib/medium"
 
 export const baseUrl = 'https://alifarooqi.vercel.app'
 
+export const revalidate = 3600; // regenerate every hour
+
 export default async function sitemap() {
-  // let blogs = getBlogPosts().map((post) => ({
-  //   url: `${baseUrl}/blog/${post.slug}`,
-  //   lastModified: post.metadata.publishedAt,
-  // }))
+  const posts = await getMediumPosts()
+  let blogs = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.date 
+      ? new Date(post.date).toISOString().split('T')[0] 
+      : new Date().toISOString().split('T')[0],
+  }))
 
-  // let routes = ['', '/blog'].map((route) => ({
-  //   url: `${baseUrl}${route}`,
-  //   lastModified: new Date().toISOString().split('T')[0],
-  // }))
+  let routes = ['', '/blog'].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date().toISOString().split('T')[0],
+  }))
 
-  // return [...routes, ...blogs]
-  return []
+  return [...routes, ...blogs]
 }
