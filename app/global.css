@@ -17,12 +17,24 @@
   --brand-color-light: #21e5e5;
   --brand-color-rgb: 60, 131, 246;
 
+  --medium-muted: #475569;
+  --medium-link: #1a73e8;
+  --medium-accent: #7c3aed;
+  --medium-border: #e6eef8;
+
+
 }
 
 .dark {
   --bg-primary: #0f131a;
   --text-primary: #fafafa;
   --text-secondary: #e0e0e0;
+
+  --medium-muted: #a8b3c7;
+  --medium-link: #7fb4ff;
+  --medium-accent: #b58cff;
+  --medium-border: rgba(255, 255, 255, 0.06);
+
 
   body {
     color-scheme: dark;
