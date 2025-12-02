@@ -39,6 +39,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       size={isMobile ? 2 : 3}
       style={style}
       isAnimated={false}
+      aria-label={tooltip}
     >
       {icon}
     </CircleButton>

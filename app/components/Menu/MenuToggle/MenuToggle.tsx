@@ -8,7 +8,7 @@ interface MenuToggleProps {
 }
 
 const MenuToggle: React.FC<MenuToggleProps> = ({ toggleMenu }) => (
-  <CircleButton onClick={toggleMenu} size={4} className="menu-toggle" isAnimated={false}>
+  <CircleButton onClick={toggleMenu} size={4} className="menu-toggle" isAnimated={false} aria-label="Menu Toggle">
     <div className="menu-burger">
       <span className="menu-burger-bar"></span>
       <span className="menu-burger-bar"></span>
