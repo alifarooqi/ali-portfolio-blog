@@ -23,6 +23,7 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import HomeIcon from '@mui/icons-material/Home';
 import CppIcon from './CplusplusPlain';
 import JavaIcon from './JavaPlainWordmark';
 import ScalaIcon from './Scala';
@@ -81,6 +82,7 @@ const Icons = {
   postgresql: PostgresIcon,
   kubernetes: KubernetesIcon,
   cv: Description,
+  home: HomeIcon,
 };
 
 export type IconKey = keyof typeof Icons;

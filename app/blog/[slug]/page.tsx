@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { formatDate } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import { getMediumPost, getMediumPosts } from '@/lib/medium';
+import Breadcrumb from '@/app/components/Breadcrumb/Breadcrumb';
 import './style.scss';
 
 export const revalidate = 3600; // revalidate once per hour
@@ -80,6 +81,7 @@ async function Blog({ params }: Props) {
         }}
       />
       <div className="max-w-3xl mx-auto py-12 px-4">
+        <Breadcrumb />
         <h1 className="title font-bold text-4xl tracking-tighter">
           {post.title}
         </h1>

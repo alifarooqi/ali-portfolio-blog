@@ -1,5 +1,6 @@
 import { getMediumPosts } from "@/lib/medium";
 import Link from "next/link";
+import Breadcrumb from '@/app/components/Breadcrumb/Breadcrumb';
 import './style.scss';
 
 export const metadata = {
@@ -14,6 +15,7 @@ export default async function Page() {
 
   return (
     <section className="max-w-4xl mx-auto py-16 px-4">
+      <Breadcrumb />
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">My Blog</h1>
       <div className="grid md:grid-cols-2 gap-10">
         {posts.map((post) => (
