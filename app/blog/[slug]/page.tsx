@@ -5,7 +5,7 @@ import { getMediumPost, getMediumPosts } from '@/lib/medium';
 import Breadcrumb from '@/app/components/Breadcrumb/Breadcrumb';
 import './style.scss';
 
-export const revalidate = 3600; // revalidate once per hour
+export const revalidate = 12*3600; // revalidate once per hour
 
 export async function generateStaticParams() {
   let posts = await getMediumPosts()

@@ -15,7 +15,7 @@ type MediumPost = Partial<{
 
 let cachedPosts: MediumPost[]= [];
 let cacheTime = 0;
-const CACHE_DURATION = 1000 * 60 * 60; // 1 hour (same as revalidate = 3600)
+const CACHE_DURATION = 12 * 1000 * 60 * 60; // 1 hour (same as revalidate = 12*3600)
 
 
 export async function getMediumPosts(): Promise<MediumPost[]> {

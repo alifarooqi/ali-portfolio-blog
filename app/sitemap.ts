@@ -2,7 +2,7 @@ import { getMediumPosts } from "@/lib/medium"
 
 export const baseUrl = 'https://alifarooqi.vercel.app'
 
-export const revalidate = 3600; // regenerate every hour
+export const revalidate = 12*3600; // regenerate every hour
 
 export default async function sitemap() {
   const posts = await getMediumPosts()
