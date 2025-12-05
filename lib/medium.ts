@@ -41,7 +41,7 @@ export async function getMediumPosts(): Promise<MediumPost[]> {
     }
 }
 
-function parseMediumFeed(feed: Record<string, any>): MediumPost[] {
+function parseMediumFeed(feed: Parser.Output<any>): MediumPost[] {
     const posts = feed.items.map((item) => {
         const content = item['content:encoded'] || item.content || '';  // full HTML
         const summary = content.replace(/<[^>]+>/g, ' ').slice(0, 160) + '...'; // plain text summary
