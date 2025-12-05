@@ -47,6 +47,11 @@ const CommonConfig: CommonConfigType = {
       iconKey: 'linkedin',
     },
     {
+      name: 'Medium',
+      link: 'https://medium.com/@ali_farooqi',
+      iconKey: 'medium',
+    },
+    {
       name: 'Email',
       link: 'mailto:m.ali_farooqi@hotmail.com',
       iconKey: 'email',

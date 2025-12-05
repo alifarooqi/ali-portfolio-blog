@@ -41,6 +41,7 @@ import GraphQLIcon from './Graphql';
 import TerraformIcon from './Terraform';
 import PostgresIcon from './Postgresql';
 import KubernetesIcon from './Kubernetes';
+import MediumIcon from './Medium';
 // ICONS END
 
 
@@ -85,6 +86,7 @@ const Icons = {
   cv: Description,
   home: HomeIcon,
   blog: ArticleIcon,
+  medium: MediumIcon,
 };
 
 export type IconKey = keyof typeof Icons;
