@@ -9,6 +9,7 @@ import Footer from './components/Footer/Footer'
 import { baseUrl } from './sitemap'
 import Menu from './components/Menu/Menu'
 import ThemeInitializerScript from './ThemeInitializerScript';
+import GoogleAnalyticsScript from './GoogleAnalyticsScript';
 
 // Layout Metadata
 export const metadata: Metadata = {
@@ -118,6 +119,7 @@ export default function RootLayout({
           <Menu />
           {children}
           <Analytics />
+          <GoogleAnalyticsScript />
           <SpeedInsights />
         </main>
         <Footer />
