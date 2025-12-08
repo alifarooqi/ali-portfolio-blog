@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { Varela_Round } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import Tooltip from '@/app/components/tooltip';
 import Footer from './components/Footer/Footer'
 import { baseUrl } from './sitemap'
 import Menu from './components/Menu/Menu'
@@ -112,6 +113,7 @@ export default function RootLayout({
         <ThemeInitializerScript />
       </head>
       <body className="flex min-h-screen flex-col">
+        <Tooltip />
         <main className="flex-1">
           <Menu />
           {children}

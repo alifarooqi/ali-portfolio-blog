@@ -3,21 +3,15 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import MenuToggle from './MenuToggle/MenuToggle';
-import MenuItem from './MenuItem/MenuItem';
+import MenuItem, { MenuItemType } from './MenuItem/MenuItem';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import SectionConfig, { Sections } from '../../config/SectionConfig';
-import './Menu.scss';
 import { getIcon } from '../icons/Icons';
+import './Menu.scss';
 
 
 
 
-interface MenuItemType {
-  icon: React.ReactNode;
-  tooltip: string;
-  action: () => void;
-  key: string;
-}
 
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
@@ -83,13 +77,13 @@ const Menu: React.FC = () => {
       {
         icon: getIcon('home', 'menu-item-icon'),
         tooltip: 'Home',
-        action: () => navigateTo('/'),
+        link: '/',
         key: 'menu-page-home',
       },
       {
         icon: getIcon('blog', 'menu-item-icon'),
         tooltip: 'Blog',
-        action: () => navigateTo('/blog'),
+        link: '/blog',
         key: 'menu-page-blog',
       },
     ];
@@ -137,11 +131,10 @@ const Menu: React.FC = () => {
 
           return (
             <MenuItem
-              {...menuItem}
+              menuItem={menuItem}
               menuActive={menuActive}
               isMobile={isMobile}
               rotationAngle={angle}
-              key={menuItem.key}
             />
           );
         })}

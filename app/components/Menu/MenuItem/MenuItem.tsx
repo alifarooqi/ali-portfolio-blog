@@ -2,10 +2,16 @@ import React, { CSSProperties } from 'react';
 import CircleButton from '../../CircleButton/CircleButton';
 import './MenuItem.scss';
 
-interface MenuItemProps {
+export interface MenuItemType {
   icon: React.ReactNode;
   tooltip: string;
-  action?: () => any;
+  action?: () => void;
+  link?: string;
+  key: string;
+}
+
+interface MenuItemProps {
+  menuItem: MenuItemType;
   menuActive: boolean;
   isMobile: boolean;
   rotationAngle: number;
@@ -19,9 +25,7 @@ const activeTransformStyle = (angle1: number, angle2: number, isMobile: boolean)
 `;
 
 const MenuItem: React.FC<MenuItemProps> = ({
-  icon,
-  tooltip,
-  action,
+  menuItem,
   menuActive,
   isMobile,
   rotationAngle,
@@ -33,15 +37,16 @@ const MenuItem: React.FC<MenuItemProps> = ({
   return (
     <CircleButton
       className="menu-item"
-      tooltip={tooltip}
-      onClick={action}
+      tooltip={menuItem.tooltip}
+      onClick={menuItem.action}
       tooltipPlacement="right"
       size={isMobile ? 2 : 3}
       style={style}
       isAnimated={false}
-      aria-label={tooltip}
+      aria-label={menuItem.tooltip}
+      link={menuItem.link}
     >
-      {icon}
+      {menuItem.icon}
     </CircleButton>
   );
 };
