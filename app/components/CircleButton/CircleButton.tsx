@@ -44,6 +44,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       aria-label={tooltip}
       data-tooltip-id={TooltipId}
       data-tooltip-content={tooltip}
+      data-tooltip-place={tooltipPlacement}
     >
       {children}
     </a>
