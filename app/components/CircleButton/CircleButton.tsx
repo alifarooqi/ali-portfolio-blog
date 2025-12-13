@@ -1,8 +1,8 @@
-import React, { CSSProperties, ReactNode, use, useMemo } from 'react';
-import clsx from 'clsx';
-import { PlacesType } from 'react-tooltip';
-import { TooltipId } from '../tooltip';
-import './CircleButton.scss';
+import React, { CSSProperties, ReactNode, use, useMemo } from "react";
+import clsx from "clsx";
+import { PlacesType } from "react-tooltip";
+import { TooltipId } from "../tooltip";
+import "./CircleButton.scss";
 
 interface CircleButtonProps {
   link?: string;
@@ -25,11 +25,13 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   style,
   size = 2.5,
   tooltip,
-  tooltipPlacement = 'top',
+  tooltipPlacement = "top",
   children,
   isAnimated = true,
 }) => {
-  const combinedClassName = clsx('circle-button', className, { 'circle-button-animated': isAnimated });
+  const combinedClassName = clsx("circle-button", className, {
+    "circle-button-animated": isAnimated,
+  });
   const sizeStyle = { width: `${size}rem`, height: `${size}rem` };
   const buttonStyle = { ...sizeStyle, ...style };
 
@@ -40,7 +42,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       onClick={onClick}
       className={combinedClassName}
       style={buttonStyle}
-      rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+      rel={target === "_blank" ? "noopener noreferrer" : undefined}
       aria-label={tooltip}
       data-tooltip-id={TooltipId}
       data-tooltip-content={tooltip}
@@ -61,7 +63,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
     >
       {children}
     </button>
-  )
+  );
 };
 
 export default CircleButton;
