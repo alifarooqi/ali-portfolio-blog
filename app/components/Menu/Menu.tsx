@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import MenuToggle from './MenuToggle/MenuToggle';
 import MenuItem, { MenuItemType } from './MenuItem/MenuItem';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
