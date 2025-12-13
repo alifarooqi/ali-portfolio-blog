@@ -79,7 +79,6 @@ const Menu: React.FC = () => {
     ];
 
 
-    // Add unique keys
     if(pathname === '/'){
       return [...baseItems, ...pageItems, ...sectionItems]
     } else {
