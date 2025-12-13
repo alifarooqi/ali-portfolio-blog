@@ -33,6 +33,7 @@ const TopSection: React.FC = () => {
     <section className="top-section">
       <div className="signature">
         <div className="avatar">
+          {/* Use nextjs image */}
           <img className='profile-picture' src="/images/faceshot.webp" alt="Profile" loading='lazy' />
         </div>
         <svg viewBox={CommonConfig.signature?.viewBox}>
