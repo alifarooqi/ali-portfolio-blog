@@ -1,6 +1,6 @@
-import React, { CSSProperties } from 'react';
-import CircleButton from '../../CircleButton/CircleButton';
-import './MenuItem.scss';
+import React, { CSSProperties } from "react";
+import CircleButton from "../../CircleButton/CircleButton";
+import "./MenuItem.scss";
 
 export interface MenuItemType {
   icon: React.ReactNode;
@@ -24,14 +24,9 @@ const activeTransformStyle = (angle1: number, angle2: number, isMobile: boolean)
   rotate(${angle2}deg)
 `;
 
-const MenuItem: React.FC<MenuItemProps> = ({
-  menuItem,
-  menuActive,
-  isMobile,
-  rotationAngle,
-}) => {
+const MenuItem: React.FC<MenuItemProps> = ({ menuItem, menuActive, isMobile, rotationAngle }) => {
   const style: CSSProperties = menuActive
-    ? { transform: activeTransformStyle(rotationAngle, -rotationAngle, isMobile)}
+    ? { transform: activeTransformStyle(rotationAngle, -rotationAngle, isMobile) }
     : {};
 
   return (
