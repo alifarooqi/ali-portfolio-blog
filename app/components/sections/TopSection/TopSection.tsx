@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
-import { TypeAnimation } from 'react-type-animation';
-import CircleButton from '../../CircleButton/CircleButton';
-import CommonConfig from '../../../config/CommonConfig';
-import { getIcon, IconKey } from '../../icons/Icons';
-import './TopSection.scss';
+import React, { useEffect, useRef } from "react";
+import { TypeAnimation } from "react-type-animation";
+import CircleButton from "../../CircleButton/CircleButton";
+import CommonConfig from "../../../config/CommonConfig";
+import { getIcon, IconKey } from "../../icons/Icons";
+import "./TopSection.scss";
 
 const TopSection: React.FC = () => {
   const pathRef = useRef<SVGPathElement | null>(null);
@@ -14,17 +14,14 @@ const TopSection: React.FC = () => {
     const pathElement = pathRef.current;
     if (pathElement && CommonConfig.signature?.viewBox) {
       const signatureLength = pathElement.getTotalLength();
-      pathElement.setAttribute('stroke-dasharray', signatureLength.toString());
-      pathElement.setAttribute('stroke-dashoffset', signatureLength.toString());
+      pathElement.setAttribute("stroke-dasharray", signatureLength.toString());
+      pathElement.setAttribute("stroke-dashoffset", signatureLength.toString());
 
       const viewBoxCoords = CommonConfig.signature.viewBox
-        .split(' ')
-        .map(val => parseInt(val, 10));
+        .split(" ")
+        .map((val) => parseInt(val, 10));
       if (viewBoxCoords.length > 0) {
-        pathElement.setAttribute(
-          'stroke-width',
-          (Math.max(...viewBoxCoords) / 100).toString()
-        );
+        pathElement.setAttribute("stroke-width", (Math.max(...viewBoxCoords) / 100).toString());
       }
     }
   }, []);
@@ -34,7 +31,12 @@ const TopSection: React.FC = () => {
       <div className="signature">
         <div className="avatar">
           {/* Use nextjs image */}
-          <img className='profile-picture' src="/images/faceshot.webp" alt="Profile" loading='lazy' />
+          <img
+            className="profile-picture"
+            src="/images/faceshot.webp"
+            alt="Profile"
+            loading="lazy"
+          />
         </div>
         <svg viewBox={CommonConfig.signature?.viewBox}>
           <path
@@ -50,11 +52,10 @@ const TopSection: React.FC = () => {
       <div className="intro">
         <h1>{CommonConfig.name}</h1>
         <TypeAnimation
-          sequence={CommonConfig.taglines.flatMap(t => [`${t}...`, 2000])}
+          sequence={CommonConfig.taglines.flatMap((t) => [`${t}...`, 2000])}
           wrapper="h2"
           repeat={Infinity}
         />
-
       </div>
       <div className="social">
         {CommonConfig.social.map((socialDetails, index) => (

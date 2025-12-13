@@ -1,29 +1,29 @@
 .about-section {
-    h4 {
-        font-size: 2rem;
+  h4 {
+    font-size: 2rem;
+  }
+
+  .programming-icons {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+
+    & > svg {
+      margin-left: 2rem;
+      margin-bottom: 2rem;
+      width: 3.5rem;
+      height: 3.5rem;
+
+      &:last-child {
+        margin-left: 0;
+      }
     }
-
-    .programming-icons {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row-reverse;
-
-        &> svg {
-            margin-left: 2rem;
-            margin-bottom: 2rem;
-            width: 3.5rem;
-            height: 3.5rem;
-
-            &:last-child {
-                margin-left: 0;
-            }
-        }
-    }
+  }
 }
 
 @media screen and (max-width: 768px) {
-    .programming-icons {
-        align-items: center;
-        justify-content: center;
-    }
+  .programming-icons {
+    align-items: center;
+    justify-content: center;
+  }
 }

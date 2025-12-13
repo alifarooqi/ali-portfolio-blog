@@ -1,8 +1,6 @@
-import React from 'react';
-import './Quote.scss';
+import React from "react";
+import "./Quote.scss";
 
-const Quote: React.FC = () => (
-    <span className='big-quote'>“</span>
-);
+const Quote: React.FC = () => <span className="big-quote">“</span>;
 
 export default Quote;
