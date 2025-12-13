@@ -9,7 +9,7 @@ import './style.scss';
 export const revalidate = 12*3600; // revalidate once per hour
 
 export async function generateStaticParams() {
-  let posts = await getMediumPosts()
+  const posts = await getMediumPosts()
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 async function Blog({ params }: Props) {
-  let post = await getMediumPost(params.slug)
+  const post = await getMediumPost(params.slug)
 
   if (!post) {
     notFound()
