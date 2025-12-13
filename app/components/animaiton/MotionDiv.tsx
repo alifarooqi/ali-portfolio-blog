@@ -1,7 +1,7 @@
 "use client";
 
-import React, { ReactNode, useRef } from 'react'
-import { motion, useInView, Variants } from 'motion/react'
+import React, { ReactNode, useRef } from "react";
+import { motion, useInView, Variants } from "motion/react";
 
 interface MotionDivProps {
   children: ReactNode;
@@ -16,22 +16,22 @@ export default function MotionDiv({
   variants,
   delay = 0,
   duration = 0.6,
-  className = '',
+  className = "",
 }: MotionDivProps) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { amount: 0.2, once: true })
+  const ref = useRef(null);
+  const isInView = useInView(ref, { amount: 0.2, once: true });
 
   return (
     <motion.div
       ref={ref}
       className={className}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
+      animate={isInView ? "visible" : "hidden"}
       variants={variants}
       transition={{ duration, delay }}
-      style={{ willChange: "transform, opacity"}}
+      style={{ willChange: "transform, opacity" }}
     >
       {children}
     </motion.div>
-  )
+  );
 }
