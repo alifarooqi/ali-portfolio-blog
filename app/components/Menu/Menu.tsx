@@ -44,12 +44,6 @@ const Menu: React.FC = () => {
     }
   }
 
-  const navigateTo = (path: string) => {
-    router.push(path);
-    closeMenu();
-  }
-
-
   const menuItems: MenuItemType[] = useMemo(() => {
     const baseItems: MenuItemType[] = [
       {
