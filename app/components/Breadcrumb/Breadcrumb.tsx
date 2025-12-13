@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
-import React from 'react';
-import { getIcon } from '../icons/Icons';
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import React from "react";
+import { getIcon } from "../icons/Icons";
 
 const Breadcrumb: React.FC = () => {
   const pathname = usePathname(); // e.g., /blog/2025/post-title
 
   // Split the path into parts
-  const pathParts = pathname.split('/').filter(Boolean);
+  const pathParts = pathname.split("/").filter(Boolean);
 
   // Build paths with hrefs
   const paths = pathParts.map((part, index) => {
-    const href = '/' + pathParts.slice(0, index + 1).join('/');
+    const href = "/" + pathParts.slice(0, index + 1).join("/");
     // Convert slug-like path to human readable, e.g., "post-title" => "Post Title"
     const name = part
-        .replace(/-[a-zA-Z0-9]+$/, '') // remove trailing IDs or slugs if any
-        .replace(/-/g, ' ') // replace hyphens with spaces
-        .replace(/\b\w/g, (l) => l.toUpperCase()); // capitalize first letter of each word
+      .replace(/-[a-zA-Z0-9]+$/, "") // remove trailing IDs or slugs if any
+      .replace(/-/g, " ") // replace hyphens with spaces
+      .replace(/\b\w/g, (l) => l.toUpperCase()); // capitalize first letter of each word
 
     return { name, href };
   });
@@ -26,10 +26,10 @@ const Breadcrumb: React.FC = () => {
   return (
     <nav className="breadcrumb flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm whitespace-nowrap overflow-x-auto no-scrollbar">
       {/* Home Button */}
-        <Link href='/' className="hover:underline hover:text-blue-600 dark:hover:text-blue-400">
-            {getIcon('home', 'inline-block mr-1 mb-0.5 !w-4 !h-4')}
-            Home
-        </Link>
+      <Link href="/" className="hover:underline hover:text-blue-600 dark:hover:text-blue-400">
+        {getIcon("home", "inline-block mr-1 mb-0.5 !w-4 !h-4")}
+        Home
+      </Link>
 
       {/* Breadcrumb Links */}
       {paths.map((path, index) => (
