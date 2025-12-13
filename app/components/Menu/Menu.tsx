@@ -120,6 +120,7 @@ const Menu: React.FC = () => {
 
           return (
             <MenuItem
+              key={menuItem.key}
               menuItem={menuItem}
               menuActive={menuActive}
               isMobile={isMobile}
