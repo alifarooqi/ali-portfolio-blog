@@ -37,6 +37,7 @@ export default async function Page() {
               blog-card
             "
           >
+            {/** TODO Use nextjs image */}
             {post.image && (
               <img
                 src={post.image}
