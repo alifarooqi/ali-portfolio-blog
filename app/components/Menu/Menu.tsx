@@ -85,7 +85,7 @@ const Menu: React.FC = () => {
     } else {
       return [...baseItems, ...pageItems]
     }
-  }, [pathname]);
+  }, [pathname, scrollToSection]);
 
   const [isMobile, setIsMobile] = useState(false);
 
