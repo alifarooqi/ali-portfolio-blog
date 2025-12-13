@@ -18,6 +18,7 @@ const Menu: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const closeMenu = () => setMenuActive(false);
 
   const scrollToSection = useCallback(
     (sectionName: Sections) => {
@@ -113,7 +114,6 @@ const Menu: React.FC = () => {
   const startAngle = isMobile ? 0 : -90;
   const rotationAngle = isMobile ? 90 : 180;
 
-  const closeMenu = () => setMenuActive(false);
 
   return (
     <div className={menuActive ? 'menu menu-active' : 'menu'}>
