@@ -11,7 +11,6 @@ import './Menu.scss';
 
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
-  const router = useRouter();
   const pathname = usePathname();
 
   const closeMenu = () => setMenuActive(false);
