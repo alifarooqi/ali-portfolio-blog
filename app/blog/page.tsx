@@ -1,14 +1,14 @@
 import { getMediumPosts } from "@/lib/medium";
 import Link from "next/link";
-import Breadcrumb from '@/app/components/Breadcrumb/Breadcrumb';
-import './style.scss';
+import Breadcrumb from "@/app/components/Breadcrumb/Breadcrumb";
+import "./style.scss";
 
 export const metadata = {
-  title: 'Blog',
-  description: 'Read my blog.',
-}
+  title: "Blog",
+  description: "Read my blog.",
+};
 
-export const revalidate = 12*3600; // revalidate once per 12-hours
+export const revalidate = 12 * 3600; // revalidate once per 12-hours
 
 export default async function Page() {
   const posts = await getMediumPosts();
@@ -19,8 +19,8 @@ export default async function Page() {
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">My Blog</h1>
       <div className="grid md:grid-cols-2 gap-10">
         {posts.map((post) => (
-          <Link 
-            key={post.slug} 
+          <Link
+            key={post.slug}
             href={`/blog/${post.slug}`}
             className="
               group 
@@ -47,18 +47,14 @@ export default async function Page() {
             )}
             <div className="p-5">
               <h2 className="text-xl font-semibold">{post.title}</h2>
-              { post.date &&
-                <p className="text-sm mt-1 italic">
-                  {new Date(post.date).toDateString()}
-                </p>
-              }
+              {post.date && (
+                <p className="text-sm mt-1 italic">{new Date(post.date).toDateString()}</p>
+              )}
               <p className="mt-3 line-clamp-3">{post.summary}</p>
-
             </div>
           </Link>
         ))}
       </div>
-
     </section>
-  )
+  );
 }
