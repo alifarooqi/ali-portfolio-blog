@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -21,8 +21,6 @@
   --medium-link: #1a73e8;
   --medium-accent: #7c3aed;
   --medium-border: #e6eef8;
-
-
 }
 
 .dark {
@@ -35,7 +33,6 @@
   --medium-accent: #b58cff;
   --medium-border: rgba(255, 255, 255, 0.06);
 
-
   body {
     color-scheme: dark;
   }
@@ -46,51 +43,56 @@ html {
 }
 
 body {
-    padding: 0;
-    margin: 0;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: var(--font-varela-round), sans-serif;
-    font-size: 16px;
-    /* Transition for dark mode */
-    transition: all 0.2s;
+  padding: 0;
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-varela-round), sans-serif;
+  font-size: 16px;
+  /* Transition for dark mode */
+  transition: all 0.2s;
 }
 
-input, textarea, button {
-    font-family: inherit;
+input,
+textarea,
+button {
+  font-family: inherit;
 }
 
-
-h1, h2, h3, h4, h5, h6 {
-    color: var(--brand-color)
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--brand-color);
 }
 
 a {
-    color: var(--text-primary);
-    text-decoration: none;
+  color: var(--text-primary);
+  text-decoration: none;
 
-    &:hover {
-        text-decoration: underline;
-    }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 ::-webkit-scrollbar {
-    width: 0.3rem;
+  width: 0.3rem;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
-  
+
 ::-webkit-scrollbar-thumb {
-    background: var(--text-primary);
-    border-radius: 0.5rem;
+  background: var(--text-primary);
+  border-radius: 0.5rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
+  background: var(--text-secondary);
 }
-
 
 /* Hide scrollbar for code blocks */
 pre::-webkit-scrollbar {
@@ -103,8 +105,8 @@ pre {
 }
 
 /* Remove Safari input shadow on mobile */
-input[type='text'],
-input[type='email'] {
+input[type="text"],
+input[type="email"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -120,7 +122,6 @@ table {
 .title {
   text-wrap: balance;
 }
-
 
 @layer base {
   h1 {
