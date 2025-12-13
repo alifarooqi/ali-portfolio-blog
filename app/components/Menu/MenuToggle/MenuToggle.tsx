@@ -1,6 +1,6 @@
-import React from 'react';
-import CircleButton from '../../CircleButton/CircleButton';
-import './MenuToggle.scss';
+import React from "react";
+import CircleButton from "../../CircleButton/CircleButton";
+import "./MenuToggle.scss";
 
 interface MenuToggleProps {
   toggleMenu: () => void;
@@ -8,7 +8,13 @@ interface MenuToggleProps {
 }
 
 const MenuToggle: React.FC<MenuToggleProps> = ({ toggleMenu }) => (
-  <CircleButton onClick={toggleMenu} size={4} className="menu-toggle" isAnimated={false} aria-label="Menu Toggle">
+  <CircleButton
+    onClick={toggleMenu}
+    size={4}
+    className="menu-toggle"
+    isAnimated={false}
+    aria-label="Menu Toggle"
+  >
     <div className="menu-burger">
       <span className="menu-burger-bar"></span>
       <span className="menu-burger-bar"></span>

@@ -1,31 +1,30 @@
 .menu-item {
-    position: fixed;
-    top: 50%;
-    left: 2rem;
-    background-color: var(--bg-primary);
-    transform: translateY(-50%);
-    visibility: hidden;
-    opacity: 0;
-    z-index: 100;
+  position: fixed;
+  top: 50%;
+  left: 2rem;
+  background-color: var(--bg-primary);
+  transform: translateY(-50%);
+  visibility: hidden;
+  opacity: 0;
+  z-index: 100;
 }
 
 .menu-active {
-    
-    .menu-item {
-        visibility: visible;
-        opacity: 1;
-    }
+  .menu-item {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 @media screen and (max-width: 768px) {
-    .menu-item {
-        left: 1rem;
-        top: 1rem;
-        transform: translateY(0);
+  .menu-item {
+    left: 1rem;
+    top: 1rem;
+    transform: translateY(0);
 
-        & > svg {
-            width: 0.8em;
-            height: 0.80em;
-        }
+    & > svg {
+      width: 0.8em;
+      height: 0.8em;
     }
+  }
 }
