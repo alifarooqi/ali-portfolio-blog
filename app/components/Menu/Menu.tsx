@@ -78,7 +78,6 @@ const Menu: React.FC = () => {
       },
     ];
 
-
     if(pathname === '/'){
       return [...baseItems, ...pageItems, ...sectionItems]
     } else {
