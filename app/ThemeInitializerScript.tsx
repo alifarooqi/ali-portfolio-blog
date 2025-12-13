@@ -1,4 +1,4 @@
-import Script from 'next/script';
+import Script from "next/script";
 
 // The script must be defined as a string for use with next/script
 const themeInitializerScript = `
@@ -23,9 +23,9 @@ const themeInitializerScript = `
 
 const ThemeInitializerScript = () => {
   return (
-    <Script 
+    <Script
       id="theme-initializer" // Unique ID for the script
-      strategy="beforeInteractive" 
+      strategy="beforeInteractive"
       dangerouslySetInnerHTML={{ __html: themeInitializerScript }}
     />
   );
