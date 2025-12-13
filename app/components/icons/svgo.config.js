@@ -4,12 +4,12 @@
  *        svgo --config svgo.config.js -f ./
  */
 module.exports = {
-  "plugins": [
+  plugins: [
     "removeXMLNS",
     "removeDimensions",
     {
-      "name": "cleanupAttrs",
-      "params": { "newlines": true }
+      name: "cleanupAttrs",
+      params: { newlines: true },
     },
     "removeUselessDefs",
     "convertStyleToAttrs",
@@ -17,6 +17,6 @@ module.exports = {
     "removeUnknownsAndDefaults",
     "cleanupIds",
     "removeDoctype",
-    "removeComments"
-  ]
-}
+    "removeComments",
+  ],
+};

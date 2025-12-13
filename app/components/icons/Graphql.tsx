@@ -24,13 +24,7 @@ const SvgGraphql = (props: React.SVGProps<SVGSVGElement>) => (
       </g>
       <g>
         <g>
-          <rect
-            x={39.8}
-            y={272.2}
-            fill="currentColor"
-            width={320.3}
-            height={16.6}
-          />
+          <rect x={39.8} y={272.2} fill="currentColor" width={320.3} height={16.6} />
         </g>
       </g>
       <g>
@@ -83,24 +77,12 @@ const SvgGraphql = (props: React.SVGProps<SVGSVGElement>) => (
       </g>
       <g>
         <g>
-          <rect
-            x={52.5}
-            y={107.5}
-            fill="currentColor"
-            width={16.6}
-            height={185}
-          />
+          <rect x={52.5} y={107.5} fill="currentColor" width={16.6} height={185} />
         </g>
       </g>
       <g>
         <g>
-          <rect
-            x={330.9}
-            y={107.5}
-            fill="currentColor"
-            width={16.6}
-            height={185}
-          />
+          <rect x={330.9} y={107.5} fill="currentColor" width={16.6} height={185} />
         </g>
       </g>
       <g>
