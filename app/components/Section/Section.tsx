@@ -4,7 +4,7 @@ import React, { ReactNode, forwardRef, useRef, useEffect } from 'react';
 import { motion, useInView, Variants } from 'motion/react'
 import MotionDiv from '../animaiton/MotionDiv';
 import { slideInLeft, slideInRight } from '../animaiton/presets';
-import { getIcon, IconKey } from '../icons/Icons';
+import { getIcon } from '../icons/Icons';
 import { SectionConfigType } from 'app/config/SectionConfig';
 import './Section.scss';
 
