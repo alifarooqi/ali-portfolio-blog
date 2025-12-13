@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import MenuToggle from './MenuToggle/MenuToggle';
 import MenuItem, { MenuItemType } from './MenuItem/MenuItem';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
@@ -9,15 +9,11 @@ import SectionConfig, { Sections } from '../../config/SectionConfig';
 import { getIcon } from '../icons/Icons';
 import './Menu.scss';
 
-
-
-
-
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
-  const router = useRouter();
   const pathname = usePathname();
 
+  const closeMenu = () => setMenuActive(false);
 
   const scrollToSection = useCallback(
     (sectionName: Sections) => {
@@ -46,12 +42,6 @@ const Menu: React.FC = () => {
       localStorage.setItem('theme', 'light');
     }
   }
-
-  const navigateTo = (path: string) => {
-    router.push(path);
-    closeMenu();
-  }
-
 
   const menuItems: MenuItemType[] = useMemo(() => {
     const baseItems: MenuItemType[] = [
@@ -95,7 +85,7 @@ const Menu: React.FC = () => {
     } else {
       return [...baseItems, ...pageItems]
     }
-  }, [pathname]);
+  }, [pathname, scrollToSection]);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -113,7 +103,6 @@ const Menu: React.FC = () => {
   const startAngle = isMobile ? 0 : -90;
   const rotationAngle = isMobile ? 90 : 180;
 
-  const closeMenu = () => setMenuActive(false);
 
   return (
     <div className={menuActive ? 'menu menu-active' : 'menu'}>
@@ -131,6 +120,7 @@ const Menu: React.FC = () => {
 
           return (
             <MenuItem
+              key={menuItem.key}
               menuItem={menuItem}
               menuActive={menuActive}
               isMobile={isMobile}
