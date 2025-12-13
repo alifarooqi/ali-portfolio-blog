@@ -9,10 +9,6 @@ import SectionConfig, { Sections } from '../../config/SectionConfig';
 import { getIcon } from '../icons/Icons';
 import './Menu.scss';
 
-
-
-
-
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
   const router = useRouter();
