@@ -4,6 +4,7 @@ import { baseUrl } from "app/sitemap";
 import { getMediumPost, getMediumPosts } from "@/lib/medium";
 import Breadcrumb from "@/app/components/Breadcrumb/Breadcrumb";
 import AboutWriter from "@/app/components/AboutWriter";
+import CommonConfig from "@/app/config/CommonConfig";
 import "./style.scss";
 
 export const revalidate = 12 * 3600; // revalidate once per hour
@@ -77,8 +78,8 @@ async function Blog({ params }: Props) {
               `${baseUrl}/preview-card.jpg?title=${encodeURIComponent(post.title ?? "Blog | Ali Farooqi")}`,
             url: `${baseUrl}/blog/${post.slug}`,
             author: {
-              "@type": "Ali Farooqi",
-              name: "My Portfolio & Blog",
+              "@type": "Person",
+              name: CommonConfig.name,
             },
           }),
         }}
