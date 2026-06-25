@@ -42,7 +42,7 @@ export async function getMediumPosts(): Promise<MediumPost[]> {
 
 // TODO
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseMediumFeed(feed: Parser.Output<any>): MediumPost[] {
+export function parseMediumFeed(feed: Parser.Output<any>): MediumPost[] {
   const posts = feed.items.map((item) => {
     const content = item["content:encoded"] || item.content || ""; // full HTML
     const summary = content.replace(/<[^>]+>/g, " ").slice(0, 160) + "..."; // plain text summary
