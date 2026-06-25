@@ -40,3 +40,21 @@ pnpm dev
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
+
+## Testing
+
+Unit tests ([Vitest](https://vitest.dev)) and end-to-end smoke tests ([Playwright](https://playwright.dev)) are included.
+
+```bash
+npm run test          # run unit tests once
+npm run test:watch    # unit tests in watch mode
+npm run test:e2e      # e2e suite (builds + starts prod server on :3000)
+```
+
+First time you run e2e locally, install the browser:
+
+```bash
+npx playwright install chromium
+```
+
+Unit tests live next to the code (`*.test.ts`). E2e tests live in `tests/e2e/`.
