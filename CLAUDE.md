@@ -71,3 +71,6 @@ TypeScript path alias `@/*` -> `./*`. Both `@/...` and relative imports appear i
 - The folder `app/components/animaiton/` is **intentionally misspelled** (not "animation") — imports throughout the code use this spelling; don't rename it piecemeal or they'll break.
 - `next` is pinned to `14.2.33` as a **stopgap** for #31. The original `"canary"` tag silently drifted on every `npm install` (jumped to 16.x mid-#46). Prefer `npm ci` for reproducibility; #31 will formalize the full version matrix. React is pinned at 18.2.0.
 - Fonts: Varela Round (single 400 weight) loaded via `next/font/google` and exposed as the CSS variable `--font-varela-round`.
+
+## Workflow
+- After opening a PR, open it in the user's browser automatically: `gh pr view <number> --web`.
