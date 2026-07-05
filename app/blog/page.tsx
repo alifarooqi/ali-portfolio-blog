@@ -8,7 +8,7 @@ export const metadata = {
   description: "Read my blog.",
 };
 
-export const revalidate = 12 * 3600; // revalidate once per 12-hours
+export const revalidate = 43200; // revalidate once per 12-hours
 
 export default async function Page() {
   const posts = await getMediumPosts();

@@ -7,17 +7,18 @@ import AboutWriter from "@/app/components/AboutWriter";
 import CommonConfig from "@/app/config/CommonConfig";
 import "./style.scss";
 
-export const revalidate = 12 * 3600; // revalidate once per hour
+export const revalidate = 43200; // revalidate once per hour
 
 export async function generateStaticParams() {
   const posts = await getMediumPosts();
   return posts.map((post) => ({ slug: post.slug }));
 }
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props) {
-  const post = await getMediumPost(params.slug);
+  const { slug } = await params;
+  const post = await getMediumPost(slug);
   if (!post) {
     return;
   }
@@ -54,7 +55,8 @@ export async function generateMetadata({ params }: Props) {
 }
 
 async function Blog({ params }: Props) {
-  const post = await getMediumPost(params.slug);
+  const { slug } = await params;
+  const post = await getMediumPost(slug);
 
   if (!post) {
     notFound();
