@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { formatDate } from "app/blog/utils";
 import { baseUrl } from "app/sitemap";
 import { getMediumPost, getMediumPosts } from "@/lib/medium";
+import { sanitizeMediumHtml } from "@/lib/sanitize";
 import Breadcrumb from "@/app/components/Breadcrumb/Breadcrumb";
 import AboutWriter from "@/app/components/AboutWriter";
 import CommonConfig from "@/app/config/CommonConfig";
@@ -94,7 +95,7 @@ async function Blog({ params }: Props) {
         </div>
         <article
           className="medium-content prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: post.content ?? "" }}
+          dangerouslySetInnerHTML={{ __html: sanitizeMediumHtml(post.content ?? "") }}
         />
         <AboutWriter link={post.link} />
       </div>
