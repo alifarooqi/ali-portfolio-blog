@@ -4,7 +4,7 @@ const steps = [
   { name: 'Linting', cmd: 'npm run lint' },
   { name: 'Typechecking', cmd: 'npm run typecheck' },
   { name: 'Unit Testing', cmd: 'npm run test' },
-  { name: 'E2E Testing', cmd: 'npm run test:e2e' }
+  { name: 'E2E Testing', cmd: 'PORT=3001 npm run test:e2e' }
 ];
 
 console.log('🚀 Starting pre-PR validation pipeline...\n');
