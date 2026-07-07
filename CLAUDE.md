@@ -30,7 +30,8 @@ Homepage content is centralized, not scattered across components:
 - `app/config/SectionConfig.ts` — registry of sections (`key`, `name`, `headerIconKey`, optional `notInMenu`). Drives both the `Section` header and the `Menu` items.
 - Per-section data files (e.g. `app/components/sections/ProjectSection/Projects.tsx`) hold the actual section content.
 
-To add a homepage section: add an entry to `SectionConfig`, drop the section component in `app/components/sections/`, and render it from `app/page.tsx`. The `Section` wrapper (scroll-spy + staggered animation) and the Menu pick it up via the config `key` / `headerIconKey`.
+> [!NOTE]
+> To add a new homepage section, use the `homepage-sections` skill.
 
 ### Sections and navigation
 `app/components/Section/Section.tsx` is a `forwardRef` client component that gives each section its `id` (from `sectionConfig.key`), tracks in-view state to toggle a `section-active` class (scroll-spy), and staggers child entrance animations via `motion`.
@@ -38,16 +39,16 @@ To add a homepage section: add an entry to `SectionConfig`, drop the section com
 `app/components/Menu/Menu.tsx` is the circular/radial nav. It builds items from `SectionConfig` plus page links (`/`, `/blog`) and a dark-mode toggle. **Section-scroll links render only on the home route** (`pathname === "/"`); elsewhere only page links + theme toggle show.
 
 ### Icons
-`app/components/icons/Icons.tsx` is a single registry mapping an `IconKey` string to a component, used everywhere via `getIcon(key)`. It mixes MUI icons and custom SVG components. To add a new SVG icon, convert it with SVGR using the template/config in that folder:
+`app/components/icons/Icons.tsx` is a single registry mapping an `IconKey` string to a component, used everywhere via `getIcon(key)`. It mixes MUI icons and custom SVG components.
 
-```
-npx @svgr/cli ./ --template svgr-motion-template.js --out-dir ./ --ext tsx --no-svgo
-```
-
-then register it in the `Icons` map. (`svgo.config.js` is also present for separate `svgo` runs.)
+> [!NOTE]
+> To convert custom SVGs and add new icons, use the `svg-icon` skill.
 
 ### Blog = Medium RSS, not local MDX
-Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `@ali_farooqi`, caches it in-memory for 12h (matching `revalidate = 12 * 3600` on the blog routes), and falls back to the committed snapshot at `lib/medium-feed.json` if the fetch fails. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist. To refresh the fallback snapshot, regenerate it from https://rss2json.com (see the comment at the top of `medium.ts`).
+Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `@ali_farooqi`, caches it in-memory for 12h (matching `revalidate = 12 * 3600` on the blog routes), and falls back to the committed snapshot at `lib/medium-feed.json` if the fetch fails. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
+
+> [!NOTE]
+> To refresh the fallback snapshot file, use the `medium-feed-refresh` skill.
 
 ### Theming (dark mode)
 Dark mode is class-based via a `.dark` class on `<html>`. `app/ThemeInitializerScript.tsx` runs `beforeInteractive` to set the class from `localStorage` / `prefers-color-scheme` (prevents flash of wrong theme). The Menu toggle flips it and persists to `localStorage`. Colors are CSS custom properties in `app/global.css` (`:root` and `.dark` blocks).
@@ -73,4 +74,4 @@ TypeScript path alias `@/*` -> `./*`. Both `@/...` and relative imports appear i
 - Fonts: Varela Round (single 400 weight) loaded via `next/font/google` and exposed as the CSS variable `--font-varela-round`.
 
 ## Workflow
-- After opening a PR, open it in the user's browser automatically: `gh pr view <number> --web`.
+- To validate local code and create a GitHub Pull Request, use the `create-pr` skill.
