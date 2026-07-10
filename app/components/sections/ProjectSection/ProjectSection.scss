@@ -28,7 +28,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     z-index: 5;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     padding-bottom: 15px;
@@ -74,42 +74,79 @@
     }
   }
 
-  .dashboard-grid {
+  /* Vertical Layout Architecture */
+  .dashboard-vertical-layout {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     z-index: 5;
   }
 
-  /* Carousel / Game Selection view */
-  .carousel-view-port {
-    overflow: visible;
+  /* Carousel Row Wrapper */
+  .carousel-wrapper-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    position: relative;
   }
 
+  /* Floating visual nav arrows */
+  .carousel-nav-btn {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    color: var(--brand-color, #3c83f6);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    flex-shrink: 0;
+
+    svg {
+      font-size: 1.6rem;
+    }
+
+    &:hover {
+      background: rgba(60, 131, 246, 0.15);
+      border-color: var(--brand-color-light, #21e5e5);
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(33, 229, 229, 0.25);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  /* Confines view slider bounds */
+  .carousel-view-port {
+    flex-grow: 1;
+    overflow: hidden;
+    max-width: 800px;
+  }
+
+  /* Container snapping cards */
   .carousel-list {
     display: flex;
     gap: 24px;
-    padding: 10px 5px 25px 5px;
+    padding: 15px 120px 25px 120px; // Padding allows active card to center
     overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; // Firefox
+    -webkit-overflow-scrolling: touch;
 
     &::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.25);
-      }
+      display: none; // Chrome/Safari
     }
   }
 
@@ -126,6 +163,7 @@
     transform-style: preserve-3d;
     background: #11141d;
     transition: border-color 0.3s, box-shadow 0.3s;
+    scroll-snap-align: center;
 
     &.selected {
       border-color: var(--brand-color-light, #21e5e5);
@@ -151,7 +189,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      transform: translateZ(25px); /* Push elements forward in 3D space */
+      transform: translateZ(25px);
     }
 
     .card-spotlight {
@@ -201,31 +239,58 @@
     }
   }
 
-  /* Sci-Fi Inspect Pane */
+  /* LED indicator pagination dots */
+  .carousel-pagination-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 5px 0 15px 0;
+
+    .pagination-dot {
+      width: 9px;
+      height: 9px;
+      background-color: rgba(255, 255, 255, 0.18);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      padding: 0;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.45);
+        transform: scale(1.2);
+      }
+
+      &.active {
+        background-color: var(--brand-color-light, #21e5e5);
+        box-shadow: 0 0 10px var(--brand-color-light, #21e5e5);
+        transform: scale(1.3);
+      }
+    }
+  }
+
+  /* Sci-Fi Inspect Pane (Now full-width below slider) */
   .inspect-details-pane {
     background: rgba(13, 18, 30, 0.72);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
-    padding: 25px;
+    padding: 30px;
     backdrop-filter: blur(12px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 380px;
+    width: 100%;
+    margin-top: 10px;
 
     .inspect-content {
       display: flex;
       flex-direction: column;
-      height: 100%;
-      justify-content: space-between;
+      gap: 20px;
     }
 
     .inspect-header {
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-bottom: 18px;
 
       .inspect-icon-container {
         width: 50px;
@@ -237,6 +302,7 @@
         align-items: center;
         justify-content: center;
         color: var(--brand-color, #3c83f6);
+        flex-shrink: 0;
 
         svg {
           font-size: 1.6rem;
@@ -250,9 +316,10 @@
 
       .inspect-project-title {
         color: #ffffff;
-        font-size: 1.25rem;
+        font-size: 1.3rem;
         margin: 0 0 4px 0;
         font-weight: 700;
+        letter-spacing: 0.01rem;
       }
 
       .inspect-project-duration {
@@ -271,19 +338,17 @@
     }
 
     .inspect-body {
-      flex-grow: 1;
-
       .inspect-divider {
         width: 100%;
         height: 1px;
         background: linear-gradient(90deg, rgba(60, 131, 246, 0.4) 0%, rgba(60, 131, 246, 0.05) 100%);
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
 
       .inspect-description {
         color: #e0e0e0;
-        line-height: 1.6;
-        font-size: 0.92rem;
+        line-height: 1.65;
+        font-size: 0.94rem;
         margin: 0;
         
         b {
@@ -293,7 +358,7 @@
     }
 
     .inspect-footer {
-      margin-top: 25px;
+      margin-top: 10px;
 
       .inspect-no-links-indicator {
         border: 1px dashed rgba(255, 255, 255, 0.1);
@@ -310,13 +375,17 @@
       }
     }
 
+    /* Horizontal buttons wrapper */
     .inspect-buttons-wrapper {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
     .sci-fi-action-button {
+      flex: 1 1 200px; // Responsive basis
+      max-width: 300px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -373,34 +442,49 @@
   }
 }
 
-/* Responsive viewports */
-@media screen and (max-width: 992px) {
+/* Responsive Viewports */
+@media screen and (max-width: 768px) {
   .project-section {
-    .dashboard-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .inspect-details-pane {
-      min-height: auto;
-    }
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .project-section {
-    padding: 2.5rem 1rem;
+    padding: 3rem 1rem;
 
     .game-dashboard-container {
-      padding: 20px;
+      padding: 20px 15px;
+    }
+
+    .carousel-wrapper-layout {
+      gap: 5px;
+    }
+
+    /* Small screen arrows */
+    .carousel-nav-btn {
+      width: 40px;
+      height: 40px;
+      
+      svg {
+        font-size: 1.3rem;
+      }
+    }
+
+    .carousel-list {
+      padding: 10px 60px 20px 60px; // less padding on smaller screens
+      gap: 16px;
     }
 
     .game-card {
-      flex: 0 0 180px;
-      height: 260px;
+      flex: 0 0 170px;
+      height: 250px;
     }
 
     .inspect-details-pane {
-      padding: 20px;
+      padding: 20px 15px;
+
+      .inspect-buttons-wrapper {
+        flex-direction: column;
+        
+        .sci-fi-action-button {
+          max-width: 100%;
+        }
+      }
     }
   }
 }

@@ -1,8 +1,10 @@
 "use client";
 
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { motion, AnimatePresence } from "motion/react";
 
 import Section from "../../Section/Section";
@@ -162,6 +164,8 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const isScrollingRef = useRef(false);
 
   // Background Particle System Loop
   useEffect(() => {
@@ -234,15 +238,65 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
     };
   }, []);
 
+  // Programmatic scroll-to-index handler (used by arrow clicks & pagination dots)
+  const scrollToIndex = useCallback((index: number) => {
+    const container = carouselRef.current;
+    if (!container) return;
+
+    isScrollingRef.current = true;
+    const cardElement = container.children[index] as HTMLElement;
+    if (cardElement) {
+      // Center the active card in the viewport
+      const leftPosition = cardElement.offsetLeft - (container.offsetWidth / 2) + (cardElement.offsetWidth / 2);
+      container.scrollTo({
+        left: leftPosition,
+        behavior: "smooth"
+      });
+    }
+    setSelectedIndex(index);
+    playInterfaceSound("select", isMuted);
+
+    // Release scroll block after smooth scrolling animation completes
+    setTimeout(() => {
+      isScrollingRef.current = false;
+    }, 450);
+  }, [isMuted]);
+
+  // Scroll listener to update selectedIndex on manual scroll/swipe
+  const handleScroll = () => {
+    if (isScrollingRef.current) return;
+    const container = carouselRef.current;
+    if (!container) return;
+
+    const containerCenter = container.scrollLeft + container.offsetWidth / 2;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    Array.from(container.children).forEach((child, index) => {
+      const card = child as HTMLElement;
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const distance = Math.abs(containerCenter - cardCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    if (closestIndex !== selectedIndex) {
+      setSelectedIndex(closestIndex);
+      playInterfaceSound("hover", isMuted);
+    }
+  };
+
   // Keyboard navigation listener (Arrow keys + Enter)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
-        setSelectedIndex((prev) => (prev + 1) % Projects.length);
-        playInterfaceSound("hover", isMuted);
+        const nextIndex = (selectedIndex + 1) % Projects.length;
+        scrollToIndex(nextIndex);
       } else if (e.key === "ArrowLeft") {
-        setSelectedIndex((prev) => (prev - 1 + Projects.length) % Projects.length);
-        playInterfaceSound("hover", isMuted);
+        const nextIndex = (selectedIndex - 1 + Projects.length) % Projects.length;
+        scrollToIndex(nextIndex);
       } else if (e.key === "Enter" || e.key === " ") {
         const activeProj = Projects[selectedIndex];
         if (activeProj.links.length > 0) {
@@ -255,7 +309,23 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedIndex, isMuted]);
+  }, [selectedIndex, isMuted, scrollToIndex]);
+
+  // Adjust scroll position if container is resized/initialized
+  useEffect(() => {
+    // Timeout to ensure offset positions are fully rendered in the DOM
+    const t = setTimeout(() => {
+      const container = carouselRef.current;
+      if (!container) return;
+      const cardElement = container.children[selectedIndex] as HTMLElement;
+      if (cardElement) {
+        const leftPosition = cardElement.offsetLeft - (container.offsetWidth / 2) + (cardElement.offsetWidth / 2);
+        container.scrollLeft = leftPosition;
+      }
+    }, 100);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const activeProject = Projects[selectedIndex];
 
@@ -284,35 +354,69 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
           </button>
         </div>
 
-        {/* Dashboard workspace grid */}
-        <div className="dashboard-grid">
-          {/* Main game select slider list */}
-          <div className="carousel-view-port">
-            <div className="carousel-list">
-              {Projects.map((project, index) => (
-                <Card3D
-                  key={"proj-card-" + index}
-                  project={project}
-                  isSelected={index === selectedIndex}
-                  coverImage={coverImages[index]}
-                  isMuted={isMuted}
-                  onClick={() => {
-                    setSelectedIndex(index);
-                    playInterfaceSound("select", isMuted);
-                  }}
-                />
-              ))}
+        {/* Unified Vertical Grid Layout */}
+        <div className="dashboard-vertical-layout">
+          
+          {/* Top Row: Game selector with visual navigation arrows */}
+          <div className="carousel-wrapper-layout">
+            <button 
+              className="carousel-nav-btn prev"
+              onClick={() => {
+                const prevIndex = (selectedIndex - 1 + Projects.length) % Projects.length;
+                scrollToIndex(prevIndex);
+              }}
+              aria-label="Select previous project"
+            >
+              <ChevronLeftIcon />
+            </button>
+
+            <div className="carousel-view-port">
+              <div className="carousel-list" ref={carouselRef} onScroll={handleScroll}>
+                {Projects.map((project, index) => (
+                  <Card3D
+                    key={"proj-card-" + index}
+                    project={project}
+                    isSelected={index === selectedIndex}
+                    coverImage={coverImages[index]}
+                    isMuted={isMuted}
+                    onClick={() => scrollToIndex(index)}
+                  />
+                ))}
+              </div>
             </div>
+
+            <button 
+              className="carousel-nav-btn next"
+              onClick={() => {
+                const nextIndex = (selectedIndex + 1) % Projects.length;
+                scrollToIndex(nextIndex);
+              }}
+              aria-label="Select next project"
+            >
+              <ChevronRightIcon />
+            </button>
           </div>
 
-          {/* Sci-Fi Inspect details pane */}
+          {/* Indicator Dots directly below Carousel */}
+          <div className="carousel-pagination-dots">
+            {Projects.map((_, index) => (
+              <button
+                key={"dot-" + index}
+                className={`pagination-dot ${index === selectedIndex ? "active" : ""}`}
+                onClick={() => scrollToIndex(index)}
+                aria-label={`Go to project ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Bottom Row: Detailed Inspection Pane */}
           <div className="inspect-details-pane">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedIndex}
-                initial={{ opacity: 0, x: 25 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -25 }}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.22, ease: "easeInOut" }}
                 className="inspect-content"
               >
