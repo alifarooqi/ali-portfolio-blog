@@ -16,12 +16,12 @@ import "./ProjectSection.scss";
 const projectSectionConfig = SectionConfig.find((section) => section.key === "projects")!;
 
 const coverImages = [
-  "/images/projects/iam_security.jpg",
-  "/images/projects/energy_efficiency.jpg",
-  "/images/projects/eczetrack.jpg",
-  "/images/projects/tic_tac_toe.jpg",
-  "/images/projects/simon_game.jpg",
-  "/images/projects/pomodoro_timer.jpg"
+  "/images/projects/iam_security.webp",
+  "/images/projects/energy_efficiency.webp",
+  "/images/projects/eczetrack.webp",
+  "/images/projects/tic_tac_toe.webp",
+  "/images/projects/simon_game.webp",
+  "/images/projects/pomodoro_timer.webp"
 ];
 
 // Helper to synthesize modern interface sci-fi sounds
