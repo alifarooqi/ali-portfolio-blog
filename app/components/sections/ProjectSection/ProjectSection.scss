@@ -1,15 +1,548 @@
 .project-section {
-  .project-heading {
-    font-size: 1.4rem;
-    text-decoration: underline;
+  padding: 4rem 1.5rem;
+
+  .game-dashboard-container {
+    position: relative;
+    width: 100%;
+    background: radial-gradient(130% 130% at 50% 0%, #151d30 0%, #0a0d14 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
   }
 
-  .project-duration {
-    color: unset;
-    margin: 0;
+  .ambient-particles-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
   }
 
-  .project-links-container {
-    text-align: right;
+  .dashboard-header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    z-index: 5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 15px;
+
+    .header-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pulsing-led {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      background-color: var(--brand-color-light, #21e5e5);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--brand-color-light, #21e5e5);
+      animation: led-pulse 1.8s infinite;
+    }
+
+    .system-ready-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15rem;
+      font-family: monospace;
+      color: var(--brand-color-light, #21e5e5);
+      font-weight: 600;
+    }
+
+    .sound-toggle-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--brand-color, #3c83f6);
+      transition: color 0.25s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: #ffffff;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  /* Vertical Layout Architecture */
+  .dashboard-vertical-layout {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 5;
+  }
+
+  /* Carousel Row Wrapper */
+  .carousel-wrapper-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    position: relative;
+  }
+
+  /* Floating visual nav arrows */
+  .carousel-nav-btn {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    color: var(--brand-color, #3c83f6);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    flex-shrink: 0;
+
+    svg {
+      font-size: 1.6rem;
+    }
+
+    &:hover {
+      background: rgba(60, 131, 246, 0.15);
+      border-color: var(--brand-color-light, #21e5e5);
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(33, 229, 229, 0.25);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  /* Confines view slider bounds */
+  .carousel-view-port {
+    flex-grow: 1;
+    overflow: hidden;
+    max-width: 800px;
+  }
+
+  /* Container snapping cards */
+  .carousel-list {
+    display: flex;
+    gap: 24px;
+    padding: 15px 120px 25px 120px; // Padding allows active card to center
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; // Firefox
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome/Safari
+    }
+  }
+
+  /* 3D Game Cover Cards */
+  .game-card {
+    flex: 0 0 210px;
+    height: 310px;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    transform-style: preserve-3d;
+    background: #11141d;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    scroll-snap-align: center;
+
+    &.selected {
+      border-color: var(--brand-color-light, #21e5e5);
+      box-shadow: 0 0 25px rgba(33, 229, 229, 0.35);
+      
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 2px solid var(--brand-color-light, #21e5e5);
+        border-radius: 16px;
+        z-index: 5;
+        pointer-events: none;
+      }
+    }
+
+    .card-cover-wrapper {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transform: translateZ(25px);
+    }
+
+    .card-spotlight {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      z-index: 3;
+    }
+
+    .card-glass-glow {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .card-game-title-overlay {
+      position: relative;
+      background: linear-gradient(0deg, rgba(10, 13, 20, 0.95) 0%, rgba(10, 13, 20, 0.7) 70%, rgba(10, 13, 20, 0) 100%);
+      padding: 25px 15px 15px 15px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .card-icon-container {
+        color: var(--brand-color-light, #21e5e5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        svg {
+          font-size: 1.3rem;
+        }
+      }
+
+      .card-game-title {
+        color: #ffffff;
+        font-size: 0.88rem;
+        font-weight: 700;
+        letter-spacing: 0.03rem;
+        line-height: 1.25;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      }
+    }
+  }
+
+  /* LED indicator pagination dots */
+  .carousel-pagination-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 5px 0 15px 0;
+
+    .pagination-dot {
+      width: 9px;
+      height: 9px;
+      background-color: rgba(255, 255, 255, 0.18);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      padding: 0;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.45);
+        transform: scale(1.2);
+      }
+
+      &.active {
+        background-color: var(--brand-color-light, #21e5e5);
+        box-shadow: 0 0 10px var(--brand-color-light, #21e5e5);
+        transform: scale(1.3);
+      }
+    }
+  }
+
+  /* Sci-Fi Inspect Pane (Now full-width below slider) */
+  .inspect-details-pane {
+    background: rgba(13, 18, 30, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 30px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    width: 100%;
+    margin-top: 10px;
+    height: 330px; /* Lock height to prevent vertical shifting/bouncing */
+    display: flex;
+    flex-direction: column;
+
+    .inspect-content {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .inspect-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      .inspect-icon-container {
+        width: 50px;
+        height: 50px;
+        background: rgba(60, 131, 246, 0.12);
+        border: 1px solid rgba(60, 131, 246, 0.25);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand-color, #3c83f6);
+        flex-shrink: 0;
+
+        svg {
+          font-size: 1.6rem;
+        }
+      }
+
+      .inspect-title-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .inspect-project-title {
+        color: #ffffff;
+        font-size: 1.3rem;
+        margin: 0 0 4px 0;
+        font-weight: 700;
+        letter-spacing: 0.01rem;
+      }
+
+      .inspect-project-duration {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        color: #adadad;
+        margin: 0;
+
+        svg {
+          font-size: 0.95rem;
+          color: var(--brand-color-light, #21e5e5);
+        }
+      }
+    }
+
+    .inspect-body {
+      .inspect-divider {
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(60, 131, 246, 0.4) 0%, rgba(60, 131, 246, 0.05) 100%);
+        margin-bottom: 15px;
+      }
+
+      .inspect-description {
+        color: #e0e0e0;
+        line-height: 1.65;
+        font-size: 0.94rem;
+        margin: 0;
+        
+        b {
+          color: var(--brand-color-light, #21e5e5);
+        }
+      }
+    }
+
+    .inspect-footer {
+      margin-top: 10px;
+
+      .inspect-no-links-indicator {
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        
+        span {
+          font-family: monospace;
+          font-size: 0.72rem;
+          color: #adadad;
+          letter-spacing: 0.05rem;
+        }
+      }
+    }
+
+    /* Horizontal buttons wrapper */
+    .inspect-buttons-wrapper {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .sci-fi-action-button {
+      flex: 0 1 220px;
+      max-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(60, 131, 246, 0.25) 0%, rgba(60, 131, 246, 0.05) 100%);
+      border: 1px solid rgba(60, 131, 246, 0.4);
+      padding: 12px 20px;
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+
+      .btn-icon {
+        display: flex;
+        align-items: center;
+        color: var(--brand-color-light, #21e5e5);
+        
+        svg {
+          font-size: 1.1rem;
+        }
+      }
+
+      &:hover {
+        background: linear-gradient(135deg, rgba(60, 131, 246, 0.45) 0%, rgba(60, 131, 246, 0.15) 100%);
+        border-color: var(--brand-color-light, #21e5e5);
+        box-shadow: 0 0 15px rgba(33, 229, 229, 0.25);
+        transform: translateY(-2px);
+        text-decoration: none;
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
   }
 }
+
+@keyframes led-pulse {
+  0% {
+    opacity: 0.4;
+    box-shadow: 0 0 4px var(--brand-color-light, #21e5e5);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 14px var(--brand-color-light, #21e5e5);
+  }
+  100% {
+    opacity: 0.4;
+    box-shadow: 0 0 4px var(--brand-color-light, #21e5e5);
+  }
+}
+
+/* Responsive Viewports */
+@media screen and (max-width: 768px) {
+  .project-section {
+    padding: 3rem 1rem;
+
+    .game-dashboard-container {
+      padding: 20px 15px;
+    }
+
+    .carousel-wrapper-layout {
+      gap: 5px;
+    }
+
+    /* Small screen arrows */
+    .carousel-nav-btn {
+      width: 40px;
+      height: 40px;
+      
+      svg {
+        font-size: 1.3rem;
+      }
+    }
+
+    .carousel-list {
+      padding: 10px 60px 20px 60px; // less padding on smaller screens
+      gap: 16px;
+    }
+
+    .game-card {
+      flex: 0 0 170px;
+      height: 250px;
+    }
+
+    .inspect-details-pane {
+      padding: 20px 15px;
+      height: auto; // Allow auto height on small mobile screens to prevent overflow
+
+      .inspect-buttons-wrapper {
+        flex-direction: column;
+        align-items: center;
+        
+        .sci-fi-action-button {
+          width: 100%;
+          max-width: 300px;
+        }
+      }
+    }
+  }
+}
+
+/* Overrides to render the standard Section header above the content instead of side-by-side */
+.project-section.section-wrapper {
+  .section {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 5rem 3rem !important;
+
+    .section-header {
+      border-right: none !important;
+      border-bottom: 1px solid var(--text-primary) !important;
+      padding: 0 0 15px 0 !important;
+      margin-bottom: 30px !important;
+      justify-content: flex-start !important;
+      width: 100% !important;
+      font-size: 2.6rem !important;
+      
+      .section-header-icon {
+        padding: 0 !important;
+        font-size: 2.6rem !important;
+        margin-right: 15px !important;
+      }
+    }
+
+    .section-content {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      width: 100% !important;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .project-section.section-wrapper {
+    .section {
+      padding: 3rem 1.5rem !important;
+      
+      .section-header {
+        font-size: 2rem !important;
+        justify-content: center !important;
+        
+        .section-header-icon {
+          font-size: 2rem !important;
+        }
+      }
+    }
+  }
+}
+
