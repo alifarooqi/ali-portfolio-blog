@@ -385,11 +385,12 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 15px;
     }
 
     .sci-fi-action-button {
-      flex: 1 1 200px; // Responsive basis
+      flex: 0 1 220px;
       max-width: 300px;
       display: flex;
       align-items: center;
@@ -482,12 +483,15 @@
 
     .inspect-details-pane {
       padding: 20px 15px;
+      height: auto; // Allow auto height on small mobile screens to prevent overflow
 
       .inspect-buttons-wrapper {
         flex-direction: column;
+        align-items: center;
         
         .sci-fi-action-button {
-          max-width: 100%;
+          width: 100%;
+          max-width: 300px;
         }
       }
     }
