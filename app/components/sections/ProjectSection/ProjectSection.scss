@@ -488,3 +488,52 @@
     }
   }
 }
+
+/* Overrides to render the standard Section header above the content instead of side-by-side */
+.project-section.section-wrapper {
+  .section {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 5rem 3rem !important;
+
+    .section-header {
+      border-right: none !important;
+      border-bottom: 1px solid var(--text-primary) !important;
+      padding: 0 0 15px 0 !important;
+      margin-bottom: 30px !important;
+      justify-content: flex-start !important;
+      width: 100% !important;
+      font-size: 2.6rem !important;
+      
+      .section-header-icon {
+        padding: 0 !important;
+        font-size: 2.6rem !important;
+        margin-right: 15px !important;
+      }
+    }
+
+    .section-content {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      width: 100% !important;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .project-section.section-wrapper {
+    .section {
+      padding: 3rem 1.5rem !important;
+      
+      .section-header {
+        font-size: 2rem !important;
+        justify-content: center !important;
+        
+        .section-header-icon {
+          font-size: 2rem !important;
+        }
+      }
+    }
+  }
+}
+
