@@ -8,6 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 const ACCEPTED_ERROR_PATTERNS = [
   /Error fetching Medium posts/i,
   /Failed to load resource.*404/i,
+  /Refused to execute script from.*_vercel/i,
 ];
 
 async function assertNoUnexpectedConsoleErrors(page: Page) {

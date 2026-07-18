@@ -1,5 +1,6 @@
 import { getMediumPosts } from "@/lib/medium";
 import Link from "next/link";
+import Image from "next/image";
 import Breadcrumb from "@/app/components/Breadcrumb/Breadcrumb";
 import "./style.scss";
 
@@ -37,13 +38,16 @@ export default async function Page() {
               blog-card
             "
           >
-            {/** TODO Use nextjs image */}
             {post.image && (
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-48 object-cover opacity-80 transition-all duration-300 group-hover:opacity-100"
-              />
+              <div className="relative w-full h-48 overflow-hidden">
+                <Image
+                  src={post.image}
+                  alt={post.title ?? ""}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover opacity-80 transition-all duration-300 group-hover:opacity-100"
+                />
+              </div>
             )}
             <div className="p-5">
               <h2 className="text-xl font-semibold">{post.title}</h2>
