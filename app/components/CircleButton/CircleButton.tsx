@@ -15,6 +15,7 @@ interface CircleButtonProps {
   tooltipPlacement?: PlacesType;
   children?: ReactNode;
   isAnimated?: boolean;
+  "aria-label"?: string;
 }
 
 const CircleButton: React.FC<CircleButtonProps> = ({
@@ -28,6 +29,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   tooltipPlacement = "top",
   children,
   isAnimated = true,
+  "aria-label": ariaLabel,
 }) => {
   const combinedClassName = clsx("circle-button", className, {
     "circle-button-animated": isAnimated,
@@ -43,7 +45,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       className={combinedClassName}
       style={buttonStyle}
       rel={target === "_blank" ? "noopener noreferrer" : undefined}
-      aria-label={tooltip}
+      aria-label={ariaLabel ?? tooltip}
       data-tooltip-id={TooltipId}
       data-tooltip-content={tooltip}
       data-tooltip-place={tooltipPlacement}
@@ -56,7 +58,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       onClick={onClick}
       className={combinedClassName}
       style={buttonStyle}
-      aria-label={tooltip}
+      aria-label={ariaLabel ?? tooltip}
       data-tooltip-id={TooltipId}
       data-tooltip-content={tooltip}
       data-tooltip-place={tooltipPlacement}
