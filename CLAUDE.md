@@ -31,6 +31,9 @@ Homepage content is centralized, not scattered across components:
 - Per-section data files (e.g. `app/components/sections/ProjectSection/Projects.tsx`) hold the actual section content.
 
 > [!NOTE]
+> To add a new project to the portfolio, use the `add-project` skill.
+
+> [!NOTE]
 > To add a new homepage section, use the `homepage-sections` skill.
 
 ### Sections and navigation

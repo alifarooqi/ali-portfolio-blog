@@ -16,6 +16,7 @@ import "./ProjectSection.scss";
 const projectSectionConfig = SectionConfig.find((section) => section.key === "projects")!;
 
 const coverImages = [
+  "/images/projects/antigravity_telegram_bridge.webp",
   "/images/projects/iam_security.webp",
   "/images/projects/energy_efficiency.webp",
   "/images/projects/eczetrack.webp",
