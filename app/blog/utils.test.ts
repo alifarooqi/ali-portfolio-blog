@@ -40,4 +40,14 @@ describe("formatDate", () => {
   it("uses day resolution for sub-month differences", () => {
     expect(formatDate("2026-06-20", true)).toBe("June 20, 2026 (5d ago)");
   });
+
+  it("computes correct days for cross-month boundary without premature month increment", () => {
+    // targetDate = 2026-05-30, systemTime = 2026-06-25T12:00:00Z
+    expect(formatDate("2026-05-30", true)).toBe("May 30, 2026 (26d ago)");
+  });
+
+  it("computes correct months for cross-year boundary without premature year increment", () => {
+    // targetDate = 2025-12-15, systemTime = 2026-06-25T12:00:00Z
+    expect(formatDate("2025-12-15", true)).toBe("December 15, 2025 (6mo ago)");
+  });
 });

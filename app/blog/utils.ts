@@ -9,9 +9,21 @@ export function formatDate(date?: string, includeRelative = false) {
   }
   const targetDate = new Date(date);
 
-  const yearsAgo = currentDate.getFullYear() - targetDate.getFullYear();
-  const monthsAgo = currentDate.getMonth() - targetDate.getMonth();
-  const daysAgo = currentDate.getDate() - targetDate.getDate();
+  let yearsAgo = currentDate.getFullYear() - targetDate.getFullYear();
+  let monthsAgo = currentDate.getMonth() - targetDate.getMonth();
+  let daysAgo = currentDate.getDate() - targetDate.getDate();
+
+  if (daysAgo < 0) {
+    monthsAgo -= 1;
+    // Get the number of days in the previous month relative to currentDate
+    const previousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+    daysAgo += previousMonth.getDate();
+  }
+
+  if (monthsAgo < 0) {
+    yearsAgo -= 1;
+    monthsAgo += 12;
+  }
 
   let formattedDate = "";
 
