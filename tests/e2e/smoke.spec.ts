@@ -54,10 +54,8 @@ test.describe("smoke", () => {
   test("theme toggle flips the `dark` class on <html>", async ({ page }) => {
     await page.goto("/");
 
-    // NOTE: `MenuToggle` passes `aria-label="Menu Toggle"` but `CircleButton`
-    // silently drops the prop and uses `tooltip` instead — a real a11y bug to
-    // file separately. Target by class until that's fixed.
-    await page.locator(".menu-toggle").click();
+    // Target the Menu Toggle by its newly fixed accessible name
+    await page.locator('[aria-label="Menu Toggle"]').click();
     const themeButton = page.locator('[aria-label="Toggle dark/light theme"]');
     await expect(themeButton).toBeVisible();
 
