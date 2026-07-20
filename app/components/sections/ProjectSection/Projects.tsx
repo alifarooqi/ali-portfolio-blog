@@ -17,6 +17,23 @@ interface Project {
 
 const Projects: Project[] = [
   {
+    name: "Antigravity Telegram Bridge",
+    icon: getIcon("smartToy"),
+    duration: "2025",
+    description: (
+      <>
+        A Python application bridging Telegram with the <b>Google Antigravity SDK</b>, enabling remote interaction and task execution on a local Mac-based agent. Supports multi-session isolation, persistence, and strict security sandboxing for git commands.
+      </>
+    ),
+    links: [
+      {
+        tooltip: "See source",
+        link: "https://github.com/alifarooqi/agy-telegram-bridge",
+        icon: getIcon("code"),
+      }
+    ],
+  },
+  {
     name: "Identity and Access Management",
     icon: getIcon("security"),
     duration: "2020 - 2025",
