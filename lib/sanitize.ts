@@ -46,10 +46,11 @@ const ALLOWED_URI_REGEXP = /^(?!(?:javascript|data|vbscript|file):)/i;
 // re-adds it even when ALLOWED_URI_REGEXP would reject. Close that hole with
 // an explicit hook. Registered once at module load.
 DOMPurify.addHook("afterSanitizeAttributes", (node) => {
-  if (node.tagName === "IMG") {
-    const src = node.getAttribute("src");
+  if (node && node.nodeType === 1 && (node as Element).tagName === "IMG") {
+    const el = node as Element;
+    const src = el.getAttribute("src");
     if (src && /^data:/i.test(src)) {
-      node.removeAttribute("src");
+      el.removeAttribute("src");
     }
   }
 });
@@ -58,10 +59,15 @@ DOMPurify.addHook("afterSanitizeAttributes", (node) => {
 // Without this, DOMPurify strips the <br>s entirely (because we did not add them to
 // ALLOWED_TAGS) causing all code inside block elements to collapse onto a single line.
 DOMPurify.addHook("beforeSanitizeElements", (node) => {
-  if (node instanceof Element && node.tagName === "PRE") {
-    const brs = node.querySelectorAll("br");
+  // nodeType === 1 ensures the node is an Element. We use this instead of `instanceof Element`
+  // because DOMPurify runs server-side in Node where the global `Element` constructor is undefined,
+  // causing ReferenceErrors.
+  if (node && node.nodeType === 1 && (node as Element).tagName === "PRE") {
+    // Assert to Element to satisfy TypeScript and allow accessing .querySelectorAll
+    const el = node as Element;
+    const brs = el.querySelectorAll("br");
     brs.forEach((br) => {
-      br.replaceWith(node.ownerDocument.createTextNode("\n"));
+      br.replaceWith(el.ownerDocument.createTextNode("\n"));
     });
   }
 });
