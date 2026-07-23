@@ -54,6 +54,18 @@ DOMPurify.addHook("afterSanitizeAttributes", (node) => {
   }
 });
 
+// Convert Medium's <br> tags within <pre> into newlines so code blocks render properly.
+// Without this, DOMPurify strips the <br>s entirely (because we did not add them to
+// ALLOWED_TAGS) causing all code inside block elements to collapse onto a single line.
+DOMPurify.addHook("beforeSanitizeElements", (node) => {
+  if (node.tagName === "PRE") {
+    const brs = node.querySelectorAll("br");
+    brs.forEach((br) => {
+      br.replaceWith(br.ownerDocument.createTextNode("\n"));
+    });
+  }
+});
+
 // DOMPurify v3 keeps these in the default attribute allowlist; we want them
 // gone. `style` is the dangerous one (CSS-based XSS via url(javascript:...)).
 const FORBID_ATTR = ["style", "class", "title"];

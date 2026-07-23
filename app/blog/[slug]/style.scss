@@ -162,17 +162,34 @@
   }
 
   /* CODE */
-  pre,
-  code {
+  pre {
     scrollbar-width: thin;
     scrollbar-color: var(--medium-border) transparent;
     background: var(--bg-secondary);
-    padding: 1em 2em;
+    padding: 1em;
     border-radius: var(--radius);
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
     font-size: 0.9em;
     overflow: auto;
     max-height: 800px;
+    white-space: pre;
+  }
+
+  code {
+    background: var(--bg-secondary);
+    border: 1px solid var(--medium-border);
+    padding: 0.15em 0.35em;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    font-size: 0.9em;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
   }
 
   hr {
