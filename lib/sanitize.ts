@@ -58,10 +58,10 @@ DOMPurify.addHook("afterSanitizeAttributes", (node) => {
 // Without this, DOMPurify strips the <br>s entirely (because we did not add them to
 // ALLOWED_TAGS) causing all code inside block elements to collapse onto a single line.
 DOMPurify.addHook("beforeSanitizeElements", (node) => {
-  if (node.tagName === "PRE") {
+  if (node instanceof Element && node.tagName === "PRE") {
     const brs = node.querySelectorAll("br");
     brs.forEach((br) => {
-      br.replaceWith(br.ownerDocument.createTextNode("\n"));
+      br.replaceWith(node.ownerDocument.createTextNode("\n"));
     });
   }
 });
