@@ -1,16 +1,44 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import CircleButton from "../../CircleButton/CircleButton";
 import Magnetic from "../../Magnetic/Magnetic";
 import CommonConfig from "../../../config/CommonConfig";
 import { getIcon, IconKey } from "../../icons/Icons";
 import "./TopSection.scss";
 
+// Gate the cursor-driven weight on (pointer: fine) AND no reduced-motion.
+// Same pattern as CustomCursor — SSR returns false; client subscribes so OS
+// preference changes apply live.
+const GATE_QUERY = "(pointer: fine) and (prefers-reduced-motion: no-preference)";
+function subscribeGate(callback: () => void) {
+  const mql = window.matchMedia(GATE_QUERY);
+  mql.addEventListener("change", callback);
+  return () => mql.removeEventListener("change", callback);
+}
+function readGate() {
+  return window.matchMedia(GATE_QUERY).matches;
+}
+function readGateSSR() {
+  return false;
+}
+
+// Variable-font weight range for the name.
+const WEIGHT_REST = 500;
+const WEIGHT_MIN = 300;
+const WEIGHT_MAX = 800;
+
 const TopSection: React.FC = () => {
   const pathRef = useRef<SVGPathElement | null>(null);
+  const nameRef = useRef<HTMLHeadingElement | null>(null);
+
+  const enabled = useSyncExternalStore(subscribeGate, readGate, readGateSSR);
+
+  const weight = useMotionValue(WEIGHT_REST);
+  const weightSpring = useSpring(weight, { stiffness: 150, damping: 20, mass: 0.4 });
 
   useEffect(() => {
     const pathElement = pathRef.current;
@@ -27,6 +55,21 @@ const TopSection: React.FC = () => {
       }
     }
   }, []);
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLHeadingElement>) => {
+    const el = nameRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const center = rect.left + rect.width / 2;
+    // Distance from cursor to name's horizontal center, normalized 0..1 at the
+    // rect's half-width (closer = higher proximity).
+    const half = Math.max(1, rect.width / 2);
+    const distance = Math.abs(e.clientX - center);
+    const proximity = Math.max(0, 1 - distance / half);
+    weight.set(WEIGHT_MIN + proximity * (WEIGHT_MAX - WEIGHT_MIN));
+  };
+
+  const resetWeight = () => weight.set(WEIGHT_REST);
 
   return (
     <section className="top-section">
@@ -53,10 +96,20 @@ const TopSection: React.FC = () => {
       </div>
 
       <div className="intro">
-        <h1>{CommonConfig.name}</h1>
+        <p className="intro__kicker">Hello, I&apos;m</p>
+        <motion.h1
+          ref={nameRef}
+          className="intro__name"
+          style={{ fontWeight: enabled ? weightSpring : WEIGHT_REST }}
+          onPointerMove={enabled ? handlePointerMove : undefined}
+          onPointerLeave={enabled ? resetWeight : undefined}
+        >
+          {CommonConfig.name}
+        </motion.h1>
         <TypeAnimation
           sequence={CommonConfig.taglines.flatMap((t) => [`${t}...`, 2000])}
           wrapper="h2"
+          className="intro__tagline"
           repeat={Infinity}
         />
       </div>
