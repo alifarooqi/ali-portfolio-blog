@@ -1,0 +1,25 @@
+.shader-background {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+
+  &__fallback {
+    position: absolute;
+    inset: 0;
+    // Single committed image serves as the no-JS / no-WebGL fallback.
+    background-image: url("/images/bg01.webp");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  &__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}

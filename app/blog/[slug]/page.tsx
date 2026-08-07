@@ -87,19 +87,21 @@ async function Blog({ params }: Props) {
           }),
         }}
       />
-      <div className="max-w-3xl mx-auto py-12 px-4">
+      <div className="blog-post__shell max-w-3xl mx-auto py-12 px-4">
         <Breadcrumb />
-        <h1 className="title font-bold text-4xl tracking-tighter">{post.title}</h1>
-        <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {formatDate(post.date, true)}
-          </p>
+        <div className="blog-post__surface">
+          <h1 className="title font-bold text-4xl tracking-tighter">{post.title}</h1>
+          <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              {formatDate(post.date, true)}
+            </p>
+          </div>
+          <article
+            className="medium-content prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: sanitizeMediumHtml(post.content ?? "") }}
+          />
+          <AboutWriter link={post.link} />
         </div>
-        <article
-          className="medium-content prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: sanitizeMediumHtml(post.content ?? "") }}
-        />
-        <AboutWriter link={post.link} />
       </div>
     </section>
   );

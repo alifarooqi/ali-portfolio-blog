@@ -4,6 +4,14 @@
   margin: auto;
 
   .section-active {
+    // Translucent backdrop over the animated shader background so content
+    // stays readable. color-mix() on --bg-primary makes it theme-aware —
+    // light mode gets a frosted white, dark mode a frosted near-black —
+    // without hardcoded rgba per theme. backdrop-filter stabilizes contrast
+    // over the moving gradient.
+    background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
     box-shadow: 0 0 40px var(--brand-color-light);
     transform: translateY(-5px) !important;
   }
@@ -104,30 +112,6 @@
   }
 }
 
-// Background images for sections
-.section-wrapper:nth-child(3n) {
-  background-image: url("/images/bg02.webp");
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: center;
-  background-size: contain;
-  background-attachment: fixed;
-}
-
-.section-wrapper:nth-child(3n + 1) {
-  background-image: url("/images/bg03.webp");
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: bottom;
-  background-size: contain;
-  background-attachment: fixed;
-}
-
-.section-wrapper:nth-child(3n + 2) {
-  background-image: url("/images/bg04.webp");
-  background-repeat: no-repeat;
-  background-position-x: center;
-  background-position-y: center;
-  background-size: contain;
-  background-attachment: fixed;
-}
+// Per-section webp backgrounds removed — background is now rendered globally
+// by <ShaderBackground />. Committed images remain as the no-JS / no-WebGL
+// fallback inside that component.

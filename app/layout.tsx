@@ -10,6 +10,10 @@ import { baseUrl } from "./sitemap";
 import Menu from "./components/Menu/Menu";
 import ThemeInitializerScript from "./ThemeInitializerScript";
 import GoogleAnalyticsScript from "./GoogleAnalyticsScript";
+import ShaderBackground from "./components/ShaderBackground/ShaderBackground";
+import CustomCursor from "./components/CustomCursor/CustomCursor";
+import SmoothScroll from "./components/SmoothScroll/SmoothScroll";
+import ScrollProgress from "./components/ScrollProgress/ScrollProgress";
 
 // Layout Metadata
 export const metadata: Metadata = {
@@ -104,6 +108,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeInitializerScript />
       </head>
       <body className="flex min-h-screen flex-col">
+        <ShaderBackground />
+        <SmoothScroll />
+        <ScrollProgress />
+        <CustomCursor />
         <Tooltip />
         <main className="flex-1">
           <Menu />

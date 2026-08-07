@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import React from "react";
 import { getIcon } from "../icons/Icons";
+import "./Breadcrumb.scss";
 
 const Breadcrumb: React.FC = () => {
   const pathname = usePathname(); // e.g., /blog/2025/post-title
@@ -24,9 +25,9 @@ const Breadcrumb: React.FC = () => {
   });
 
   return (
-    <nav className="breadcrumb flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm whitespace-nowrap overflow-x-auto no-scrollbar">
+    <nav className="breadcrumb flex items-center gap-2 text-sm whitespace-nowrap overflow-x-auto no-scrollbar">
       {/* Home Button */}
-      <Link href="/" className="hover:underline hover:text-blue-600 dark:hover:text-blue-400">
+      <Link href="/">
         {getIcon("home", "inline-block mr-1 mb-0.5 !w-4 !h-4")}
         Home
       </Link>
@@ -34,16 +35,13 @@ const Breadcrumb: React.FC = () => {
       {/* Breadcrumb Links */}
       {paths.map((path, index) => (
         <React.Fragment key={index}>
-          <span className="mx-1">/</span>
+          <span className="breadcrumb__separator mx-1">/</span>
           {index === paths.length - 1 ? (
-            <span className="font-semibold truncate max-w-[200px] block">{path.name}</span>
-          ) : (
-            <Link
-              href={path.href}
-              className="hover:underline hover:text-blue-600 dark:hover:text-blue-400"
-            >
+            <span className="breadcrumb__current font-semibold truncate max-w-[200px] block">
               {path.name}
-            </Link>
+            </span>
+          ) : (
+            <Link href={path.href}>{path.name}</Link>
           )}
         </React.Fragment>
       ))}
