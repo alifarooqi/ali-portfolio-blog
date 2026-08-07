@@ -4,13 +4,8 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-
-  background-image: url("/images/bg01.webp");
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: bottom;
-  background-size: cover;
-  background-attachment: fixed;
+  // Background is rendered globally by <ShaderBackground />.
+  background: transparent;
 
   .intro {
     text-align: left;

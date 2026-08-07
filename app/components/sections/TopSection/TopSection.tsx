@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 import CircleButton from "../../CircleButton/CircleButton";
+import Magnetic from "../../Magnetic/Magnetic";
 import CommonConfig from "../../../config/CommonConfig";
 import { getIcon, IconKey } from "../../icons/Icons";
 import "./TopSection.scss";
@@ -61,16 +62,17 @@ const TopSection: React.FC = () => {
       </div>
       <div className="social">
         {CommonConfig.social.map((socialDetails, index) => (
-          <CircleButton
-            key={`top-section-social-${index}`}
-            tooltip={socialDetails.name}
-            link={socialDetails.link}
-            target="_blank"
-          >
-            {socialDetails.iconKey
-              ? getIcon(socialDetails.iconKey)
-              : getIcon(socialDetails.name.toLowerCase() as IconKey)}
-          </CircleButton>
+          <Magnetic key={`top-section-social-${index}`} strength={0.4}>
+            <CircleButton
+              tooltip={socialDetails.name}
+              link={socialDetails.link}
+              target="_blank"
+            >
+              {socialDetails.iconKey
+                ? getIcon(socialDetails.iconKey)
+                : getIcon(socialDetails.name.toLowerCase() as IconKey)}
+            </CircleButton>
+          </Magnetic>
         ))}
       </div>
     </section>

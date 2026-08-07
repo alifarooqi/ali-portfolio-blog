@@ -149,3 +149,17 @@ table {
     padding-top: 3rem;
   }
 }
+
+/* Respect users who prefer reduced motion. Disables the CSS-driven loops
+   used across the site (hero gradient shine, avatar morph, signature draw).
+   JS-driven animations gate themselves on this media query individually. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

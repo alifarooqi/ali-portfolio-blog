@@ -104,30 +104,6 @@
   }
 }
 
-// Background images for sections
-.section-wrapper:nth-child(3n) {
-  background-image: url("/images/bg02.webp");
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: center;
-  background-size: contain;
-  background-attachment: fixed;
-}
-
-.section-wrapper:nth-child(3n + 1) {
-  background-image: url("/images/bg03.webp");
-  background-repeat: no-repeat;
-  background-position-x: right;
-  background-position-y: bottom;
-  background-size: contain;
-  background-attachment: fixed;
-}
-
-.section-wrapper:nth-child(3n + 2) {
-  background-image: url("/images/bg04.webp");
-  background-repeat: no-repeat;
-  background-position-x: center;
-  background-position-y: center;
-  background-size: contain;
-  background-attachment: fixed;
-}
+// Per-section webp backgrounds removed — background is now rendered globally
+// by <ShaderBackground />. Committed images remain as the no-JS / no-WebGL
+// fallback inside that component.
