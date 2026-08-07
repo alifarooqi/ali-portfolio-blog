@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import { useCursorMotionGate } from "../animaiton/useCursorMotionGate";
 import "./CustomCursor.scss";
 
 /**
@@ -12,25 +13,8 @@ import "./CustomCursor.scss";
  * Disabled entirely on touch devices and when prefers-reduced-motion is set —
  * in those cases the native cursor remains and this component renders nothing.
  */
-
-// Gate the cursor on (pointer: fine) AND no reduced-motion. SSR returns false;
-// client subscribes via useSyncExternalStore so changes (e.g. user toggles
-// reduced-motion in OS prefs) are picked up live.
-const GATE_QUERY = "(pointer: fine) and (prefers-reduced-motion: no-preference)";
-function subscribeGate(callback: () => void) {
-  const mql = window.matchMedia(GATE_QUERY);
-  mql.addEventListener("change", callback);
-  return () => mql.removeEventListener("change", callback);
-}
-function readGate() {
-  return window.matchMedia(GATE_QUERY).matches;
-}
-function readGateSSR() {
-  return false;
-}
-
 export default function CustomCursor() {
-  const enabled = useSyncExternalStore(subscribeGate, readGate, readGateSSR);
+  const enabled = useCursorMotionGate();
   const [hovering, setHovering] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [hidden, setHidden] = useState(true);

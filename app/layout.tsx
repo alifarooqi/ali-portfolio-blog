@@ -1,7 +1,7 @@
 import "./global.css";
 import type { Metadata } from "next";
 import clsx from "clsx";
-import { Varela_Round } from "next/font/google";
+import { Varela_Round, Bricolage_Grotesque } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Tooltip from "@/app/components/tooltip";
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
 };
 
 // Layout Fonts
-// 1. Configure the font loader
+// 1. Configure the font loaders
 const varelaRound = Varela_Round({
   weight: "400", // Varela Round typically only has a 400 weight
   subsets: ["latin"],
@@ -101,9 +101,18 @@ const varelaRound = Varela_Round({
   variable: "--font-varela-round", // Assign a CSS variable name
 });
 
+// Variable display grotesque used for the hero name. Loading without a fixed
+// weight pulls the variable font (full wght axis) so we can drive font-weight
+// from motion values in TopSection.
+const bricolageGrotesque = Bricolage_Grotesque({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-bricolage",
+});
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={clsx(varelaRound.variable)}>
+    <html lang="en" className={clsx(varelaRound.variable, bricolageGrotesque.variable)}>
       <head>
         <ThemeInitializerScript />
       </head>
