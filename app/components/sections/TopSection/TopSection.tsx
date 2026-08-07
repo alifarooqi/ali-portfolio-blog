@@ -1,30 +1,15 @@
 "use client";
 
-import React, { useEffect, useRef, useSyncExternalStore } from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import CircleButton from "../../CircleButton/CircleButton";
 import Magnetic from "../../Magnetic/Magnetic";
+import { useCursorMotionGate } from "../../animaiton/useCursorMotionGate";
 import CommonConfig from "../../../config/CommonConfig";
 import { getIcon, IconKey } from "../../icons/Icons";
 import "./TopSection.scss";
-
-// Gate the cursor-driven weight on (pointer: fine) AND no reduced-motion.
-// Same pattern as CustomCursor — SSR returns false; client subscribes so OS
-// preference changes apply live.
-const GATE_QUERY = "(pointer: fine) and (prefers-reduced-motion: no-preference)";
-function subscribeGate(callback: () => void) {
-  const mql = window.matchMedia(GATE_QUERY);
-  mql.addEventListener("change", callback);
-  return () => mql.removeEventListener("change", callback);
-}
-function readGate() {
-  return window.matchMedia(GATE_QUERY).matches;
-}
-function readGateSSR() {
-  return false;
-}
 
 // Variable-font weight range for the name.
 const WEIGHT_REST = 500;
@@ -35,7 +20,7 @@ const TopSection: React.FC = () => {
   const pathRef = useRef<SVGPathElement | null>(null);
   const nameRef = useRef<HTMLHeadingElement | null>(null);
 
-  const enabled = useSyncExternalStore(subscribeGate, readGate, readGateSSR);
+  const enabled = useCursorMotionGate();
 
   const weight = useMotionValue(WEIGHT_REST);
   const weightSpring = useSpring(weight, { stiffness: 150, damping: 20, mass: 0.4 });
