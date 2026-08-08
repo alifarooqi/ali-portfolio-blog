@@ -8,7 +8,9 @@ import AboutWriter from "@/app/components/AboutWriter";
 import CommonConfig from "@/app/config/CommonConfig";
 import "./style.scss";
 
-export const revalidate = 43200; // revalidate once per hour
+// 12h. Duplicated across sitemap.ts, blog/page.tsx, og/route.tsx —
+// Next.js requires literals here; see lib/revalidate.ts for the source of truth.
+export const revalidate = 43200;
 
 export async function generateStaticParams() {
   const posts = await getMediumPosts();

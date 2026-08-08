@@ -2,7 +2,9 @@ import { getMediumPosts } from "@/lib/medium";
 
 export const baseUrl = "https://alifarooqi.vercel.app";
 
-export const revalidate = 43200; // regenerate every hour
+// 12h. Duplicated across blog/page.tsx, blog/[slug]/page.tsx, og/route.tsx —
+// Next.js requires literals here; see lib/revalidate.ts for the source of truth.
+export const revalidate = 43200;
 
 export default async function sitemap() {
   const posts = await getMediumPosts();
