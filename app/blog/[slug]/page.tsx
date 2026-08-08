@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props) {
   const description = post.summary;
   const publishedTime = post.date;
 
-  const ogImage = post.image ?? `${baseUrl}/preview-card.jpg?title=${encodeURIComponent(title)}`;
+  const ogImage = post.image ?? `/og?title=${encodeURIComponent(title)}`;
 
   return {
     title,
@@ -78,7 +78,7 @@ async function Blog({ params }: Props) {
             description: post.summary,
             image:
               post.image ??
-              `${baseUrl}/preview-card.jpg?title=${encodeURIComponent(post.title ?? "Blog | Ali Farooqi")}`,
+              `${baseUrl}/og?title=${encodeURIComponent(post.title ?? "Blog | Ali Farooqi")}`,
             url: `${baseUrl}/blog/${post.slug}`,
             author: {
               "@type": "Person",

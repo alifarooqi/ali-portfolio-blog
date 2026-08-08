@@ -1,5 +1,5 @@
 import "./global.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import clsx from "clsx";
 import { Varela_Round, Bricolage_Grotesque } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
@@ -15,6 +15,20 @@ import ShaderBackground from "./components/ShaderBackground/ShaderBackground";
 import CustomCursor from "./components/CustomCursor/CustomCursor";
 import SmoothScroll from "./components/SmoothScroll/SmoothScroll";
 import ScrollProgress from "./components/ScrollProgress/ScrollProgress";
+
+// Viewport — Next.js 13+ requires themeColor/colorScheme here, not in Metadata.
+// Media queries let mobile browser chrome adapt to the user's OS theme.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f131a" },
+  ],
+  colorScheme: "light dark",
+};
+
+const defaultOgImage = `/og?title=${encodeURIComponent(
+  "Ali Farooqi | Cloud & IoT Engineer for China & GBA"
+)}`;
 
 // Layout Metadata
 export const metadata: Metadata = {
@@ -45,7 +59,7 @@ export const metadata: Metadata = {
     siteName: "Ali Farooqi Portfolio",
     locale: "en_US",
     type: "website",
-    images: [{ url: "/preview-card.jpg", width: 1200, height: 630 }],
+    images: [{ url: defaultOgImage, width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
@@ -55,7 +69,7 @@ export const metadata: Metadata = {
       "Helping businesses scale cloud-native and IoT solutions in China and the Greater Bay Area. View my portfolio and get in touch.",
     images: [
       {
-        url: "/preview-card.jpg",
+        url: defaultOgImage,
         alt: "Ali Portfolio Preview",
       },
     ],
