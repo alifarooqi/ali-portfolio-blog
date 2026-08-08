@@ -183,21 +183,18 @@
   }
 }
 
-// Tablet and up: two-column top row, stats left + bio right.
-@media (min-width: 768px) {
+// Desktop: two-column top row (stats left + bio right). Previously this
+// kicked in at 768px, but between 768–1024px the section is flex-row with a
+// ~180px header and 5rem padding, which starved the stats card of width and
+// caused its inner 2-col grid (values + labels) to overlap. Holding the
+// single-column stack until 1024px gives stats the full content width.
+@media (min-width: 1024px) {
   .about-bento {
     grid-template-columns: 1fr 2fr;
     grid-template-areas:
       "stats bio"
       "prog  prog"
       "tools tools";
-    gap: 1.25rem;
-  }
-}
-
-// Desktop: tighten the gap and let the grid breathe at wide widths.
-@media (min-width: 1024px) {
-  .about-bento {
     gap: 1.5rem;
   }
 }
