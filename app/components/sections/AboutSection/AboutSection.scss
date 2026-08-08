@@ -22,6 +22,11 @@
     border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
     border-radius: 14px;
     padding: clamp(1.1rem, 4vw, 1.75rem);
+    // Grid item: allow shrinking below intrinsic min-width of children (the
+    // marquee track has width: max-content) so the card stays within the
+    // viewport on mobile.
+    min-width: 0;
+    overflow: hidden;
     transition: border-color 0.3s ease, transform 0.3s ease;
 
     &:hover {
@@ -100,6 +105,9 @@
   width: 100%;
   overflow: hidden;
   position: relative;
+  // Guard against the track's width: max-content pulling the parent grid
+  // item wider than the viewport on mobile.
+  min-width: 0;
   -webkit-mask-image: linear-gradient(
     90deg,
     transparent 0,
