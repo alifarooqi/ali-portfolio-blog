@@ -8,8 +8,6 @@ export type Review = {
     name: string;
     title: string;
     company: string;
-    /** Optional profile link; wraps the avatar + name when present. */
-    link?: string;
   };
 };
 

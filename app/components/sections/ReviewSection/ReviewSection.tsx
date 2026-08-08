@@ -74,7 +74,7 @@ function ReviewCard({ review, tilt }: { review: Review; tilt: boolean }) {
         {getIcon("formatQuote")}
       </span>
 
-      <p className="review-card__body">{review.quote}</p>
+      <blockquote className="review-card__body">{review.quote}</blockquote>
 
       {review.footnote && <p className="review-card__footnote">{review.footnote}</p>}
 
@@ -97,7 +97,7 @@ const ReviewSection = forwardRef<HTMLDivElement>((_, ref) => {
   const tiltEnabled = useCursorMotionGate();
 
   return (
-    <Section ref={ref} sectionConfig={reviewSectionConfig} extraClass="review-section">
+    <Section ref={ref} sectionConfig={reviewSectionConfig}>
       <h4 className="reviews-intro">
         <RateReviewIcon /> What do others say?
       </h4>
