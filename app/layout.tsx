@@ -9,6 +9,7 @@ import Footer from "./components/Footer/Footer";
 import { baseUrl } from "./sitemap";
 import Menu from "./components/Menu/Menu";
 import ThemeInitializerScript from "./ThemeInitializerScript";
+import SoundInitializerScript from "./SoundInitializerScript";
 import GoogleAnalyticsScript from "./GoogleAnalyticsScript";
 import ShaderBackground from "./components/ShaderBackground/ShaderBackground";
 import CustomCursor from "./components/CustomCursor/CustomCursor";
@@ -115,6 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={clsx(varelaRound.variable, bricolageGrotesque.variable)}>
       <head>
         <ThemeInitializerScript />
+        <SoundInitializerScript />
       </head>
       <body className="flex min-h-screen flex-col">
         <ShaderBackground />

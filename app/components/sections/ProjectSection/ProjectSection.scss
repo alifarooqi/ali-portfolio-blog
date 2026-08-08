@@ -56,22 +56,6 @@
       color: var(--brand-color-light, #21e5e5);
       font-weight: 600;
     }
-
-    .sound-toggle-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--brand-color, #3c83f6);
-      transition: color 0.25s, transform 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      &:hover {
-        color: #ffffff;
-        transform: scale(1.1);
-      }
-    }
   }
 
   /* Vertical Layout Architecture */

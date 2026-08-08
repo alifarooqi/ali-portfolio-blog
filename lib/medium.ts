@@ -3,7 +3,7 @@ import mediumFeed from "./medium-feed.json"; // Updated from: https://rss2json.c
 
 const MY_USERNAME = "ali_farooqi";
 
-type MediumPost = Partial<{
+export type MediumPost = Partial<{
   title: string;
   link: string;
   content: string; // full HTML content

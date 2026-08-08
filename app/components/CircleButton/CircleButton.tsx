@@ -1,7 +1,10 @@
+"use client";
+
 import React, { CSSProperties, ReactNode } from "react";
 import clsx from "clsx";
 import { PlacesType } from "react-tooltip";
 import { TooltipId } from "../tooltip";
+import { playSound } from "@/lib/sound";
 import "./CircleButton.scss";
 
 interface CircleButtonProps {
@@ -42,6 +45,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       href={link}
       target={target}
       onClick={onClick}
+      onMouseEnter={() => playSound("hover")}
       className={combinedClassName}
       style={buttonStyle}
       rel={target === "_blank" ? "noopener noreferrer" : undefined}
@@ -56,6 +60,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
     <button
       type="button"
       onClick={onClick}
+      onMouseEnter={() => playSound("hover")}
       className={combinedClassName}
       style={buttonStyle}
       aria-label={ariaLabel ?? tooltip}

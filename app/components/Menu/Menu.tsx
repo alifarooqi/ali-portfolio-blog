@@ -5,7 +5,10 @@ import { usePathname } from "next/navigation";
 import MenuToggle from "./MenuToggle/MenuToggle";
 import MenuItem, { MenuItemType } from "./MenuItem/MenuItem";
 import ThemeToggleIcon from "./ThemeToggleIcon";
+import SoundToggleIcon from "./SoundToggleIcon";
 import { useIsDarkMode } from "./useIsDarkMode";
+import { useIsMuted } from "./useIsMuted";
+import { setMuted, playSound, isMuted as readIsMuted } from "@/lib/sound";
 import SectionConfig, { Sections } from "../../config/SectionConfig";
 import { getIcon } from "../icons/Icons";
 import "./Menu.scss";
@@ -13,6 +16,7 @@ import "./Menu.scss";
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
   const isDark = useIsDarkMode();
+  const isMuted = useIsMuted();
   const pathname = usePathname();
 
   const closeMenu = () => setMenuActive(false);
@@ -41,6 +45,16 @@ const Menu: React.FC = () => {
     // useIsDarkMode picks up the class change via its MutationObserver.
   };
 
+  const toggleSound = () => {
+    // Read mute state imperatively from the DOM (mirrors toggleTheme) so this
+    // function doesn't capture the reactive isMuted value and pollute the
+    // menuItems useMemo deps. useIsMuted still drives SoundToggleIcon's render.
+    const next = !readIsMuted();
+    setMuted(next);
+    // Confirmation beep only on unmute — when muting, no sound should play.
+    if (!next) playSound("toggle");
+  };
+
   const menuItems: MenuItemType[] = useMemo(() => {
     const baseItems: MenuItemType[] = [
       {
@@ -48,6 +62,12 @@ const Menu: React.FC = () => {
         tooltip: "Toggle dark/light theme",
         action: toggleTheme,
         key: "menu-theme-toggle",
+      },
+      {
+        icon: <SoundToggleIcon isMuted={isMuted} />,
+        tooltip: "Toggle sound effects",
+        action: toggleSound,
+        key: "menu-sound-toggle",
       },
     ];
 
@@ -80,7 +100,7 @@ const Menu: React.FC = () => {
     } else {
       return [...baseItems, ...pageItems];
     }
-  }, [pathname, scrollToSection, isDark]);
+  }, [pathname, scrollToSection, isDark, isMuted]);
 
   const [isMobile, setIsMobile] = useState(false);
 

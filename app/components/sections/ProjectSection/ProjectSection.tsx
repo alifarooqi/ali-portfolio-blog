@@ -1,8 +1,6 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { motion, AnimatePresence } from "motion/react";
@@ -10,6 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import Section from "../../Section/Section";
 import { getIcon } from "../../icons/Icons";
 import SectionConfig from "../../../config/SectionConfig";
+import { playSound } from "@/lib/sound";
 import Projects from "./Projects";
 import "./ProjectSection.scss";
 
@@ -25,74 +24,15 @@ const coverImages = [
   "/images/projects/pomodoro_timer.webp"
 ];
 
-// Helper to synthesize modern interface sci-fi sounds
-const playInterfaceSound = (type: "hover" | "select" | "toggle", isMuted: boolean) => {
-  if (isMuted || typeof window === "undefined") return;
-  try {
-    const AudioContextClass = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    if (type === "hover") {
-      // Futuristic click/tick
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(320, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.03, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.08);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.08);
-    } else if (type === "select") {
-      // Sci-fi energy sweep
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(150, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.25);
-      
-      const filter = ctx.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.Q.value = 6;
-      filter.frequency.setValueAtTime(180, ctx.currentTime);
-      filter.frequency.exponentialRampToValueAtTime(1800, ctx.currentTime + 0.25);
-
-      osc.disconnect(gain);
-      osc.connect(filter);
-      filter.connect(gain);
-
-      gain.gain.setValueAtTime(0.05, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-      
-      osc.start();
-      osc.stop(ctx.currentTime + 0.25);
-    } else if (type === "toggle") {
-      // Futuristic slide toggle beep
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(520, ctx.currentTime);
-      osc.frequency.setValueAtTime(780, ctx.currentTime + 0.06);
-      gain.gain.setValueAtTime(0.02, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.002, ctx.currentTime + 0.15);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.15);
-    }
-  } catch (e) {
-    console.warn("AudioContext playback interrupted:", e);
-  }
-};
-
 interface Card3DProps {
   project: typeof Projects[number];
   isSelected: boolean;
   onClick: () => void;
   coverImage: string;
-  isMuted: boolean;
 }
 
 // 3D Parallax Game Cover Card
-const Card3D = ({ project, isSelected, onClick, coverImage, isMuted }: Card3DProps) => {
+const Card3D = ({ project, isSelected, onClick, coverImage }: Card3DProps) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [hovering, setHovering] = useState(false);
@@ -108,7 +48,7 @@ const Card3D = ({ project, isSelected, onClick, coverImage, isMuted }: Card3DPro
 
   const handleMouseEnter = () => {
     setHovering(true);
-    playInterfaceSound("hover", isMuted);
+    playSound("hover");
   };
 
   const handleMouseLeave = () => {
@@ -163,7 +103,6 @@ const Card3D = ({ project, isSelected, onClick, coverImage, isMuted }: Card3DPro
 
 const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isMuted, setIsMuted] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const isScrollingRef = useRef(false);
@@ -255,13 +194,13 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
       });
     }
     setSelectedIndex(index);
-    playInterfaceSound("select", isMuted);
+    playSound("select");
 
     // Release scroll block after smooth scrolling animation completes
     setTimeout(() => {
       isScrollingRef.current = false;
     }, 450);
-  }, [isMuted]);
+  }, []);
 
   // Scroll listener to update selectedIndex on manual scroll/swipe
   const handleScroll = () => {
@@ -285,7 +224,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
 
     if (closestIndex !== selectedIndex) {
       setSelectedIndex(closestIndex);
-      playInterfaceSound("hover", isMuted);
+      playSound("hover");
     }
   };
 
@@ -302,7 +241,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
         const activeProj = Projects[selectedIndex];
         if (activeProj.links.length > 0) {
           e.preventDefault();
-          playInterfaceSound("select", isMuted);
+          playSound("select");
           window.open(activeProj.links[0].link, "_blank");
         }
       }
@@ -310,7 +249,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedIndex, isMuted, scrollToIndex]);
+  }, [selectedIndex, scrollToIndex]);
 
   // Adjust scroll position if container is resized/initialized
   useEffect(() => {
@@ -342,17 +281,6 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
             <span className="pulsing-led" />
             <span className="system-ready-label">SYSTEM READY // SELECT WORKPLACE ROM</span>
           </div>
-          <button 
-            className="sound-toggle-btn"
-            onClick={() => {
-              const nextMutedState = !isMuted;
-              setIsMuted(nextMutedState);
-              playInterfaceSound("toggle", nextMutedState);
-            }}
-            aria-label="Toggle system sound effects"
-          >
-            {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
-          </button>
         </div>
 
         {/* Unified Vertical Grid Layout */}
@@ -379,7 +307,6 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
                     project={project}
                     isSelected={index === selectedIndex}
                     coverImage={coverImages[index]}
-                    isMuted={isMuted}
                     onClick={() => scrollToIndex(index)}
                   />
                 ))}
@@ -447,7 +374,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="sci-fi-action-button"
-                          onMouseEnter={() => playInterfaceSound("hover", isMuted)}
+                          onMouseEnter={() => playSound("hover")}
                         >
                           <span className="btn-icon">{link.icon}</span>
                           <span className="btn-text">{link.tooltip}</span>
