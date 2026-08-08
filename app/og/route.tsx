@@ -11,6 +11,12 @@ import CommonConfig from "@/app/config/CommonConfig";
 // `style` is more reliable for layered layouts. Custom fonts would require an
 // edge-compatible font fetch; the signature SVG carries enough branding that
 // the system sans is fine.
+//
+// ISR revalidate matches the blog routes (12h) so a single rendered card is
+// reused across crawlers/share previews; the cache-control header does the
+// same for downstream CDNs (Vercel respects it for the edge cache).
+export const revalidate = 43200;
+
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const title =
@@ -91,6 +97,12 @@ export function GET(request: Request) {
         </div>
       </div>
     ),
-    { width: 1200, height: 630 }
+    {
+      width: 1200,
+      height: 630,
+      headers: {
+        "cache-control": "public, s-maxage=43200, stale-while-revalidate=604800",
+      },
+    }
   );
 }
