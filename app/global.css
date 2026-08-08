@@ -77,10 +77,10 @@ a {
   }
 }
 
-// Animated underline that draws left→right on hover/focus. Uses background-image
-// rather than text-decoration so the stroke can transition cleanly and sit at a
-// controlled offset. Inherits text color via currentColor — theme-aware for free.
-// Opt-in: apply on curated text links where the global a:hover underline is too plain.
+/* Animated underline that draws left→right on hover/focus. Uses background-image
+   rather than text-decoration so the stroke can transition cleanly and sit at a
+   controlled offset. Inherits text color via currentColor — theme-aware for free.
+   Opt-in: apply on curated text links where the global a:hover underline is too plain. */
 .link-underline {
   background-image: linear-gradient(currentColor, currentColor);
   background-position: 0 100%;
@@ -95,8 +95,8 @@ a {
   }
 }
 
-// Wraps a text label + arrow icon so the arrow nudges diagonally on hover/focus.
-// Designed for ArrowOutward (up-right diagonal) but works for any .arrow-nudge__icon.
+/* Wraps a text label + arrow icon so the arrow nudges diagonally on hover/focus.
+   Designed for ArrowOutward (up-right diagonal) but works for any .arrow-nudge__icon. */
 .arrow-nudge {
   display: inline-flex;
   align-items: center;
