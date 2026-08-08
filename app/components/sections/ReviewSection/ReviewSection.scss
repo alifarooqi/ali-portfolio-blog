@@ -23,6 +23,11 @@
   grid-template-columns: 1fr;
   gap: 1rem;
   width: 100%;
+  // Single column across all viewports — testimonials read best as a
+  // vertical narrative, not side-by-side. Multiple columns made the cards
+  // fight for attention and squeezed the quote text.
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .review-card {
@@ -118,19 +123,9 @@
   }
 }
 
-// Tablet: 2-up
+// Tablet+: widen the reading measure slightly.
 @media (min-width: 768px) {
   .reviews-grid {
-    grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
-  }
-}
-
-// Desktop: 3-up so a future third review slots in cleanly. With only two,
-// the empty third column reads as breathing room rather than a gap.
-@media (min-width: 1024px) {
-  .reviews-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
   }
 }
