@@ -4,13 +4,15 @@ import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import MenuToggle from "./MenuToggle/MenuToggle";
 import MenuItem, { MenuItemType } from "./MenuItem/MenuItem";
-import NightsStayIcon from "@mui/icons-material/NightsStay";
+import ThemeToggleIcon from "./ThemeToggleIcon";
+import { useIsDarkMode } from "./useIsDarkMode";
 import SectionConfig, { Sections } from "../../config/SectionConfig";
 import { getIcon } from "../icons/Icons";
 import "./Menu.scss";
 
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
+  const isDark = useIsDarkMode();
   const pathname = usePathname();
 
   const closeMenu = () => setMenuActive(false);
@@ -33,18 +35,16 @@ const Menu: React.FC = () => {
   }, []);
 
   const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
-    if (document.documentElement.classList.contains("dark")) {
-      localStorage.setItem("theme", "dark");
-    } else {
-      localStorage.setItem("theme", "light");
-    }
+    const nextDark = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", nextDark);
+    localStorage.setItem("theme", nextDark ? "dark" : "light");
+    // useIsDarkMode picks up the class change via its MutationObserver.
   };
 
   const menuItems: MenuItemType[] = useMemo(() => {
     const baseItems: MenuItemType[] = [
       {
-        icon: <NightsStayIcon classes={{ root: "menu-item-icon" }} />,
+        icon: <ThemeToggleIcon isDark={isDark} />,
         tooltip: "Toggle dark/light theme",
         action: toggleTheme,
         key: "menu-theme-toggle",
@@ -80,7 +80,7 @@ const Menu: React.FC = () => {
     } else {
       return [...baseItems, ...pageItems];
     }
-  }, [pathname, scrollToSection]);
+  }, [pathname, scrollToSection, isDark]);
 
   const [isMobile, setIsMobile] = useState(false);
 
