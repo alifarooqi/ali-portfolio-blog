@@ -59,6 +59,8 @@ Dark mode is class-based via a `.dark` class on `<html>`. `app/ThemeInitializerS
 ### Styling
 Tailwind v4 (alpha) is configured via `@import "tailwindcss"` in `app/global.css` plus `@tailwindcss/postcss`; the dark variant is declared with `@custom-variant dark (&:where(.dark, .dark *))`. SCSS is also used — most components ship a co-located `.scss` file imported next to the component. Tailwind utilities and component-scoped SCSS coexist; follow whichever pattern the file you're editing already uses.
 
+**Design is mobile-first.** New and modified SCSS must target small screens in the base rules and layer larger-viewport behavior on top via `min-width` media queries (never `max-width` overrides that walk backwards from desktop). Use `clamp()` for fluid type/spacing where it removes the need for per-breakpoint overrides. Verify at ≥320px, ~430px, ~768px, and ~1024px before considering a layout done.
+
 ### SEO / metadata
 `app/layout.tsx` owns the root `Metadata` (incl. JSON-LD `Person` schema, OG/Twitter images). `app/blog/[slug]/page.tsx` uses `generateMetadata` and emits `BlogPosting` JSON-LD per post. `app/og/route.tsx` generates dynamic OG images. `app/sitemap.ts` exports `baseUrl` (hardcoded to `https://alifarooqi.vercel.app`) — reuse it for any absolute URLs.
 

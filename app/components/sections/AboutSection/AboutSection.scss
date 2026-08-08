@@ -1,13 +1,18 @@
 // Bento grid for the About section. Cards have their own frosted surfaces so
 // they stay readable whether or not the parent .section is .section-active.
+//
+// Mobile-first: the base rules target small screens. Tablet (≥768px) and
+// desktop (≥1024px) overrides layered on top via min-width media queries.
 .about-bento {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  // Single-column stack on phones.
+  grid-template-columns: 1fr;
   grid-template-areas:
-    "bio   stats"
-    "prog  prog"
-    "tools tools";
-  gap: 1.25rem;
+    "stats"
+    "bio"
+    "prog"
+    "tools";
+  gap: 1rem;
   width: 100%;
 
   &__card {
@@ -16,7 +21,7 @@
     -webkit-backdrop-filter: blur(12px) saturate(120%);
     border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
     border-radius: 14px;
-    padding: 1.75rem;
+    padding: clamp(1.1rem, 4vw, 1.75rem);
     transition: border-color 0.3s ease, transform 0.3s ease;
 
     &:hover {
@@ -24,7 +29,7 @@
     }
 
     h4 {
-      font-size: 1.4rem;
+      font-size: clamp(1.15rem, 2.5vw, 1.4rem);
       margin: 0 0 0.75rem;
       display: flex;
       align-items: center;
@@ -35,18 +40,8 @@
         width: 1.4rem;
         height: 1.4rem;
         color: var(--brand-color);
+        flex-shrink: 0;
       }
-    }
-  }
-
-  &__bio {
-    grid-area: bio;
-
-    p {
-      margin: 0;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: var(--text-primary);
     }
   }
 
@@ -54,29 +49,41 @@
     grid-area: stats;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem 1.25rem;
+    gap: 0.85rem 1rem;
     align-content: center;
   }
 
   &__stat {
     display: flex;
     flex-direction: column;
+    min-width: 0; // lets long labels wrap on narrow phones
   }
 
   &__stat-value {
     font-family: var(--font-bricolage), var(--font-varela-round), sans-serif;
-    font-size: 2.1rem;
+    font-size: clamp(1.5rem, 6vw, 2.1rem);
     font-weight: 700;
     line-height: 1;
     color: var(--brand-color);
   }
 
   &__stat-label {
-    font-size: 0.72rem;
+    font-size: clamp(0.65rem, 1.6vw, 0.72rem);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-secondary);
     margin-top: 0.45rem;
+  }
+
+  &__bio {
+    grid-area: bio;
+
+    p {
+      margin: 0;
+      font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+      line-height: 1.7;
+      color: var(--text-primary);
+    }
   }
 
   &__marquee--prog {
@@ -104,7 +111,7 @@
 
   &__track {
     display: flex;
-    gap: 2.5rem;
+    gap: 2rem;
     width: max-content;
     align-items: center;
   }
@@ -113,8 +120,8 @@
     display: inline-flex;
 
     svg {
-      width: 2.8rem;
-      height: 2.8rem;
+      width: clamp(2rem, 7vw, 2.8rem);
+      height: clamp(2rem, 7vw, 2.8rem);
       display: block;
       transition: transform 0.25s ease, filter 0.25s ease;
 
@@ -168,30 +175,21 @@
   }
 }
 
-@media (max-width: 768px) {
+// Tablet and up: two-column top row, stats left + bio right.
+@media (min-width: 768px) {
   .about-bento {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 2fr;
     grid-template-areas:
-      "bio"
-      "stats"
-      "prog"
-      "tools";
-
-    &__stats {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    &__card {
-      padding: 1.25rem;
-    }
-
-    &__stat-value {
-      font-size: 1.7rem;
-    }
+      "stats bio"
+      "prog  prog"
+      "tools tools";
+    gap: 1.25rem;
   }
+}
 
-  .about-marquee__item svg {
-    width: 2.2rem;
-    height: 2.2rem;
+// Desktop: tighten the gap and let the grid breathe at wide widths.
+@media (min-width: 1024px) {
+  .about-bento {
+    gap: 1.5rem;
   }
 }

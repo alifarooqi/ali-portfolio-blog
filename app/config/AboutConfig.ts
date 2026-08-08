@@ -16,7 +16,7 @@ export type AboutConfigType = {
 const AboutConfig: AboutConfigType = {
   bio: "Engineer by trade, bridge-builder by nature — I design secure, scalable platforms and help global tech thrive in the Chinese cloud. Off the clock, you'll find me watching football, probably yelling at the screen like it's a code review :)",
   stats: [
-    { label: "Years Experience", value: "8+" },
+    { label: "Years Experience", value: "6+" },
     { label: "Projects Shipped", value: "12+" },
     { label: "Tech Stack", value: "12" },
     { label: "Blog Posts", value: "10+" },
