@@ -27,7 +27,7 @@ const Breadcrumb: React.FC = () => {
   return (
     <nav className="breadcrumb flex items-center gap-2 text-sm whitespace-nowrap overflow-x-auto no-scrollbar">
       {/* Home Button */}
-      <Link href="/">
+      <Link href="/" className="link-underline">
         {getIcon("home", "inline-block mr-1 mb-0.5 !w-4 !h-4")}
         Home
       </Link>
@@ -41,7 +41,9 @@ const Breadcrumb: React.FC = () => {
               {path.name}
             </span>
           ) : (
-            <Link href={path.href}>{path.name}</Link>
+            <Link href={path.href} className="link-underline">
+              {path.name}
+            </Link>
           )}
         </React.Fragment>
       ))}

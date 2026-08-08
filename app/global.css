@@ -77,6 +77,41 @@ a {
   }
 }
 
+// Animated underline that draws left→right on hover/focus. Uses background-image
+// rather than text-decoration so the stroke can transition cleanly and sit at a
+// controlled offset. Inherits text color via currentColor — theme-aware for free.
+// Opt-in: apply on curated text links where the global a:hover underline is too plain.
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.28s ease;
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+    text-decoration: none;
+  }
+}
+
+// Wraps a text label + arrow icon so the arrow nudges diagonally on hover/focus.
+// Designed for ArrowOutward (up-right diagonal) but works for any .arrow-nudge__icon.
+.arrow-nudge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+
+  &__icon {
+    transition: transform 0.25s ease;
+  }
+
+  &:hover &__icon,
+  &:focus-visible &__icon {
+    transform: translate(0.18em, -0.18em);
+  }
+}
+
 ::-webkit-scrollbar {
   width: 0.3rem;
 }

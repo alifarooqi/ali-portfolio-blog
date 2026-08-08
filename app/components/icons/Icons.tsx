@@ -42,6 +42,7 @@ import TerraformIcon from "./Terraform";
 import PostgresIcon from "./Postgresql";
 import KubernetesIcon from "./Kubernetes";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import MediumIcon from "./Medium";
 // ICONS END
 
@@ -88,6 +89,7 @@ const Icons = {
   blog: ArticleIcon,
   medium: MediumIcon,
   formatQuote: FormatQuoteIcon,
+  arrowOutward: ArrowOutwardIcon,
 };
 
 export type IconKey = keyof typeof Icons;
