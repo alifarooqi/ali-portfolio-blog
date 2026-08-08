@@ -3,15 +3,20 @@
 // so playSound() can read it without prop-drilling or a React context. The
 // SoundInitializerScript sets the attribute pre-hydration from localStorage;
 // the radial Menu toggle flips it via setMuted().
-//
-// Single shared AudioContext (lazy-created) replaces the old per-call ctx from
-// ProjectSection — fixes the autoplay-policy gap via resume() on unmute and
-// avoids spinning up a fresh context for every hover tick.
 
 export type SoundType = "hover" | "select" | "toggle";
 
+// The AudioContext MUST be created inside a user-gesture handler (click,
+// pointerdown, keydown) — not just resumed there. Creating it from a
+// mouseenter handler (what playSound callers use) triggers Chrome's:
+//   "The AudioContext was not allowed to start."
+// So the context is only created by ensureCtx(), which is called exclusively
+// from gesture-safe call sites: the pointerdown/keydown unlock listeners and
+// setMuted(false). playSound never creates it — it only plays if the context
+// already exists, and otherwise quietly installs the gesture listeners that
+// will create it on the next click/keydown.
 let ctx: AudioContext | null = null;
-let autoResumeInstalled = false;
+let gestureUnlockInstalled = false;
 
 // Debounce window for hover ticks. Sweeping across several CircleButtons in
 // quick succession would otherwise fire one tick per icon; this collapses
@@ -20,34 +25,31 @@ let autoResumeInstalled = false;
 const HOVER_DEBOUNCE_MS = 150;
 let lastHoverTime = 0;
 
-// mouseenter (what playSound callers use) is NOT a user-activation event per
-// Chrome's autoplay policy — only click/pointerdown/keydown unlock audio. On a
-// refresh where the user was already unmuted (localStorage), the lazy
-// AudioContext is created suspended on the first hover and can't be resumed
-// from there. So the first time we create a context, we attach one-shot
-// listeners for the real gesture events; the next click/keydown anywhere on
-// the page transitions the context to "running", and all subsequent hover
-// sounds are audible.
-function installAutoResume(audioCtx: AudioContext): void {
-  if (autoResumeInstalled || typeof window === "undefined") return;
-  autoResumeInstalled = true;
-  const resume = () => {
-    if (audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
+// Attaches one-shot listeners for the user-activation events Chrome's autoplay
+// policy accepts. On the first pointerdown/keydown anywhere on the page, the
+// callback creates the AudioContext inside the gesture (allowed) and resumes
+// it. After that, all subsequent playSound calls find a running context.
+function installGestureUnlock(): void {
+  if (gestureUnlockInstalled || typeof window === "undefined") return;
+  gestureUnlockInstalled = true;
+  const unlock = () => {
+    const c = ensureCtx();
+    if (c && c.state === "suspended") c.resume().catch(() => {});
   };
-  window.addEventListener("pointerdown", resume, { passive: true });
-  window.addEventListener("keydown", resume, { passive: true });
+  window.addEventListener("pointerdown", unlock, { passive: true });
+  window.addEventListener("keydown", unlock, { passive: true });
 }
 
-function getCtx(): AudioContext | null {
+// Lazily creates the singleton AudioContext. Callers MUST be inside a
+// user-gesture handler (click/pointerdown/keydown) — Chrome will otherwise
+// block the context and log an autoplay-policy warning.
+function ensureCtx(): AudioContext | null {
   if (typeof window === "undefined") return null;
   const Ctor =
     window.AudioContext ||
     (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!Ctor) return null;
-  if (!ctx) {
-    ctx = new Ctor();
-    installAutoResume(ctx);
-  }
+  if (!ctx) ctx = new Ctor();
   return ctx;
 }
 
@@ -64,10 +66,10 @@ export function setMuted(next: boolean): void {
   } catch {
     // storage disabled (private mode / cookies off) — DOM attribute still works in-session
   }
-  // Resume on unmute. The click that triggered this is a user gesture, so the
-  // autoplay policy allows the context to leave the "suspended" state here.
+  // Create + resume on unmute. setMuted is called from the radial Menu toggle
+  // click, which IS a user gesture, so creating the context here is allowed.
   if (!next) {
-    const c = getCtx();
+    const c = ensureCtx();
     if (c && c.state === "suspended") c.resume().catch(() => {});
   }
 }
@@ -77,7 +79,8 @@ export function toggleSound(): void {
   const willUnmute = isMuted();
   setMuted(!willUnmute);
   // Confirmation beep only on unmute — when muting, no sound should play.
-  // After setMuted(false), the DOM reads "unmuted" so playSound passes the gate.
+  // After setMuted(false), the DOM reads "unmuted" and ctx is created, so
+  // playSound passes both the mute gate and the ctx-exists check.
   if (willUnmute) playSound("toggle");
 }
 
@@ -90,12 +93,18 @@ export function playSound(type: SoundType): void {
     if (now - lastHoverTime < HOVER_DEBOUNCE_MS) return;
     lastHoverTime = now;
   }
-  const c = getCtx();
-  if (!c) return;
-  // Belt-and-suspenders: after the page has sticky activation (any prior
-  // click/keydown), a suspended ctx (e.g. after tab switch) can be resumed
-  // even from a non-gesture handler. The initial unlock is handled by
-  // installAutoResume's pointerdown/keydown listeners.
+  // Do NOT create the context here. playSound callers use mouseenter, which is
+  // not a user-activation event — creating the context would trigger Chrome's
+  // "AudioContext was not allowed to start" warning. Instead, install gesture
+  // listeners (if not already) that will create it on the next click/keydown,
+  // then bail out. The first hover after a gesture finds ctx already running.
+  if (!ctx) {
+    installGestureUnlock();
+    return;
+  }
+  const c = ctx;
+  // After the page has sticky activation, a suspended ctx (e.g. after tab
+  // switch) can be resumed even from a non-gesture handler.
   if (c.state === "suspended") c.resume().catch(() => {});
   try {
     const osc = c.createOscillator();
