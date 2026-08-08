@@ -70,6 +70,11 @@ export function playSound(type: SoundType): void {
   }
   const c = getCtx();
   if (!c) return;
+  // On a refresh where the user was already unmuted via localStorage, setMuted
+  // (which normally resumes the context) never runs, so the AudioContext is
+  // created suspended by the autoplay policy. Resume here — every caller is an
+  // event handler (hover/click), so the user-gesture requirement is met.
+  if (c.state === "suspended") c.resume().catch(() => {});
   try {
     const osc = c.createOscillator();
     const gain = c.createGain();
