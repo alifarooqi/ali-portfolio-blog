@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import CommonConfig from "../config/CommonConfig";
 import { getIcon } from "./icons/Icons";
+import { playSound } from "@/lib/sound";
 
 interface Props {
   link?: string;
@@ -37,6 +40,8 @@ export default function AboutWriter({ link }: Props) {
           href={link || MEDIUM_BASE_URL}
           target="_blank"
           className="arrow-nudge inline-block bg-[var(--brand-color)] !text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-900 transition duration-300"
+          onMouseEnter={() => playSound("hover")}
+          onClick={() => playSound("select")}
         >
           Originally posted on Medium
           <span className="arrow-nudge__icon inline-flex">{getIcon("arrowOutward")}</span>

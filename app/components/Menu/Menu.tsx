@@ -5,7 +5,10 @@ import { usePathname } from "next/navigation";
 import MenuToggle from "./MenuToggle/MenuToggle";
 import MenuItem, { MenuItemType } from "./MenuItem/MenuItem";
 import ThemeToggleIcon from "./ThemeToggleIcon";
+import SoundToggleIcon from "./SoundToggleIcon";
 import { useIsDarkMode } from "./useIsDarkMode";
+import { useIsMuted } from "./useIsMuted";
+import { toggleSound } from "@/lib/sound";
 import SectionConfig, { Sections } from "../../config/SectionConfig";
 import { getIcon } from "../icons/Icons";
 import "./Menu.scss";
@@ -13,6 +16,7 @@ import "./Menu.scss";
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
   const isDark = useIsDarkMode();
+  const isMuted = useIsMuted();
   const pathname = usePathname();
 
   const closeMenu = () => setMenuActive(false);
@@ -49,6 +53,12 @@ const Menu: React.FC = () => {
         action: toggleTheme,
         key: "menu-theme-toggle",
       },
+      {
+        icon: <SoundToggleIcon isMuted={isMuted} />,
+        tooltip: "Toggle sound effects",
+        action: toggleSound,
+        key: "menu-sound-toggle",
+      },
     ];
 
     const sectionItems: MenuItemType[] = SectionConfig.filter(
@@ -80,7 +90,7 @@ const Menu: React.FC = () => {
     } else {
       return [...baseItems, ...pageItems];
     }
-  }, [pathname, scrollToSection, isDark]);
+  }, [pathname, scrollToSection, isDark, isMuted]);
 
   const [isMobile, setIsMobile] = useState(false);
 

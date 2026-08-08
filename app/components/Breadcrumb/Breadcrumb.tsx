@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import React from "react";
 import { getIcon } from "../icons/Icons";
+import { playSound } from "@/lib/sound";
 import "./Breadcrumb.scss";
 
 const Breadcrumb: React.FC = () => {
@@ -27,7 +28,7 @@ const Breadcrumb: React.FC = () => {
   return (
     <nav className="breadcrumb flex items-center gap-2 text-sm whitespace-nowrap overflow-x-auto no-scrollbar">
       {/* Home Button */}
-      <Link href="/" className="link-underline">
+      <Link href="/" className="link-underline" onMouseEnter={() => playSound("hover")}>
         {getIcon("home", "inline-block mr-1 mb-0.5 !w-4 !h-4")}
         Home
       </Link>
@@ -41,7 +42,7 @@ const Breadcrumb: React.FC = () => {
               {path.name}
             </span>
           ) : (
-            <Link href={path.href} className="link-underline">
+            <Link href={path.href} className="link-underline" onMouseEnter={() => playSound("hover")}>
               {path.name}
             </Link>
           )}
