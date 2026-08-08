@@ -16,7 +16,7 @@ let ctx: AudioContext | null = null;
 // quick succession would otherwise fire one tick per icon; this collapses
 // repeated hovers within the window into a single sound. Only "hover" is
 // gated — "select" and "toggle" should always fire on explicit intent.
-const HOVER_DEBOUNCE_MS = 80;
+const HOVER_DEBOUNCE_MS = 150;
 let lastHoverTime = 0;
 
 function getCtx(): AudioContext | null {
