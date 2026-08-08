@@ -64,8 +64,8 @@ const TopSection: React.FC = () => {
             className="profile-picture"
             src="/images/faceshot.webp"
             alt="Profile"
-            width={1184}
-            height={864}
+            width={490}
+            height={639}
             priority
           />
         </div>
