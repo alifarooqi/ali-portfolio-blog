@@ -12,6 +12,13 @@ export type SoundType = "hover" | "select" | "toggle";
 
 let ctx: AudioContext | null = null;
 
+// Debounce window for hover ticks. Sweeping across several CircleButtons in
+// quick succession would otherwise fire one tick per icon; this collapses
+// repeated hovers within the window into a single sound. Only "hover" is
+// gated — "select" and "toggle" should always fire on explicit intent.
+const HOVER_DEBOUNCE_MS = 80;
+let lastHoverTime = 0;
+
 function getCtx(): AudioContext | null {
   if (typeof window === "undefined") return null;
   const Ctor =
@@ -44,13 +51,23 @@ export function setMuted(next: boolean): void {
 }
 
 export function toggleSound(): void {
-  setMuted(!isMuted());
+  // willUnmute is true when currently muted → toggling toward unmuted.
+  const willUnmute = isMuted();
+  setMuted(!willUnmute);
+  // Confirmation beep only on unmute — when muting, no sound should play.
+  // After setMuted(false), the DOM reads "unmuted" so playSound passes the gate.
+  if (willUnmute) playSound("toggle");
 }
 
 // Oscillator configs preserved verbatim from the former ProjectSection inline
 // helper — same waveforms, frequency sweeps, gain envelopes, and bandpass filter.
 export function playSound(type: SoundType): void {
   if (isMuted()) return;
+  if (type === "hover") {
+    const now = typeof performance !== "undefined" ? performance.now() : Date.now();
+    if (now - lastHoverTime < HOVER_DEBOUNCE_MS) return;
+    lastHoverTime = now;
+  }
   const c = getCtx();
   if (!c) return;
   try {

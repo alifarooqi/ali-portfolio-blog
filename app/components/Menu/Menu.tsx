@@ -8,7 +8,7 @@ import ThemeToggleIcon from "./ThemeToggleIcon";
 import SoundToggleIcon from "./SoundToggleIcon";
 import { useIsDarkMode } from "./useIsDarkMode";
 import { useIsMuted } from "./useIsMuted";
-import { setMuted, playSound, isMuted as readIsMuted } from "@/lib/sound";
+import { toggleSound } from "@/lib/sound";
 import SectionConfig, { Sections } from "../../config/SectionConfig";
 import { getIcon } from "../icons/Icons";
 import "./Menu.scss";
@@ -43,16 +43,6 @@ const Menu: React.FC = () => {
     document.documentElement.classList.toggle("dark", nextDark);
     localStorage.setItem("theme", nextDark ? "dark" : "light");
     // useIsDarkMode picks up the class change via its MutationObserver.
-  };
-
-  const toggleSound = () => {
-    // Read mute state imperatively from the DOM (mirrors toggleTheme) so this
-    // function doesn't capture the reactive isMuted value and pollute the
-    // menuItems useMemo deps. useIsMuted still drives SoundToggleIcon's render.
-    const next = !readIsMuted();
-    setMuted(next);
-    // Confirmation beep only on unmute — when muting, no sound should play.
-    if (!next) playSound("toggle");
   };
 
   const menuItems: MenuItemType[] = useMemo(() => {
