@@ -11,6 +11,7 @@
 export type SoundType = "hover" | "select" | "toggle";
 
 let ctx: AudioContext | null = null;
+let autoResumeInstalled = false;
 
 // Debounce window for hover ticks. Sweeping across several CircleButtons in
 // quick succession would otherwise fire one tick per icon; this collapses
@@ -19,13 +20,34 @@ let ctx: AudioContext | null = null;
 const HOVER_DEBOUNCE_MS = 150;
 let lastHoverTime = 0;
 
+// mouseenter (what playSound callers use) is NOT a user-activation event per
+// Chrome's autoplay policy — only click/pointerdown/keydown unlock audio. On a
+// refresh where the user was already unmuted (localStorage), the lazy
+// AudioContext is created suspended on the first hover and can't be resumed
+// from there. So the first time we create a context, we attach one-shot
+// listeners for the real gesture events; the next click/keydown anywhere on
+// the page transitions the context to "running", and all subsequent hover
+// sounds are audible.
+function installAutoResume(audioCtx: AudioContext): void {
+  if (autoResumeInstalled || typeof window === "undefined") return;
+  autoResumeInstalled = true;
+  const resume = () => {
+    if (audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
+  };
+  window.addEventListener("pointerdown", resume, { passive: true });
+  window.addEventListener("keydown", resume, { passive: true });
+}
+
 function getCtx(): AudioContext | null {
   if (typeof window === "undefined") return null;
   const Ctor =
     window.AudioContext ||
     (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!Ctor) return null;
-  if (!ctx) ctx = new Ctor();
+  if (!ctx) {
+    ctx = new Ctor();
+    installAutoResume(ctx);
+  }
   return ctx;
 }
 
@@ -70,10 +92,10 @@ export function playSound(type: SoundType): void {
   }
   const c = getCtx();
   if (!c) return;
-  // On a refresh where the user was already unmuted via localStorage, setMuted
-  // (which normally resumes the context) never runs, so the AudioContext is
-  // created suspended by the autoplay policy. Resume here — every caller is an
-  // event handler (hover/click), so the user-gesture requirement is met.
+  // Belt-and-suspenders: after the page has sticky activation (any prior
+  // click/keydown), a suspended ctx (e.g. after tab switch) can be resumed
+  // even from a non-gesture handler. The initial unlock is handled by
+  // installAutoResume's pointerdown/keydown listeners.
   if (c.state === "suspended") c.resume().catch(() => {});
   try {
     const osc = c.createOscillator();
