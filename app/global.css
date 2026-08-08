@@ -93,6 +93,7 @@ a {
 
   &:hover,
   &:focus-visible {
+    color: var(--brand-color);
     background-size: 100% 1px;
     text-decoration: none;
   }

@@ -7,11 +7,9 @@
   a {
     color: inherit;
     text-decoration: none;
-
-    &:hover,
-    &:focus-visible {
-      color: var(--brand-color);
-    }
+    // Hover color + underline-draw are owned globally by .link-underline
+    // (applied on each <Link> in Breadcrumb.tsx) so every text link that opts
+    // in gets the same treatment without re-declaring it here.
   }
 
   // The trailing current-page item gets full contrast so the reader can
