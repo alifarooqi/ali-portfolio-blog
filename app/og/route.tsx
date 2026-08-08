@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import CommonConfig from "@/app/config/CommonConfig";
+import { REVALIDATE_INTERVAL_SECONDS } from "@/lib/revalidate";
 
 // Dynamic OG card generator. Renders a branded dark card (matches the site's
 // sci-fi aesthetic) with the signature SVG, the page/post title, and a name +
@@ -15,6 +16,11 @@ import CommonConfig from "@/app/config/CommonConfig";
 // ISR revalidate matches the blog routes (12h) so a single rendered card is
 // reused across crawlers/share previews; the cache-control header does the
 // same for downstream CDNs (Vercel respects it for the edge cache).
+//
+// 43200 is duplicated across sitemap.ts, blog/page.tsx, blog/[slug]/page.tsx
+// — Next.js requires literals here; see lib/revalidate.ts for the source of
+// truth. The cache-control header below imports the constant (runtime code
+// is not subject to the segment-config literal restriction).
 export const revalidate = 43200;
 
 export function GET(request: Request) {
@@ -101,7 +107,7 @@ export function GET(request: Request) {
       width: 1200,
       height: 630,
       headers: {
-        "cache-control": "public, s-maxage=43200, stale-while-revalidate=604800",
+        "cache-control": `public, s-maxage=${REVALIDATE_INTERVAL_SECONDS}, stale-while-revalidate=604800`,
       },
     }
   );

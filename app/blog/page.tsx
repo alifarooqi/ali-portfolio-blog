@@ -8,7 +8,9 @@ export const metadata = {
   description: "Read my blog.",
 };
 
-export const revalidate = 43200; // revalidate once per 12-hours
+// 12h. Duplicated across sitemap.ts, blog/[slug]/page.tsx, og/route.tsx —
+// Next.js requires literals here; see lib/revalidate.ts for the source of truth.
+export const revalidate = 43200;
 
 export default async function Page() {
   const posts = await getMediumPosts();
