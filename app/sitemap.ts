@@ -1,15 +1,23 @@
 import { getMediumPosts } from "@/lib/medium";
 
-// Falls back through:
+// Resolves the canonical site URL. Priority:
 //   1. NEXT_PUBLIC_SITE_URL  — set explicitly on Vercel Production
-//   2. NEXT_PUBLIC_VERCEL_URL — set to https://$VERCEL_URL on Vercel Preview
-//      so each preview deploy advertises its own dynamic URL in metadata
-//      (useful for OG card / sitemap smoke on per-branch deploys)
-//   3. The hardcoded prod URL — dev/CI "just works" with no .env file
-export const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  process.env.NEXT_PUBLIC_VERCEL_URL ??
-  "https://alifarooqi.vercel.app";
+//   2. NEXT_PUBLIC_VERCEL_URL — manual override (rarely needed)
+//   3. VERCEL_URL             — auto-injected by Vercel on every deploy
+//                              (bare hostname, no protocol — prefixed here)
+//   4. The hardcoded prod URL — dev/CI "just works" with no .env file
+//
+// Reading VERCEL_URL directly (rather than relying on $VERCEL_URL expansion
+// in an env-var value) is the reliable path — Vercel only expands `$VAR`
+// references for vars you've explicitly defined, not system-provided ones.
+function resolveBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) return process.env.NEXT_PUBLIC_VERCEL_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "https://alifarooqi.vercel.app";
+}
+
+export const baseUrl = resolveBaseUrl();
 
 // 12h. Duplicated across blog/page.tsx, blog/[slug]/page.tsx, og/route.tsx —
 // Next.js requires literals here; see lib/revalidate.ts for the source of truth.
