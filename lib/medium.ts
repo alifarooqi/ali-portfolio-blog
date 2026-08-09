@@ -1,7 +1,7 @@
 import Parser from "rss-parser";
 import mediumFeed from "./medium-feed.json"; // Updated from: https://rss2json.com/#rss_url=https%3A%2F%2Fmedium.com%2Ffeed%2F%40ali_farooqi
 
-const MY_USERNAME = "ali_farooqi";
+const MY_USERNAME = process.env.MEDIUM_USERNAME ?? "ali_farooqi";
 
 export type MediumPost = Partial<{
   title: string;

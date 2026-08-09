@@ -1,6 +1,10 @@
 import { getMediumPosts } from "@/lib/medium";
 
-export const baseUrl = "https://alifarooqi.vercel.app";
+// Falls back to the prod URL so dev/preview "just works" without an .env
+// file. Vercel production sets NEXT_PUBLIC_SITE_URL explicitly so metadata,
+// sitemap, and JSON-LD always carry the canonical URL.
+export const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://alifarooqi.vercel.app";
 
 // 12h. Duplicated across blog/page.tsx, blog/[slug]/page.tsx, og/route.tsx —
 // Next.js requires literals here; see lib/revalidate.ts for the source of truth.
