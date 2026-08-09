@@ -77,11 +77,25 @@ DOMPurify.addHook("beforeSanitizeElements", (node) => {
 const FORBID_ATTR = ["style", "class", "title"];
 
 export function sanitizeMediumHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
+  const sanitized = DOMPurify.sanitize(html, {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
     ALLOW_DATA_ATTR: false,
     ALLOWED_URI_REGEXP,
     FORBID_ATTR,
   });
+
+  // Merge consecutive <pre> siblings. Medium's RSS feed sometimes splits a
+  // single code block into multiple <pre> siblings separated only by
+  // whitespace (see issue #81). Each would otherwise render as its own boxed
+  // fragment where Medium shows one continuous block.
+  //
+  // Runs AFTER sanitize so we match what actually renders: by this point
+  // DOMPurify has stripped all attributes from <pre> (we forbid class/style/
+  // title), so the tag pair is always a bare </pre>...<pre>. The leading
+  // \s* eats trailing whitespace inside the first <pre> to avoid a blank
+  // line at the join; \s* between the tags swallows whitespace text nodes
+  // (newlines, indentation) from the source HTML. The /g flag collapses
+  // runs of any length in one pass.
+  return sanitized.replace(/\s*<\/pre>\s*<pre[^>]*>/g, "\n");
 }
