@@ -1,5 +1,6 @@
 .project-section {
-  padding: 4rem 1.5rem;
+  // Mobile-first base; desktop padding restored at min-width: 768px below.
+  padding: 3rem 1rem;
 
   .game-dashboard-container {
     position: relative;
@@ -7,7 +8,7 @@
     background: radial-gradient(130% 130% at 50% 0%, #151d30 0%, #0a0d14 100%);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 20px;
-    padding: 30px;
+    padding: 20px 15px;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(16px);
     overflow: hidden;
@@ -72,15 +73,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 5px;
     width: 100%;
     position: relative;
   }
 
   /* Floating visual nav arrows */
   .carousel-nav-btn {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 50%;
@@ -95,7 +96,7 @@
     flex-shrink: 0;
 
     svg {
-      font-size: 1.6rem;
+      font-size: 1.3rem;
     }
 
     &:hover {
@@ -121,8 +122,8 @@
   /* Container snapping cards */
   .carousel-list {
     display: flex;
-    gap: 24px;
-    padding: 15px 120px 25px 120px; // Padding allows active card to center
+    gap: 16px;
+    padding: 10px 60px 20px 60px; // Padding allows active card to center
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
@@ -136,8 +137,8 @@
 
   /* 3D Game Cover Cards */
   .game-card {
-    flex: 0 0 210px;
-    height: 310px;
+    flex: 0 0 170px;
+    height: 250px;
     position: relative;
     border-radius: 16px;
     overflow: hidden;
@@ -259,12 +260,12 @@
     background: rgba(13, 18, 30, 0.72);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
-    padding: 30px;
+    padding: 20px 15px;
     backdrop-filter: blur(12px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
     width: 100%;
     margin-top: 10px;
-    height: 330px; /* Lock height to prevent vertical shifting/bouncing */
+    height: auto; /* Auto on mobile to prevent overflow; locked at 330px on desktop */
     display: flex;
     flex-direction: column;
 
@@ -364,13 +365,18 @@
       }
     }
 
-    /* Horizontal buttons wrapper */
+    /* Buttons wrapper — stacks vertically on mobile, row on desktop */
     .inspect-buttons-wrapper {
       display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
       gap: 15px;
+
+      .sci-fi-action-button {
+        width: 100%;
+        max-width: 300px;
+      }
     }
 
     .sci-fi-action-button {
@@ -379,13 +385,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       background: linear-gradient(135deg, rgba(60, 131, 246, 0.25) 0%, rgba(60, 131, 246, 0.05) 100%);
       border: 1px solid rgba(60, 131, 246, 0.4);
-      padding: 12px 20px;
+      // Mobile-first: smaller padding/type/icon on small screens; layer up
+      // via min-width tiers at 430px (phablet) and 768px (desktop).
+      padding: 8px 14px;
       border-radius: 10px;
       color: #ffffff;
-      font-size: 0.88rem;
+      font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.05rem;
       text-transform: uppercase;
@@ -396,8 +404,29 @@
         display: flex;
         align-items: center;
         color: var(--brand-color-light, #21e5e5);
-        
+
         svg {
+          font-size: 0.95rem;
+        }
+      }
+
+      // Phablet tier (~430px): step up halfway.
+      @media (min-width: 430px) {
+        padding: 10px 16px;
+        font-size: 0.82rem;
+        gap: 10px;
+
+        .btn-icon svg {
+          font-size: 1rem;
+        }
+      }
+
+      // Desktop tier (768px+): original desktop values.
+      @media (min-width: 768px) {
+        padding: 12px 20px;
+        font-size: 0.88rem;
+
+        .btn-icon svg {
           font-size: 1.1rem;
         }
       }
@@ -432,75 +461,77 @@
   }
 }
 
-/* Responsive Viewports */
-@media screen and (max-width: 768px) {
+/* Responsive Viewports — mobile-first: base rules target small screens,
+   desktop values layered on top at min-width: 768px. */
+@media screen and (min-width: 768px) {
   .project-section {
-    padding: 3rem 1rem;
+    padding: 4rem 1.5rem;
 
     .game-dashboard-container {
-      padding: 20px 15px;
+      padding: 30px;
     }
 
     .carousel-wrapper-layout {
-      gap: 5px;
+      gap: 20px;
     }
 
-    /* Small screen arrows */
+    /* Full-size arrows on larger screens */
     .carousel-nav-btn {
-      width: 40px;
-      height: 40px;
-      
+      width: 48px;
+      height: 48px;
+
       svg {
-        font-size: 1.3rem;
+        font-size: 1.6rem;
       }
     }
 
     .carousel-list {
-      padding: 10px 60px 20px 60px; // less padding on smaller screens
-      gap: 16px;
+      padding: 15px 120px 25px 120px;
+      gap: 24px;
     }
 
     .game-card {
-      flex: 0 0 170px;
-      height: 250px;
+      flex: 0 0 210px;
+      height: 310px;
     }
 
     .inspect-details-pane {
-      padding: 20px 15px;
-      height: auto; // Allow auto height on small mobile screens to prevent overflow
+      padding: 30px;
+      height: 330px; /* Lock height to prevent vertical shifting/bouncing */
 
       .inspect-buttons-wrapper {
-        flex-direction: column;
-        align-items: center;
-        
+        flex-direction: row;
+        flex-wrap: wrap;
+
         .sci-fi-action-button {
-          width: 100%;
-          max-width: 300px;
+          width: auto;
         }
       }
     }
   }
 }
 
-/* Overrides to render the standard Section header above the content instead of side-by-side */
+/* Overrides to render the standard Section header above the content instead of side-by-side.
+   Mobile-first: base rules target small screens; desktop padding/type layered
+   at min-width: 768px below. */
 .project-section.section-wrapper {
   .section {
     flex-direction: column !important;
     align-items: stretch !important;
-    padding: 5rem 3rem !important;
+    padding: 3rem 1.5rem !important;
 
     .section-header {
       border-right: none !important;
       border-bottom: 1px solid var(--text-primary) !important;
       padding: 0 0 15px 0 !important;
       margin-bottom: 30px !important;
-      justify-content: flex-start !important;
+      justify-content: center !important;
       width: 100% !important;
-      font-size: 2.6rem !important;
-      
+      font-size: 2rem !important;
+
       .section-header-icon {
         padding: 0 !important;
-        font-size: 2.6rem !important;
+        font-size: 2rem !important;
         margin-right: 15px !important;
       }
     }
@@ -513,17 +544,17 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 768px) {
   .project-section.section-wrapper {
     .section {
-      padding: 3rem 1.5rem !important;
-      
+      padding: 5rem 3rem !important;
+
       .section-header {
-        font-size: 2rem !important;
-        justify-content: center !important;
-        
+        justify-content: flex-start !important;
+        font-size: 2.6rem !important;
+
         .section-header-icon {
-          font-size: 2rem !important;
+          font-size: 2.6rem !important;
         }
       }
     }
