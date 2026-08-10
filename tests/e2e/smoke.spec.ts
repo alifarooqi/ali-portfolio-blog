@@ -88,8 +88,8 @@ test.describe("smoke", () => {
   test("section scroll-spy is visible on home, absent on /blog", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator(".section-nav")).toBeVisible();
-    // One dot per section in SectionConfig (Projects, About, Reviews).
-    await expect(page.locator(".section-nav-dot")).toHaveCount(3);
+    // Hero (TopSection) + one per section in SectionConfig (Projects, About, Reviews).
+    await expect(page.locator(".section-nav-dot")).toHaveCount(4);
 
     await page.goto("/blog");
     await expect(page.locator(".section-nav")).toHaveCount(0);

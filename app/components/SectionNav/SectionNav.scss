@@ -36,8 +36,12 @@
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 50%;
-    background: var(--text-secondary, #adadad);
-    opacity: 0.5;
+    // Use --text-primary (not --text-secondary) so contrast adapts per theme:
+    // --text-secondary is #adadad in light mode, nearly invisible on #fafafa.
+    // --text-primary is dark in light theme / light in dark theme, so opacity
+    // alone gives a visible-but-muted dot in both.
+    background: var(--text-primary);
+    opacity: 0.35;
     transition:
       width 0.25s ease,
       height 0.25s ease,
@@ -51,7 +55,7 @@
   &:focus-visible &__indicator {
     width: 0.7rem;
     height: 0.7rem;
-    opacity: 0.85;
+    opacity: 0.7;
   }
 
   &:focus-visible {

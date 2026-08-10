@@ -6,10 +6,18 @@ import { scrollToSection } from "@/lib/scrollToSection";
 import { TooltipId } from "../tooltip";
 import "./SectionNav.scss";
 
-// Filter once at module load — matches the historical radial-menu filter
-// (`!notInMenu && headerIconKey`). TopSection is intentionally excluded
-// (it's not in SectionConfig); when scrolled to the top, no dot is active.
-const SECTIONS = SectionConfig.filter((s) => !s.notInMenu && s.headerIconKey);
+// One entry per scroll-spy dot. The hero (TopSection) is included so the
+// top of the page has an active dot too — it's outside SectionConfig because
+// it isn't a Section component, so we prepend it manually here.
+type SectionNavItem = { key: string; name: string };
+
+const SECTIONS: SectionNavItem[] = [
+  { key: "top", name: "Home" },
+  ...SectionConfig.filter((s) => !s.notInMenu && s.headerIconKey).map((s) => ({
+    key: s.key,
+    name: s.name,
+  })),
+];
 
 /**
  * Always-visible scroll-spy dots, mounted only on `/` (see app/page.tsx).

@@ -57,7 +57,7 @@ const TopSection: React.FC = () => {
   const resetWeight = () => weight.set(WEIGHT_REST);
 
   return (
-    <section className="top-section">
+    <section className="top-section" id="top">
       <div className="signature">
         <div className="avatar">
           <Image
