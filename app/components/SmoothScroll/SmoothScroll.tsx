@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Lenis from "lenis";
+import { setLenisInstance } from "@/lib/lenis";
 
 /**
  * Initializes Lenis smooth-inertia scrolling. No-op on touch devices and
@@ -34,6 +35,9 @@ export default function SmoothScroll() {
       smoothWheel: true,
     });
     lenisRef.current = lenis;
+    // Publish the instance so lib/scrollToSection can route through Lenis
+    // (Lenis hijacks native scroll on desktop — window.scrollTo is unreliable).
+    setLenisInstance(lenis);
 
     let raf = 0;
     const loop = (time: number) => {
@@ -46,6 +50,7 @@ export default function SmoothScroll() {
       cancelAnimationFrame(raf);
       lenis.destroy();
       lenisRef.current = null;
+      setLenisInstance(null);
     };
   }, []);
 
