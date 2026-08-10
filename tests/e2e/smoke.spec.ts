@@ -72,6 +72,19 @@ test.describe("smoke", () => {
       .toBe(!darkBefore);
   });
 
+  test("radial menu items are inert when closed, focusable when open", async ({ page }) => {
+    await page.goto("/");
+
+    const firstItem = page.locator(".menu-item").first();
+
+    // Closed: items are removed from the tab order + accessibility tree.
+    await expect(firstItem).toHaveJSProperty("inert", true);
+
+    // Open the menu — inert must clear so items become keyboard-operable.
+    await page.locator('[aria-label="Open menu"]').click();
+    await expect(firstItem).toHaveJSProperty("inert", false);
+  });
+
   test("unknown route shows the 404 page", async ({ page }) => {
     await page.goto("/no-such-page", { waitUntil: "domcontentloaded" });
     await expect(page.locator("h1")).toHaveText("404 - Page Not Found");

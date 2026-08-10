@@ -51,9 +51,12 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   // Forwarded to both render paths. `inert` removes the element from the tab
   // order + accessibility tree + disables pointer events — used by MenuItem
   // when the radial menu is closed. aria-* exposed for MenuToggle state.
+  // NOTE: spread below is positioned AFTER the explicit `aria-label={...}`
+  // on each render path. Keep it that way — if `aria-label` is ever added to
+  // this object, it would silently override the per-instance label.
   const a11yProps = {
     inert: inert || undefined,
-    "aria-hidden": ariaHidden,
+    "aria-hidden": ariaHidden || undefined,
     "aria-expanded": ariaExpanded,
     "aria-controls": ariaControls,
   };
