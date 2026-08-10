@@ -85,6 +85,36 @@ test.describe("smoke", () => {
     await expect(firstItem).toHaveJSProperty("inert", false);
   });
 
+  test("section scroll-spy is visible on home, absent on /blog", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".section-nav")).toBeVisible();
+    // Hero (TopSection) + one per section in SectionConfig (Projects, About, Reviews).
+    await expect(page.locator(".section-nav-dot")).toHaveCount(4);
+
+    await page.goto("/blog");
+    await expect(page.locator(".section-nav")).toHaveCount(0);
+  });
+
+  test("clicking a section-nav dot scrolls the page", async ({ page }) => {
+    // Regression guard for the Lenis-hijacks-native-scroll bug: clicking a
+    // dot ran scrollToSection -> window.scrollTo, which Lenis overrode via
+    // its RAF loop. The util now routes through lenis.scrollTo when active.
+    await page.goto("/");
+    const scrollYBefore = await page.evaluate(() => window.scrollY);
+    expect(scrollYBefore).toBe(0);
+
+    // Click the Reviews dot (last dot = Projects, About, Reviews after Home).
+    const reviewsDot = page.locator(".section-nav-dot").last();
+    await reviewsDot.click();
+
+    // Wait for either Lenis or native smooth scroll to settle, then confirm
+    // the viewport actually moved. Reviews is near the bottom, so any real
+    // scroll will be well past zero.
+    await expect
+      .poll(async () => page.evaluate(() => window.scrollY), { timeout: 5000 })
+      .toBeGreaterThan(200);
+  });
+
   test("unknown route shows the 404 page", async ({ page }) => {
     await page.goto("/no-such-page", { waitUntil: "domcontentloaded" });
     await expect(page.locator("h1")).toHaveText("404 - Page Not Found");

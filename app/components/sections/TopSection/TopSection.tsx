@@ -57,7 +57,9 @@ const TopSection: React.FC = () => {
   const resetWeight = () => weight.set(WEIGHT_REST);
 
   return (
-    <section className="top-section">
+    // The `id="top"` is referenced by SectionNav's scroll-spy (Home dot) and
+    // by scrollToSection("top"). Don't rename without updating SectionNav.
+    <section className="top-section" id="top">
       <div className="signature">
         <div className="avatar">
           <Image
