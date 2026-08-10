@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { motion, AnimatePresence } from "motion/react";
@@ -29,10 +30,11 @@ interface Card3DProps {
   isSelected: boolean;
   onClick: () => void;
   coverImage: string;
+  priority?: boolean;
 }
 
 // 3D Parallax Game Cover Card
-const Card3D = ({ project, isSelected, onClick, coverImage }: Card3DProps) => {
+const Card3D = ({ project, isSelected, onClick, coverImage, priority }: Card3DProps) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [hovering, setHovering] = useState(false);
@@ -77,13 +79,16 @@ const Card3D = ({ project, isSelected, onClick, coverImage }: Card3DProps) => {
         transition: hovering ? "none" : "transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
       }}
     >
-      <div 
-        className="card-cover-wrapper"
-        style={{
-          backgroundImage: `url(${coverImage})`
-        }}
-      >
-        <div 
+      <div className="card-cover-wrapper">
+        <Image
+          className="card-cover-image"
+          src={coverImage}
+          alt={`${project.name} cover`}
+          fill
+          sizes="(min-width: 768px) 210px, 170px"
+          priority={priority}
+        />
+        <div
           className="card-spotlight"
           style={{
             background: hovering 
@@ -307,6 +312,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
                     project={project}
                     isSelected={index === selectedIndex}
                     coverImage={coverImages[index]}
+                    priority={index === 0}
                     onClick={() => scrollToIndex(index)}
                   />
                 ))}
