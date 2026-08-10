@@ -13,27 +13,14 @@ export type MediumPost = Partial<{
   image: string;
 }>;
 
-let cachedPosts: MediumPost[] = [];
-let cacheTime = 0;
-const CACHE_DURATION = 12 * 1000 * 60 * 60; // 1 hour (same as revalidate = 12*3600)
-
+// No module-level cache: on Vercel serverless, in-memory state does not persist
+// across invocations anyway, and ISR (`revalidate = 12 * 3600` on the routes)
+// is the actual caching layer. See lib/revalidate.ts.
 export async function getMediumPosts(): Promise<MediumPost[]> {
-  const now = Date.now();
-
-  if (cachedPosts?.length && now - cacheTime < CACHE_DURATION) {
-    console.log("Returning cached Medium posts");
-    return cachedPosts;
-  }
-
   const parser = new Parser();
   try {
     const feed = await parser.parseURL(`https://medium.com/feed/@${MY_USERNAME}`);
-
-    const posts = parseMediumFeed(feed);
-    cachedPosts = posts;
-    cacheTime = now;
-
-    return posts;
+    return parseMediumFeed(feed);
   } catch (error) {
     console.error("Error fetching Medium posts:", error);
     return parseMediumFeed(mediumFeed);
