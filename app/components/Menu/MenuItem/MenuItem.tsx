@@ -40,6 +40,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, menuActive, isMobile, rot
       isAnimated={false}
       aria-label={menuItem.tooltip}
       link={menuItem.link}
+      inert={!menuActive}
+      aria-hidden={!menuActive || undefined}
     >
       {menuItem.icon}
     </CircleButton>

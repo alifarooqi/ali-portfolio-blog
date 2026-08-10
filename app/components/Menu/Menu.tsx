@@ -110,8 +110,8 @@ const Menu: React.FC = () => {
   return (
     <div className={menuActive ? "menu menu-active" : "menu"}>
       <div className="menu-backdrop" onClick={closeMenu}></div>
-      <div className="menu-data">
-        <MenuToggle isMobile={isMobile} toggleMenu={() => setMenuActive((m) => !m)} />
+      <div className="menu-data" id="menu-data">
+        <MenuToggle isMobile={isMobile} toggleMenu={() => setMenuActive((m) => !m)} isOpen={menuActive} />
 
         {menuItems.map((menuItem, index) => {
           let angle = startAngle;
