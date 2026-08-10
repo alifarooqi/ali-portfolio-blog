@@ -34,9 +34,9 @@ const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
   <Section ref={ref} sectionConfig={aboutSectionConfig} isReversed extraClass="about-section">
     <div className="about-bento">
       <MotionDiv variants={slideInRight} className="about-bento__card about-bento__bio">
-        <h4>
+        <h3>
           {getIcon("helpoutline")} Who is this guy?
-        </h4>
+        </h3>
         <p>{AboutConfig.bio}</p>
       </MotionDiv>
 
@@ -54,7 +54,7 @@ const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
         className="about-bento__card about-bento__marquee about-bento__marquee--prog"
         delay={0.2}
       >
-        <h4>{getIcon("code")} Programming</h4>
+        <h3>{getIcon("code")} Programming</h3>
         <MarqueeRow items={AboutConfig.programming} direction="left" />
       </MotionDiv>
 
@@ -63,7 +63,7 @@ const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
         className="about-bento__card about-bento__marquee about-bento__marquee--tools"
         delay={0.3}
       >
-        <h4>{getIcon("tools")} Tools</h4>
+        <h3>{getIcon("tools")} Tools</h3>
         <MarqueeRow items={AboutConfig.tools} direction="right" />
       </MotionDiv>
     </div>

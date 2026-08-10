@@ -98,9 +98,9 @@ const ReviewSection = forwardRef<HTMLDivElement>((_, ref) => {
 
   return (
     <Section ref={ref} sectionConfig={reviewSectionConfig}>
-      <h4 className="reviews-intro">
+      <h3 className="reviews-intro">
         <RateReviewIcon /> What do others say?
-      </h4>
+      </h3>
       <div className="reviews-grid">
         {ReviewsConfig.reviews.map((review, i) => (
           <MotionDiv
