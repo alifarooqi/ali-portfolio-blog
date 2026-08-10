@@ -54,8 +54,8 @@ test.describe("smoke", () => {
   test("theme toggle flips the `dark` class on <html>", async ({ page }) => {
     await page.goto("/");
 
-    // Target the Menu Toggle by its newly fixed accessible name
-    await page.locator('[aria-label="Menu Toggle"]').click();
+    // Target the Menu Toggle by its accessible name (closed state).
+    await page.locator('[aria-label="Open menu"]').click();
     const themeButton = page.locator('[aria-label="Toggle dark/light theme"]');
     await expect(themeButton).toBeVisible();
 

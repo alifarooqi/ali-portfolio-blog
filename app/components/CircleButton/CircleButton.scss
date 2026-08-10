@@ -17,6 +17,13 @@
     background: var(--text-primary);
   }
 
+  // Keyboard / programmatic focus only — :focus-visible does not fire on
+  // mouse clicks, so mouse users see no ring.
+  &:focus-visible {
+    outline: 2px solid var(--brand-color-light, #21e5e5);
+    outline-offset: 2px;
+  }
+
   &.circle-button-animated {
     &:hover {
       transform: scale(1.1) translateY(-5px);

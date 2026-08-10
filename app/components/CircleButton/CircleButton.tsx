@@ -19,6 +19,10 @@ interface CircleButtonProps {
   children?: ReactNode;
   isAnimated?: boolean;
   "aria-label"?: string;
+  "aria-hidden"?: boolean;
+  "aria-expanded"?: boolean;
+  "aria-controls"?: string;
+  inert?: boolean;
 }
 
 const CircleButton: React.FC<CircleButtonProps> = ({
@@ -33,12 +37,26 @@ const CircleButton: React.FC<CircleButtonProps> = ({
   children,
   isAnimated = true,
   "aria-label": ariaLabel,
+  "aria-hidden": ariaHidden,
+  "aria-expanded": ariaExpanded,
+  "aria-controls": ariaControls,
+  inert,
 }) => {
   const combinedClassName = clsx("circle-button", className, {
     "circle-button-animated": isAnimated,
   });
   const sizeStyle = { width: `${size}rem`, height: `${size}rem` };
   const buttonStyle = { ...sizeStyle, ...style };
+
+  // Forwarded to both render paths. `inert` removes the element from the tab
+  // order + accessibility tree + disables pointer events — used by MenuItem
+  // when the radial menu is closed. aria-* exposed for MenuToggle state.
+  const a11yProps = {
+    inert: inert || undefined,
+    "aria-hidden": ariaHidden,
+    "aria-expanded": ariaExpanded,
+    "aria-controls": ariaControls,
+  };
 
   return link ? (
     <a
@@ -53,6 +71,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       data-tooltip-id={TooltipId}
       data-tooltip-content={tooltip}
       data-tooltip-place={tooltipPlacement}
+      {...a11yProps}
     >
       {children}
     </a>
@@ -67,6 +86,7 @@ const CircleButton: React.FC<CircleButtonProps> = ({
       data-tooltip-id={TooltipId}
       data-tooltip-content={tooltip}
       data-tooltip-place={tooltipPlacement}
+      {...a11yProps}
     >
       {children}
     </button>
