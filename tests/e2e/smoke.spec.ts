@@ -85,6 +85,16 @@ test.describe("smoke", () => {
     await expect(firstItem).toHaveJSProperty("inert", false);
   });
 
+  test("section scroll-spy is visible on home, absent on /blog", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".section-nav")).toBeVisible();
+    // One dot per section in SectionConfig (Projects, About, Reviews).
+    await expect(page.locator(".section-nav-dot")).toHaveCount(3);
+
+    await page.goto("/blog");
+    await expect(page.locator(".section-nav")).toHaveCount(0);
+  });
+
   test("unknown route shows the 404 page", async ({ page }) => {
     await page.goto("/no-such-page", { waitUntil: "domcontentloaded" });
     await expect(page.locator("h1")).toHaveText("404 - Page Not Found");

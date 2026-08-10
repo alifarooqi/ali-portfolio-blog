@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useCallback } from "react";
-import { usePathname } from "next/navigation";
+import React, { useState, useMemo, useEffect } from "react";
 import MenuToggle from "./MenuToggle/MenuToggle";
 import MenuItem, { MenuItemType } from "./MenuItem/MenuItem";
 import ThemeToggleIcon from "./ThemeToggleIcon";
@@ -9,34 +8,19 @@ import SoundToggleIcon from "./SoundToggleIcon";
 import { useIsDarkMode } from "./useIsDarkMode";
 import { useIsMuted } from "./useIsMuted";
 import { toggleSound } from "@/lib/sound";
-import SectionConfig, { Sections } from "../../config/SectionConfig";
 import { getIcon } from "../icons/Icons";
 import "./Menu.scss";
 
+// Fixed global set: the radial menu renders the same four items in the same
+// order on every route. Section-scroll shortcuts have moved to the home-only
+// <SectionNav /> component (see app/page.tsx). Keep this list route-agnostic
+// so the arc geometry stays constant across pages.
 const Menu: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
   const isDark = useIsDarkMode();
   const isMuted = useIsMuted();
-  const pathname = usePathname();
 
   const closeMenu = () => setMenuActive(false);
-
-  const scrollToSection = useCallback((sectionName: Sections) => {
-    const element = document.getElementById(sectionName);
-
-    if (element) {
-      const offset =
-        window.innerHeight > element.offsetHeight
-          ? (window.innerHeight - element.offsetHeight) / 2
-          : 0;
-      window.scrollTo({
-        top: element.offsetTop - offset,
-        left: 0,
-        behavior: "smooth",
-      });
-    }
-    closeMenu();
-  }, []);
 
   const toggleTheme = () => {
     const nextDark = !document.documentElement.classList.contains("dark");
@@ -45,32 +29,8 @@ const Menu: React.FC = () => {
     // useIsDarkMode picks up the class change via its MutationObserver.
   };
 
-  const menuItems: MenuItemType[] = useMemo(() => {
-    const baseItems: MenuItemType[] = [
-      {
-        icon: <ThemeToggleIcon isDark={isDark} />,
-        tooltip: "Toggle dark/light theme",
-        action: toggleTheme,
-        key: "menu-theme-toggle",
-      },
-      {
-        icon: <SoundToggleIcon isMuted={isMuted} />,
-        tooltip: "Toggle sound effects",
-        action: toggleSound,
-        key: "menu-sound-toggle",
-      },
-    ];
-
-    const sectionItems: MenuItemType[] = SectionConfig.filter(
-      (section) => !section.notInMenu && section.headerIconKey
-    ).map((section) => ({
-      icon: getIcon(section.headerIconKey, "menu-item-icon"),
-      tooltip: section.name,
-      action: () => scrollToSection(section.key),
-      key: `menu-section-${section.key}`,
-    }));
-
-    const pageItems: MenuItemType[] = [
+  const menuItems: MenuItemType[] = useMemo(
+    () => [
       {
         icon: getIcon("home", "menu-item-icon"),
         tooltip: "Home",
@@ -83,14 +43,21 @@ const Menu: React.FC = () => {
         link: "/blog",
         key: "menu-page-blog",
       },
-    ];
-
-    if (pathname === "/") {
-      return [...baseItems, ...pageItems, ...sectionItems];
-    } else {
-      return [...baseItems, ...pageItems];
-    }
-  }, [pathname, scrollToSection, isDark, isMuted]);
+      {
+        icon: <ThemeToggleIcon isDark={isDark} />,
+        tooltip: "Toggle dark/light theme",
+        action: toggleTheme,
+        key: "menu-theme-toggle",
+      },
+      {
+        icon: <SoundToggleIcon isMuted={isMuted} />,
+        tooltip: "Toggle sound effects",
+        action: toggleSound,
+        key: "menu-sound-toggle",
+      },
+    ],
+    [isDark, isMuted],
+  );
 
   const [isMobile, setIsMobile] = useState(false);
 
