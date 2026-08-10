@@ -1,20 +1,26 @@
 import { getMediumPosts } from "@/lib/medium";
 
 // Resolves the canonical site URL. Priority:
-//   1. NEXT_PUBLIC_SITE_URL  — set explicitly on Vercel Production
+//   1. NEXT_PUBLIC_SITE_URL   — set explicitly on Vercel Production
 //   2. NEXT_PUBLIC_VERCEL_URL — manual override (rarely needed)
-//   3. VERCEL_URL             — auto-injected by Vercel on every deploy
-//                              (bare hostname, no protocol — prefixed here)
-//   4. The hardcoded prod URL — dev/CI "just works" with no .env file
+//   3. VERCEL_URL              — auto-injected by Vercel on every deploy
+//                               (bare hostname, no protocol — prefixed here)
+//   4. The hardcoded prod URL  — dev/CI "just works" with no .env file
 //
-// Reading VERCEL_URL directly (rather than relying on $VERCEL_URL expansion
-// in an env-var value) is the reliable path — Vercel only expands `$VAR`
-// references for vars you've explicitly defined, not system-provided ones.
+// All candidates are normalized to include an https:// prefix before return,
+// because `new URL(baseUrl)` (used by Next.js metadataBase) throws on
+// protocol-less input. VERCEL_URL is always bare, and a misconfigured
+// NEXT_PUBLIC_VERCEL_URL (e.g. set to "$VERCEL_URL" which Vercel expands to
+// a bare hostname) would otherwise break the build.
 function resolveBaseUrl(): string {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
-  if (process.env.NEXT_PUBLIC_VERCEL_URL) return process.env.NEXT_PUBLIC_VERCEL_URL;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return "https://alifarooqi.vercel.app";
+  const candidate =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.NEXT_PUBLIC_VERCEL_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
+
+  if (!candidate) return "https://alifarooqi.vercel.app";
+
+  return /^https?:\/\//.test(candidate) ? candidate : `https://${candidate}`;
 }
 
 export const baseUrl = resolveBaseUrl();
