@@ -376,6 +376,10 @@
       .sci-fi-action-button {
         width: 100%;
         max-width: 300px;
+        // The button's own `flex: 0 1 220px` is a width basis for row layout.
+        // Inside this column wrapper it would otherwise set the button's
+        // HEIGHT to 220px. Reset to auto so height is content-driven on mobile.
+        flex: 0 0 auto;
       }
     }
 
@@ -505,6 +509,8 @@
 
         .sci-fi-action-button {
           width: auto;
+          // Restore row-layout width basis (button's own flex: 0 1 220px).
+          flex: 0 1 220px;
         }
       }
     }
