@@ -206,6 +206,17 @@
     white-space: pre;
   }
 
+  // Defensive fallback: if consecutive <pre> siblings slip through the
+  // sanitizer's merge step in lib/sanitize.ts (feed-format drift, edge case),
+  // collapse their visual separation so they read as one continuous code
+  // block. Should rarely fire — primary fix is the post-sanitize regex.
+  pre + pre {
+    margin-top: 0;
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
   code {
     background: color-mix(in srgb, var(--bg-secondary) 80%, transparent);
     border: 1px solid var(--medium-border);

@@ -149,3 +149,61 @@ describe("sanitizeMediumHtml — strips dangerous content", () => {
     expect(out).toContain("<p>x</p>");
   });
 });
+
+describe("sanitizeMediumHtml — merges consecutive <pre> blocks", () => {
+  it("merges two <pre> siblings separated only by whitespace", () => {
+    const out = sanitizeMediumHtml("<pre>line 1</pre>\n<pre>line 2</pre>");
+    expect(out).toBe("<pre>line 1\nline 2</pre>");
+  });
+
+  it("merges a run of multiple consecutive <pre> blocks", () => {
+    const out = sanitizeMediumHtml("<pre>a</pre><pre>b</pre><pre>c</pre><pre>d</pre>");
+    expect(out).toBe("<pre>a\nb\nc\nd</pre>");
+  });
+
+  it("does NOT merge <pre> blocks separated by other elements", () => {
+    const out = sanitizeMediumHtml(
+      "<pre>first</pre><p>prose between</p><pre>second</pre>",
+    );
+    expect(out).toContain("<pre>first</pre>");
+    expect(out).toContain("<p>prose between</p>");
+    expect(out).toContain("<pre>second</pre>");
+  });
+
+  it("merges the issue #81 ASCII flowchart into a single <pre>", () => {
+    // Real-world input from the Medium feed — five <pre> fragments that
+    // should render as one continuous flowchart.
+    const input =
+      "<p>The flow&nbsp;becomes:</p>" +
+      "<pre>Incoming Message\n        |\n        v</pre>" +
+      "<pre>Check Agent Connection</pre>" +
+      "<pre>        |\n        +---- Healthy\n        |\n        +---- Broken\n                 |\n                 v</pre>" +
+      "<pre>          Reconnect Agent</pre>" +
+      "<pre>                 |\n                 v</pre>" +
+      "<pre>          Continue Conversation</pre>" +
+      "<p>The user experience stays consistent.</p>";
+
+    const out = sanitizeMediumHtml(input);
+
+    // Exactly one <pre>...</pre> pair in the output.
+    expect(out.match(/<pre/g)?.length).toBe(1);
+    expect(out.match(/<\/pre>/g)?.length).toBe(1);
+
+    // Every fragment's content survives in the merged block.
+    expect(out).toContain("Incoming Message");
+    expect(out).toContain("Check Agent Connection");
+    expect(out).toContain("+---- Healthy");
+    expect(out).toContain("Reconnect Agent");
+    expect(out).toContain("Continue Conversation");
+
+    // The surrounding <p> tags are untouched.
+    expect(out).toContain("<p>The flow&nbsp;becomes:</p>");
+    expect(out).toContain("<p>The user experience stays consistent.</p>");
+  });
+
+  it("preserves the existing <br>-to-newline conversion inside <pre> (no regression)", () => {
+    // Pre-existing behavior: <br> inside a single <pre> becomes \n.
+    const out = sanitizeMediumHtml("<pre>line 1<br>line 2</pre>");
+    expect(out).toBe("<pre>line 1\nline 2</pre>");
+  });
+});
