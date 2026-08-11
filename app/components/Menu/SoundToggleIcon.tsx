@@ -1,18 +1,17 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import { Volume2, VolumeX } from "lucide-react";
 import { useCursorMotionGate } from "../animaiton/useCursorMotionGate";
 
-// Mirrors ThemeToggleIcon: in muted state show VolumeUp (action: unmute);
-// in unmuted state VolumeOff. When motion is gated off (touch device or
+// Mirrors ThemeToggleIcon: in muted state show Volume2 (action: unmute);
+// in unmuted state VolumeX. When motion is gated off (touch device or
 // prefers-reduced-motion), icons swap instantly with no animation — still
 // legible, just not animated. Audio itself is not motion-gated; only the
 // icon crossfade is.
 export default function SoundToggleIcon({ isMuted }: { isMuted: boolean }) {
   const animate = useCursorMotionGate();
-  const icon = isMuted ? <VolumeUpIcon /> : <VolumeOffIcon />;
+  const icon = isMuted ? <Volume2 /> : <VolumeX />;
 
   if (!animate) {
     return <span className="menu-item-icon">{icon}</span>;

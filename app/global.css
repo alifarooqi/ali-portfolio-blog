@@ -77,6 +77,16 @@ a {
   }
 }
 
+/* lucide-react icons render with width="24" height="24" as presentation
+   attributes. Author CSS overrides those, so sizing via font-size (the
+   pattern this codebase already uses for icon sizing, e.g.
+   `.btn-icon svg { font-size: 0.95rem }`) keeps working once we set
+   width/height to 1em here. Stroke width scales with the icon. */
+svg.lucide {
+  width: 1em;
+  height: 1em;
+}
+
 /* Animated underline that draws left→right on hover/focus. Uses background-image
    rather than text-decoration so the stroke can transition cleanly and sit at a
    controlled offset. Inherits text color via currentColor — theme-aware for free.

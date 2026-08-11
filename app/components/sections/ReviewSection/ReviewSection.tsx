@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
-import RateReviewIcon from "@mui/icons-material/RateReview";
+import { MessageSquareQuote } from "lucide-react";
 import Section from "../../Section/Section";
 import SectionConfig from "../../../config/SectionConfig";
 import MotionDiv from "../../animaiton/MotionDiv";
@@ -99,7 +99,7 @@ const ReviewSection = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <Section ref={ref} sectionConfig={reviewSectionConfig}>
       <h3 className="reviews-intro">
-        <RateReviewIcon /> What do others say?
+        <MessageSquareQuote /> What do others say?
       </h3>
       <div className="reviews-grid">
         {ReviewsConfig.reviews.map((review, i) => (
