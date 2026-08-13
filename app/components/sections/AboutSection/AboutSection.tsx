@@ -1,7 +1,8 @@
 import React, { forwardRef } from "react";
 import Section from "../../Section/Section";
-import { getIcon, IconKey } from "../../icons/Icons";
+import { getIcon, getIconLabel, IconKey } from "../../icons/Icons";
 import SectionConfig from "../../../config/SectionConfig";
+import { TooltipId } from "../../tooltip";
 import MotionDiv from "../../animaiton/MotionDiv";
 import { slideInLeft, slideInRight, zoomIn } from "../../animaiton/presets";
 import AboutConfig from "../../../config/AboutConfig";
@@ -16,7 +17,13 @@ const aboutSectionConfig = SectionConfig.find((section) => section.key === "abou
  */
 function MarqueeRow({ items, direction }: { items: IconKey[]; direction: "left" | "right" }) {
   const rendered = items.map((key, i) => (
-    <span key={`${key}-${i}`} className="about-marquee__item">
+    <span
+      key={`${key}-${i}`}
+      className="about-marquee__item"
+      data-tooltip-id={TooltipId}
+      data-tooltip-content={getIconLabel(key)}
+      data-tooltip-place="top"
+    >
       {getIcon(key)}
     </span>
   ));

@@ -1,8 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import NightsStayIcon from "@mui/icons-material/NightsStay";
-import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import { Moon, Sun } from "lucide-react";
 import { useCursorMotionGate } from "../animaiton/useCursorMotionGate";
 
 /**
@@ -13,7 +12,7 @@ import { useCursorMotionGate } from "../animaiton/useCursorMotionGate";
  */
 export default function ThemeToggleIcon({ isDark }: { isDark: boolean }) {
   const animate = useCursorMotionGate();
-  const icon = isDark ? <WbSunnyIcon /> : <NightsStayIcon />;
+  const icon = isDark ? <Sun /> : <Moon />;
 
   if (!animate) {
     return <span className="menu-item-icon">{icon}</span>;

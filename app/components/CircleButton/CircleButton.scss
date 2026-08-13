@@ -12,6 +12,14 @@
   transition: all 0.5s;
   margin: 0.5rem;
 
+  // Icons (lucide via the global svg.lucide{1em} rule, plus the hand-rolled
+  // brand SVGs) need an explicit size here — nothing else on the button sets
+  // font-size, so without this they fall back to the 16px body default.
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
   &:hover {
     color: var(--bg-primary);
     background: var(--text-primary);

@@ -2,8 +2,7 @@
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import Section from "../../Section/Section";
@@ -293,7 +292,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
           
           {/* Top Row: Game selector with visual navigation arrows */}
           <div className="carousel-wrapper-layout">
-            <button 
+            <button
               className="carousel-nav-btn prev"
               onClick={() => {
                 const prevIndex = (selectedIndex - 1 + Projects.length) % Projects.length;
@@ -301,7 +300,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
               }}
               aria-label="Select previous project"
             >
-              <ChevronLeftIcon />
+              <ChevronLeft />
             </button>
 
             <div className="carousel-view-port">
@@ -319,7 +318,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
               </div>
             </div>
 
-            <button 
+            <button
               className="carousel-nav-btn next"
               onClick={() => {
                 const nextIndex = (selectedIndex + 1) % Projects.length;
@@ -327,7 +326,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
               }}
               aria-label="Select next project"
             >
-              <ChevronRightIcon />
+              <ChevronRight />
             </button>
           </div>
 
