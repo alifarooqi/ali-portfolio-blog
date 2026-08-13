@@ -102,3 +102,24 @@ export const getIcon = (key: IconKey, className?: string): ReactElement => {
   }
   return <span>Missing icon: {key}</span>;
 };
+
+// Human-readable names for icons whose registry key isn't already a clean
+// display name — used for tooltips, alt text, etc. Keys not listed fall back
+// to a Title-cased version of the registry key.
+export const iconLabels: Partial<Record<IconKey, string>> = {
+  java: "Java",
+  cpp: "C++",
+  typescript: "TypeScript",
+  scala: "Scala",
+  kotlin: "Kotlin",
+  nodejs: "Node.js",
+  react: "React",
+  graphql: "GraphQL",
+  postgresql: "PostgreSQL",
+  terraform: "Terraform",
+  mongodb: "MongoDB",
+  kubernetes: "Kubernetes",
+};
+
+export const getIconLabel = (key: IconKey): string =>
+  iconLabels[key] ?? (key.charAt(0).toUpperCase() + key.slice(1));

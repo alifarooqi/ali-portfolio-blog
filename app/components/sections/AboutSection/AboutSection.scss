@@ -105,6 +105,12 @@
   width: 100%;
   overflow: hidden;
   position: relative;
+  // Vertical breathing room so the hover scale + lift (&__item svg:hover)
+  // isn't clipped by overflow:hidden — without this the zoomed icon's top
+  // edge gets cut off under the section heading. overflow-x must stay hidden
+  // to clip the scrolling track (and CSS then forces overflow-y to auto, not
+  // visible), so padding is the fix rather than overflow-y: visible.
+  padding: 0.5rem 0;
   // Guard against the track's width: max-content pulling the parent grid
   // item wider than the viewport on mobile.
   min-width: 0;
