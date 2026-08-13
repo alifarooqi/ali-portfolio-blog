@@ -1,9 +1,3 @@
-import bundleAnalyzer from "@next/bundle-analyzer";
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
@@ -47,5 +41,13 @@ const nextConfig = {
     ];
   },
 };
+
+// @next/bundle-analyzer is a devDependency — only `npm run analyze` needs it.
+// Load it lazily when ANALYZE=true so production installs that omit devDeps
+// (e.g. `npm ci --omit=dev`) don't fail resolving it at config-load time.
+const withBundleAnalyzer =
+  process.env.ANALYZE === "true"
+    ? (await import("@next/bundle-analyzer")).default({ enabled: true })
+    : (config) => config;
 
 export default withBundleAnalyzer(nextConfig);

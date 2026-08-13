@@ -3,10 +3,8 @@ import {
   Monitor,
   Info,
   HelpCircle,
-  Map,
   Code,
   Link as LinkIcon,
-  Globe,
   Mail,
   Shield,
   Bot,
@@ -24,8 +22,9 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
-// Brand glyphs as hand-rolled SVGs (lucide deprecated brand icons). Local
-// files in this directory follow the same single-path pattern as Medium.tsx.
+// Brand glyphs as hand-rolled SVGs (lucide deprecated brand icons). Like
+// Medium.tsx, each sets width/height + fill="currentColor" so it inherits
+// color (both themes + hover) and renders at a sane default size.
 import Twitter from "./Twitter";
 import FacebookIcon from "./Facebook";
 import GitHubIcon from "./Github";
@@ -71,10 +70,8 @@ const Icons = {
   angular: AngularIcon,
   graphql: GraphQLIcon,
   helpoutline: HelpCircle,
-  map: Map,
   code: Code,
   link: LinkIcon,
-  web: Globe,
   security: Shield,
   energy: Leaf,
   smartToy: Bot,

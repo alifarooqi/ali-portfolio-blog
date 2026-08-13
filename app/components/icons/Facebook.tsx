@@ -5,6 +5,9 @@ const SvgFacebook = (props: React.SVGProps<SVGSVGElement>) => (
     x="0px"
     y="0px"
     viewBox="0 0 24 24"
+    width="24px"
+    height="24px"
+    fill="currentColor"
     xmlSpace="preserve"
     {...props}
   >
