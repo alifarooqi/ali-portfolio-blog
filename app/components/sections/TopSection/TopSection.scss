@@ -47,16 +47,14 @@
     justify-content: center;
     align-items: center;
 
+    // The morphing-blob frame. The faceshot renders via the priority
+    // next/image inside the frame (visible, preloaded → fast, LCP-eligible
+    // <img>) — previously the <Image> was visibility:hidden and the visible
+    // face came from a CSS background-image, which next/image can't optimize.
     .avatar {
       width: 60%;
       aspect-ratio: 356 / 466; // faceshot.webp aspect ratio
-      background-image: url("/images/faceshot.webp");
-      background-repeat: no-repeat;
-      background-position: 50%;
-      background-size: contain; // ensures the whole image is visible
-      background-origin: content-box;
       animation: morph 8s ease-in-out 1s infinite;
-      background-blend-mode: multiply;
       box-shadow: inset 0 0 0 9px rgba(var(--brand-color-rgb), 0.3);
       border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
       overflow: hidden;
@@ -65,8 +63,10 @@
 
       .profile-picture {
         width: 100%;
-        height: auto;
-        visibility: hidden;
+        height: 100%;
+        // contain (not cover) keeps the whole face visible, matching the
+        // old background-size: contain inset look.
+        object-fit: contain;
       }
     }
 
