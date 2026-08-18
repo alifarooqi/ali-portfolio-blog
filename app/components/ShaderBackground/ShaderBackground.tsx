@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./ShaderBackground.scss";
 
 /**
@@ -8,9 +8,13 @@ import "./ShaderBackground.scss";
  *
  * Renders a single fragment shader that paints a slow-moving, mouse-reactive
  * gradient. Color palette swaps between light and dark themes by observing the
- * `.dark` class on <html>. The committed `.webp` backgrounds remain visible as
- * a CSS fallback layer behind the canvas — if WebGL is unavailable or the
- * context is lost, the canvas stays transparent and the fallback shows through.
+ * `.dark` class on <html>. Until the first frame draws, a static CSS gradient
+ * (approximating the shader palette) shows instead — see ShaderBackground.scss.
+ *
+ * The committed `bg01.webp` fallback layer is mounted (and its image fetched)
+ * ONLY when WebGL initialization fails or the context is lost — on the normal
+ * path the opaque canvas covers the background, so eagerly loading the image
+ * wasted ~155 KiB on every page view (#86: it sat in the LCP window).
  *
  * Honors prefers-reduced-motion by skipping the RAF loop (shader draws a single
  * static frame).
@@ -147,33 +151,48 @@ function compileShader(gl: WebGL2RenderingContext, type: number, src: string): W
 
 export default function ShaderBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  // Mounts (and fetches) the bg01.webp fallback only when the shader can't run.
+  const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Canvas goes transparent if the GL context is lost at runtime — bring
+    // the fallback image back when that happens.
+    const onContextLost = () => setShowFallback(true);
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const gl = canvas.getContext("webgl2", { antialias: false, alpha: false, powerPreference: "high-performance" });
     if (!gl) {
-      // WebGL2 unavailable — leave canvas transparent; CSS fallback shows through.
+      // WebGL2 unavailable — show the committed image fallback.
+      setShowFallback(true);
       return;
     }
 
     // --- Program setup ---
     const vs = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
     const fs = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
-    if (!vs || !fs) return;
+    if (!vs || !fs) {
+      setShowFallback(true);
+      return;
+    }
 
     const program = gl.createProgram();
-    if (!program) return;
+    if (!program) {
+      setShowFallback(true);
+      return;
+    }
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       console.warn("ShaderBackground program link failed:", gl.getProgramInfoLog(program));
+      setShowFallback(true);
       return;
     }
     gl.useProgram(program);
+    canvas.addEventListener("webglcontextlost", onContextLost);
 
     // Full-screen triangle — covers clip space without a quad.
     const buffer = gl.createBuffer();
@@ -270,6 +289,7 @@ export default function ShaderBackground() {
     // --- Cleanup ---
     return () => {
       cancelAnimationFrame(raf);
+      canvas.removeEventListener("webglcontextlost", onContextLost);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", resize);
@@ -283,7 +303,7 @@ export default function ShaderBackground() {
 
   return (
     <div className="shader-background" aria-hidden="true">
-      <div className="shader-background__fallback" />
+      {showFallback && <div className="shader-background__fallback" />}
       <canvas ref={canvasRef} className="shader-background__canvas" />
     </div>
   );
