@@ -18,6 +18,10 @@ interface CommonConfigType {
   signature: SignatureConfig;
   profilePicture: string;
   email: string;
+  /** Shown in the Contact section — confirm wording before relying on it. */
+  location: string;
+  /** Availability badge text in the Contact section. */
+  availability: string;
   social: SocialLink[];
 }
 
@@ -39,6 +43,8 @@ const CommonConfig: CommonConfigType = {
   signature,
   profilePicture: "",
   email: "m.ali_farooqi@hotmail.com",
+  location: "China · Greater Bay Area",
+  availability: "Available for new opportunities",
   social: [
     {
       name: "GitHub",

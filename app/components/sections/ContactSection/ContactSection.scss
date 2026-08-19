@@ -1,0 +1,85 @@
+// Contact section — the closing beat. Mobile-first: a single centered
+// column at every size; only the type scales up on larger viewports.
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(0.9rem, 3vw, 1.25rem);
+  padding: clamp(0.5rem, 3vw, 2rem) 0;
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--text-secondary) 25%, transparent);
+    background: color-mix(in srgb, var(--brand-color) 8%, transparent);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+  }
+
+  // Pulsing status dot. The global prefers-reduced-motion rule disables the
+  // animation; the dot itself stays as a static status indicator.
+  &__badge-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--brand-color);
+    animation: contact-pulse 2.2s ease-in-out infinite;
+  }
+
+  &__heading {
+    margin: 0;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    color: var(--text-primary);
+  }
+
+  &__lede {
+    margin: 0;
+    max-width: 34rem;
+    font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  &__email {
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+    color: var(--text-primary);
+    // Underline draw comes from the global .link-underline utility.
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  &__cv {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--brand-color);
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+@keyframes contact-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--brand-color-rgb), 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(var(--brand-color-rgb), 0);
+  }
+}
