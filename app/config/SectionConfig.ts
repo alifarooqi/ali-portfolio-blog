@@ -1,7 +1,7 @@
 import { IconKey } from "app/components/icons/Icons";
 
 // Type for section refs
-export type Sections = "projects" | "about" | "review";
+export type Sections = "projects" | "about" | "experience" | "review";
 
 export interface SectionConfigType {
   key: Sections;
@@ -20,6 +20,11 @@ const SectionConfig: SectionConfigType[] = [
     key: "about",
     name: "About",
     headerIconKey: "aboutSection",
+  },
+  {
+    key: "experience",
+    name: "Experience",
+    headerIconKey: "schedule",
   },
   {
     key: "review",

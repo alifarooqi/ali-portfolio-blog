@@ -1,0 +1,156 @@
+// Experience timeline. Mobile-first: base rules target small screens with a
+// single left rail; the ≥1024px layer switches to a center rail with
+// alternating cards. Cards reuse the frosted-glass surface of the About
+// bento so the two sections read as one system.
+.experience-timeline {
+  position: relative;
+  width: 100%;
+  // Room for the rail + dots on the left of every card.
+  padding-left: 1.75rem;
+
+  // The rail itself — brand-tinted, fading at both ends.
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0.45rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    border-radius: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--brand-color) 55%, transparent),
+      transparent
+    );
+  }
+
+  &__item {
+    position: relative;
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Dot sitting on the rail, aligned with the card title.
+  &__dot {
+    position: absolute;
+    left: -1.65rem;
+    top: 1.35rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    border: 2px solid var(--brand-color);
+    box-shadow: 0 0 0 4px rgba(var(--brand-color-rgb), 0.15);
+  }
+
+  &__card {
+    background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
+    border-radius: 14px;
+    padding: clamp(1.1rem, 4vw, 1.5rem);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--brand-color) 45%, transparent);
+    }
+  }
+
+  &__period {
+    display: block;
+    font-size: clamp(0.65rem, 1.6vw, 0.72rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-color);
+    margin-bottom: 0.4rem;
+  }
+
+  &__role {
+    margin: 0 0 0.3rem;
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    color: var(--text-primary);
+  }
+
+  &__org {
+    margin: 0 0 0.75rem;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    color: var(--text-secondary);
+  }
+
+  &__description {
+    margin: 0;
+    font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+
+  &__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0.9rem 0 0;
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--text-secondary) 25%, transparent);
+    background: color-mix(in srgb, var(--brand-color) 8%, transparent);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+
+    svg {
+      width: 0.95rem;
+      height: 0.95rem;
+      color: var(--brand-color);
+    }
+  }
+}
+
+// Desktop: center rail, cards alternating sides. Items are 50%-wide blocks
+// pushed to one side; dots sit on the center rail at the inner edge.
+@media (min-width: 1024px) {
+  .experience-timeline {
+    padding-left: 0;
+
+    &::before {
+      left: 50%;
+      margin-left: -1px;
+    }
+
+    &__item {
+      width: calc(50% - 2.25rem);
+
+      &:nth-child(odd) {
+        margin-right: auto;
+
+        .experience-timeline__dot {
+          left: auto;
+          right: -2.75rem;
+        }
+      }
+
+      &:nth-child(even) {
+        margin-left: auto;
+
+        .experience-timeline__dot {
+          left: -2.75rem;
+        }
+      }
+    }
+
+    &__dot {
+      top: 1.6rem;
+    }
+  }
+}
