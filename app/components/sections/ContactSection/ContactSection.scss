@@ -1,5 +1,6 @@
 // Contact section — the closing beat. Mobile-first: a single centered
 // column at every size; only the type scales up on larger viewports.
+// The badge surface comes from the shared .pill utility (global.css).
 .contact {
   display: flex;
   flex-direction: column;
@@ -9,16 +10,9 @@
   padding: clamp(0.5rem, 3vw, 2rem) 0;
 
   &__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
     padding: 0.35rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid color-mix(in srgb, var(--text-secondary) 25%, transparent);
-    background: color-mix(in srgb, var(--brand-color) 8%, transparent);
     font-size: 0.78rem;
     letter-spacing: 0.04em;
-    color: var(--text-secondary);
   }
 
   // Pulsing status dot. The global prefers-reduced-motion rule disables the
@@ -45,10 +39,36 @@
     color: var(--text-secondary);
   }
 
-  &__email {
-    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
-    color: var(--text-primary);
-    // Underline draw comes from the global .link-underline utility.
+  // Primary CTA — opens the visitor's mail client with a drafted email.
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.6rem;
+    border-radius: 999px;
+    background: var(--brand-color);
+    color: #fefefe;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 14px rgba(var(--brand-color-rgb), 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      background: color-mix(in srgb, var(--brand-color) 85%, black);
+      box-shadow: 0 6px 20px rgba(var(--brand-color-rgb), 0.45);
+      text-decoration: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--brand-color-light, #21e5e5);
+      outline-offset: 2px;
+    }
   }
 
   &__meta {

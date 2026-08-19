@@ -24,7 +24,7 @@ async function assertNoUnexpectedConsoleErrors(page: Page) {
 }
 
 test.describe("smoke", () => {
-  test("home renders all four sections", async ({ page }) => {
+  test("home renders all sections", async ({ page }) => {
     const errors = await assertNoUnexpectedConsoleErrors(page);
     await page.goto("/");
 
@@ -89,8 +89,11 @@ test.describe("smoke", () => {
   test("section scroll-spy is visible on home, absent on /blog", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator(".section-nav")).toBeVisible();
-    // Hero (TopSection) + one per section in SectionConfig (Projects, About, Reviews, Contact).
-    await expect(page.locator(".section-nav-dot")).toHaveCount(5);
+    // One dot per rendered <section id> (the hero has id="top", each
+    // Section takes its id from SectionConfig) — derived from the page so
+    // adding sections doesn't require renumbering this assertion.
+    const sectionCount = await page.locator("section[id]").count();
+    await expect(page.locator(".section-nav-dot")).toHaveCount(sectionCount);
 
     await page.goto("/blog");
     await expect(page.locator(".section-nav")).toHaveCount(0);
@@ -104,13 +107,14 @@ test.describe("smoke", () => {
     const scrollYBefore = await page.evaluate(() => window.scrollY);
     expect(scrollYBefore).toBe(0);
 
-    // Click the Reviews dot (last dot = Projects, About, Reviews after Home).
-    const reviewsDot = page.locator(".section-nav-dot").last();
-    await reviewsDot.click();
+    // Click the last dot (the final SectionConfig entry — Contact on this
+    // branch; experience joins between About and Reviews on its branch).
+    const lastDot = page.locator(".section-nav-dot").last();
+    await lastDot.click();
 
     // Wait for either Lenis or native smooth scroll to settle, then confirm
-    // the viewport actually moved. Reviews is near the bottom, so any real
-    // scroll will be well past zero.
+    // the viewport actually moved. The last section is near the bottom, so
+    // any real scroll will be well past zero.
     await expect
       .poll(async () => page.evaluate(() => window.scrollY), { timeout: 5000 })
       .toBeGreaterThan(200);
