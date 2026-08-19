@@ -1,7 +1,7 @@
 // Experience timeline. Mobile-first: base rules target small screens with a
 // single left rail; the ≥1024px layer switches to a center rail with
-// alternating cards. Cards reuse the frosted-glass surface of the About
-// bento so the two sections read as one system.
+// alternating cards. The card surface comes from the shared .glass-card
+// utility (global.css); this file owns layout, spacing, and type.
 .experience-timeline {
   position: relative;
   width: 100%;
@@ -48,17 +48,7 @@
   }
 
   &__card {
-    background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
-    border-radius: 14px;
     padding: clamp(1.1rem, 4vw, 1.5rem);
-    transition: border-color 0.3s ease, transform 0.3s ease;
-
-    &:hover {
-      border-color: color-mix(in srgb, var(--brand-color) 45%, transparent);
-    }
   }
 
   &__period {
@@ -98,16 +88,10 @@
     margin: 0.9rem 0 0;
   }
 
+  // Surface comes from the shared .pill utility; this owns chip sizing.
   &__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
     padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    border: 1px solid color-mix(in srgb, var(--text-secondary) 25%, transparent);
-    background: color-mix(in srgb, var(--brand-color) 8%, transparent);
     font-size: 0.75rem;
-    color: var(--text-secondary);
 
     svg {
       width: 0.95rem;

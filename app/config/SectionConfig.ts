@@ -1,16 +1,9 @@
 import { IconKey } from "app/components/icons/Icons";
 
-// Type for section refs
-export type Sections = "projects" | "about" | "experience" | "review";
-
-export interface SectionConfigType {
-  key: Sections;
-  name: string;
-  headerIconKey: IconKey;
-  notInMenu?: boolean;
-}
-
-const SectionConfig: SectionConfigType[] = [
+// The registry is the single source of truth: `Sections` is DERIVED from the
+// array below, so adding a section means adding one entry — sibling section
+// PRs no longer edit the same union line (a past merge-conflict trap).
+const SectionConfig = [
   {
     key: "projects",
     name: "Projects",
@@ -31,6 +24,17 @@ const SectionConfig: SectionConfigType[] = [
     name: "Reviews",
     headerIconKey: "reviewSection",
   },
-];
+] as const;
 
-export default SectionConfig;
+export type Sections = (typeof SectionConfig)[number]["key"];
+
+export interface SectionConfigType {
+  key: Sections;
+  name: string;
+  headerIconKey: IconKey;
+  notInMenu?: boolean;
+}
+
+// Cast at the boundary: consumers get the optional-`notInMenu` view while
+// the literal types above keep `Sections` exact.
+export default SectionConfig as ReadonlyArray<SectionConfigType>;

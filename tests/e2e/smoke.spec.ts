@@ -89,8 +89,11 @@ test.describe("smoke", () => {
   test("section scroll-spy is visible on home, absent on /blog", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator(".section-nav")).toBeVisible();
-    // Hero (TopSection) + one per section in SectionConfig (Projects, About, Experience, Reviews).
-    await expect(page.locator(".section-nav-dot")).toHaveCount(5);
+    // One dot per rendered <section id> (the hero has id="top", each
+    // Section takes its id from SectionConfig) — derived from the page so
+    // adding sections doesn't require renumbering this assertion.
+    const sectionCount = await page.locator("section[id]").count();
+    await expect(page.locator(".section-nav-dot")).toHaveCount(sectionCount);
 
     await page.goto("/blog");
     await expect(page.locator(".section-nav")).toHaveCount(0);
