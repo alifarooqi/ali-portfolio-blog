@@ -41,12 +41,12 @@ const PALETTE = {
     b: [0.83, 0.9, 1.0], // soft cyan
     c: [0.55, 0.78, 1.0], // brand-blue tint
     d: [0.13, 0.9, 0.9], // brand-cyan-light
-    // Light mode keeps the airy feel: a pale watercolor planet and faint
+    // Light mode keeps the airy feel: near-white watercolor planets and faint
     // dust-star specks, never saturated dark balls punching holes in the page.
-    planetA: [0.62, 0.72, 0.94],
-    planetB: [0.9, 0.94, 1.0],
-    starColor: [0.85, 0.91, 1.0],
-    starIntensity: 0.35,
+    planetA: [0.79, 0.86, 0.96],
+    planetB: [0.95, 0.97, 1.0],
+    starColor: [0.72, 0.8, 0.92],
+    starIntensity: 0.22,
   },
   dark: {
     a: [0.04, 0.05, 0.08], // near-black blue
@@ -207,17 +207,8 @@ void main(){
   float pd = length(tc - rd * dot(tc, rd));
   col += uColorC * exp(-max(pd - giantR, 0.0) * 7.0) * 0.14;
 
-  // Moon — occluded by the giant when it passes behind.
-  if (tM > 0.0 && (tG < 0.0 || tM < tG)) {
-    vec3 mp = ro + rd * tM;
-    vec3 mn = normalize(mp - moonC);
-    float mdiff = max(dot(mn, L), 0.0);
-    float msp = fbm(mn.xy * 9.0 + 2.7);
-    vec3 msurf = mix(uPlanetB, uPlanetA, 0.5 + 0.5 * msp);
-    col = msurf * (0.2 + 0.9 * mdiff) + uColorD * pow(1.0 - max(dot(mn, -rd), 0.0), 3.0) * 0.3;
-  }
-
-  // Gas giant — banded surface, Lambert + cyan rim.
+  // Gas giant — banded surface, Lambert + cyan rim. Drawn before the moon
+  // and ring so they composite correctly on top when they pass in front.
   if (tG > 0.0) {
     vec3 gp = ro + rd * tG;
     vec3 gn = normalize(gp - giantC);
@@ -230,8 +221,19 @@ void main(){
     col = gsurf * (0.22 + 0.85 * gdiff) + uColorD * fres * 0.38;
   }
 
-  // Ring — tilted annulus with a Cassini-like gap; hidden where the planet
-  // occludes it (tG < tR), drawn over the planet where it passes in front.
+  // Moon — only drawn when it is the nearest body (in front of the giant);
+  // when behind (tG < tM) the giant has already covered its pixels.
+  if (tM > 0.0 && (tG < 0.0 || tM < tG)) {
+    vec3 mp = ro + rd * tM;
+    vec3 mn = normalize(mp - moonC);
+    float mdiff = max(dot(mn, L), 0.0);
+    float msp = fbm(mn.xy * 9.0 + 2.7);
+    vec3 msurf = mix(uPlanetB, uPlanetA, 0.5 + 0.5 * msp);
+    col = msurf * (0.2 + 0.9 * mdiff) + uColorD * pow(1.0 - max(dot(mn, -rd), 0.0), 3.0) * 0.3;
+  }
+
+  // Ring — tilted annulus with a Cassini-like gap; hidden where a nearer
+  // body occludes it (giant or moon), drawn over whatever is behind it.
   vec3 rn = normalize(vec3(0.28, 1.0, 0.12));
   float denom = dot(rd, rn);
   if (abs(denom) > 1e-4) {
@@ -243,7 +245,8 @@ void main(){
       float rr = length(vec2(dot(hp, e1), dot(hp, e2)));
       float rIn = giantR * 1.35;
       float rOut = giantR * 2.3;
-      if (rr > rIn && rr < rOut && (tG < 0.0 || tR < tG)) {
+      bool ringNearest = (tG < 0.0 || tR < tG) && (tM < 0.0 || tR < tM);
+      if (rr > rIn && rr < rOut && ringNearest) {
         float rb = snoise(vec2(rr * 26.0, 3.7)) * 0.5 + 0.5;
         float gap = smoothstep(0.02, 0.08, abs(rr - giantR * 1.85));
         float edge = smoothstep(rIn, rIn + giantR * 0.25, rr)
