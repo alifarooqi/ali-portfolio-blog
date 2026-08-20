@@ -10,9 +10,9 @@ import "./ExperienceSection.scss";
 const experienceSectionConfig = SectionConfig.find((section) => section.key === "experience")!;
 
 /**
- * Work-history timeline. Single rail on mobile (line + dots on the left,
- * cards to the right); center rail with alternating cards on desktop.
- * Entry data lives in ExperienceConfig.
+ * Work-history timeline. Single left rail at every breakpoint — rail + dots
+ * on the left, cards stacked vertically to the right. Entry data lives in
+ * ExperienceConfig.
  */
 const ExperienceSection = forwardRef<HTMLDivElement>((_, ref) => (
   <Section ref={ref} sectionConfig={experienceSectionConfig} extraClass="experience-section">

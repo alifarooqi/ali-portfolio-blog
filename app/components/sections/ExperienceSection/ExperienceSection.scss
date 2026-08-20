@@ -1,7 +1,7 @@
-// Experience timeline. Mobile-first: base rules target small screens with a
-// single left rail; the ≥1024px layer switches to a center rail with
-// alternating cards. The card surface comes from the shared .glass-card
-// utility (global.css); this file owns layout, spacing, and type.
+// Experience timeline. Single left rail at every breakpoint — cards stack
+// vertically regardless of viewport width. The card surface comes from the
+// shared .glass-card utility (global.css); this file owns layout, spacing,
+// and type.
 .experience-timeline {
   position: relative;
   width: 100%;
@@ -97,44 +97,6 @@
       width: 0.95rem;
       height: 0.95rem;
       color: var(--brand-color);
-    }
-  }
-}
-
-// Desktop: center rail, cards alternating sides. Items are 50%-wide blocks
-// pushed to one side; dots sit on the center rail at the inner edge.
-@media (min-width: 1024px) {
-  .experience-timeline {
-    padding-left: 0;
-
-    &::before {
-      left: 50%;
-      margin-left: -1px;
-    }
-
-    &__item {
-      width: calc(50% - 2.25rem);
-
-      &:nth-child(odd) {
-        margin-right: auto;
-
-        .experience-timeline__dot {
-          left: auto;
-          right: -2.75rem;
-        }
-      }
-
-      &:nth-child(even) {
-        margin-left: auto;
-
-        .experience-timeline__dot {
-          left: -2.75rem;
-        }
-      }
-    }
-
-    &__dot {
-      top: 1.6rem;
     }
   }
 }
