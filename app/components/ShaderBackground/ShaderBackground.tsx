@@ -33,6 +33,8 @@ type Uniforms = {
   uPlanetB: WebGLUniformLocation | null;
   uStarColor: WebGLUniformLocation | null;
   uStarIntensity: WebGLUniformLocation | null;
+  uAmbientFloor: WebGLUniformLocation | null;
+  uAmbientRange: WebGLUniformLocation | null;
 };
 
 const PALETTE = {
@@ -43,10 +45,14 @@ const PALETTE = {
     d: [0.13, 0.9, 0.9], // brand-cyan-light
     // Light mode keeps the airy feel: near-white watercolor planets and faint
     // dust-star specks, never saturated dark balls punching holes in the page.
-    planetA: [0.79, 0.86, 0.96],
-    planetB: [0.95, 0.97, 1.0],
+    planetA: [0.92, 0.96, 1.0],
+    planetB: [1.0, 1.0, 1.0],
     starColor: [0.72, 0.8, 0.92],
     starIntensity: 0.22,
+    // Light theme: lift the ambient floor so the dark side reads as pale
+    // watercolor, not 22% gray. Range still gives a hint of 3D shading.
+    ambientFloor: 0.78,
+    ambientRange: 0.22,
   },
   dark: {
     a: [0.04, 0.05, 0.08], // near-black blue
@@ -58,6 +64,9 @@ const PALETTE = {
     planetB: [0.38, 0.6, 0.85],
     starColor: [0.92, 0.96, 1.0],
     starIntensity: 0.9,
+    // Dark theme: keep the original dramatic shading floor.
+    ambientFloor: 0.22,
+    ambientRange: 0.85,
   },
 } as const;
 
@@ -76,6 +85,8 @@ uniform vec3 uPlanetA;
 uniform vec3 uPlanetB;
 uniform vec3 uStarColor;
 uniform float uStarIntensity;
+uniform float uAmbientFloor;
+uniform float uAmbientRange;
 
 // 2D simplex noise — Ashima/Stefan Gustavson.
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
@@ -218,7 +229,7 @@ void main(){
     vec3 gsurf = mix(uPlanetA, uPlanetB, smoothstep(-0.35, 0.35, band));
     gsurf *= 1.0 - 0.22 * smoothstep(0.55, 1.0, abs(gn.y)); // polar shading
     float fres = pow(1.0 - max(dot(gn, -rd), 0.0), 2.5);
-    col = gsurf * (0.22 + 0.85 * gdiff) + uColorD * fres * 0.38;
+    col = gsurf * (uAmbientFloor + uAmbientRange * gdiff) + uColorD * fres * 0.38;
   }
 
   // Moon — only drawn when it is the nearest body (in front of the giant);
@@ -229,7 +240,7 @@ void main(){
     float mdiff = max(dot(mn, L), 0.0);
     float msp = fbm(mn.xy * 9.0 + 2.7);
     vec3 msurf = mix(uPlanetB, uPlanetA, 0.5 + 0.5 * msp);
-    col = msurf * (0.2 + 0.9 * mdiff) + uColorD * pow(1.0 - max(dot(mn, -rd), 0.0), 3.0) * 0.3;
+    col = msurf * (uAmbientFloor + uAmbientRange * mdiff) + uColorD * pow(1.0 - max(dot(mn, -rd), 0.0), 3.0) * 0.3;
   }
 
   // Ring — tilted annulus with a Cassini-like gap; hidden where a nearer
@@ -356,6 +367,8 @@ export default function ShaderBackground() {
       uPlanetB: gl.getUniformLocation(program, "uPlanetB"),
       uStarColor: gl.getUniformLocation(program, "uStarColor"),
       uStarIntensity: gl.getUniformLocation(program, "uStarIntensity"),
+      uAmbientFloor: gl.getUniformLocation(program, "uAmbientFloor"),
+      uAmbientRange: gl.getUniformLocation(program, "uAmbientRange"),
     };
 
     // --- Theme detection ---
@@ -371,6 +384,8 @@ export default function ShaderBackground() {
       gl.uniform3f(uniforms.uPlanetB, p.planetB[0], p.planetB[1], p.planetB[2]);
       gl.uniform3f(uniforms.uStarColor, p.starColor[0], p.starColor[1], p.starColor[2]);
       gl.uniform1f(uniforms.uStarIntensity, p.starIntensity);
+      gl.uniform1f(uniforms.uAmbientFloor, p.ambientFloor);
+      gl.uniform1f(uniforms.uAmbientRange, p.ambientRange);
     };
     applyPalette();
 
