@@ -1,97 +1,39 @@
+// Project carousel + inspect panel. All colors are theme-aware via CSS
+// custom properties + color-mix(), never hardcoded hex/rgba. The carousel
+// cards sit inside the shared TiltCard wrapper, so the 3D cursor tilt is
+// gated by useCursorMotionGate (no fine pointer / prefers-reduced-motion
+// disables it). The section-wide `.section-active` frosted backdrop applies
+// here via the standard Section wrapper.
+//
+// Mobile-first: base rules target small screens; desktop values layered
+// on top via min-width: 768px.
 .project-section {
-  // Mobile-first base; desktop padding restored at min-width: 768px below.
   padding: 3rem 1rem;
 
-  .game-dashboard-container {
+  .project-carousel {
     position: relative;
-    width: 100%;
-    background: radial-gradient(130% 130% at 50% 0%, #151d30 0%, #0a0d14 100%);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 20px;
-    padding: 20px 15px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(16px);
-    overflow: hidden;
-  }
-
-  .ambient-particles-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .dashboard-header {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    z-index: 5;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding-bottom: 15px;
-
-    .header-status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pulsing-led {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      background-color: var(--brand-color-light, #21e5e5);
-      border-radius: 50%;
-      box-shadow: 0 0 12px var(--brand-color-light, #21e5e5);
-      animation: led-pulse 1.8s infinite;
-    }
-
-    .system-ready-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.15rem;
-      font-family: monospace;
-      color: var(--brand-color-light, #21e5e5);
-      font-weight: 600;
-    }
-  }
-
-  /* Vertical Layout Architecture */
-  .dashboard-vertical-layout {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    z-index: 5;
-  }
-
-  /* Carousel Row Wrapper */
-  .carousel-wrapper-layout {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
     width: 100%;
-    position: relative;
   }
 
-  /* Floating visual nav arrows */
-  .carousel-nav-btn {
+  // Visual nav arrows flanking the carousel.
+  .project-carousel-btn {
     width: 40px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: color-mix(in srgb, var(--text-secondary) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--text-secondary) 18%, transparent);
     border-radius: 50%;
-    color: var(--brand-color, #3c83f6);
+    color: var(--brand-color);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 10;
     flex-shrink: 0;
 
@@ -100,10 +42,10 @@
     }
 
     &:hover {
-      background: rgba(60, 131, 246, 0.15);
-      border-color: var(--brand-color-light, #21e5e5);
-      color: #ffffff;
-      box-shadow: 0 0 15px rgba(33, 229, 229, 0.25);
+      background: rgba(var(--brand-color-rgb), 0.15);
+      border-color: var(--brand-color-light);
+      color: var(--text-primary);
+      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color-light) 25%, transparent);
       transform: scale(1.08);
     }
 
@@ -112,18 +54,16 @@
     }
   }
 
-  /* Confines view slider bounds */
-  .carousel-view-port {
+  .project-carousel-viewport {
     flex-grow: 1;
     overflow: hidden;
     max-width: 800px;
   }
 
-  /* Container snapping cards */
-  .carousel-list {
+  .project-carousel-list {
     display: flex;
     gap: 16px;
-    padding: 10px 60px 20px 60px; // Padding allows active card to center
+    padding: 10px 60px 20px 60px; // Padding lets the active card center
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
@@ -135,114 +75,105 @@
     }
   }
 
-  /* 3D Game Cover Cards */
-  .game-card {
+  // Project card surface. Wrapped in TiltCard so the 3D tilt comes from
+  // the shared component; the card itself only owns the layout, surface,
+  // and cover image composition.
+  .project-card {
     flex: 0 0 170px;
     height: 250px;
     position: relative;
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    transform-style: preserve-3d;
-    background: #11141d;
+    border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
+    background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 10px 25px color-mix(in srgb, var(--text-primary) 18%, transparent);
     transition: border-color 0.3s, box-shadow 0.3s;
     scroll-snap-align: center;
 
-    &.selected {
-      border-color: var(--brand-color-light, #21e5e5);
-      box-shadow: 0 0 25px rgba(33, 229, 229, 0.35);
-      
-      &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border: 2px solid var(--brand-color-light, #21e5e5);
-        border-radius: 16px;
-        z-index: 5;
-        pointer-events: none;
-      }
+    &:hover {
+      border-color: color-mix(in srgb, var(--brand-color-light) 45%, transparent);
     }
 
-    .card-cover-wrapper {
+    &.selected {
+      border-color: var(--brand-color-light);
+      box-shadow: 0 0 25px color-mix(in srgb, var(--brand-color-light) 35%, transparent);
+    }
+
+    .project-card-cover {
       width: 100%;
       height: 100%;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      transform: translateZ(25px);
+      display: block;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      color: inherit;
     }
 
-    // Cover image sits behind the overlays (z-index 1). Spotlight/glow/title
-    // keep their existing z-indices (3, 2, 4). object-fit/position replace the
-    // old `background-size: cover; background-position: center` on the wrapper.
-    .card-cover-image {
+    .project-card-image {
       object-fit: cover;
       object-position: center;
       z-index: 1;
     }
 
-    .card-spotlight {
+    // Theme-aware gradient that fades the bottom of the cover image so the
+    // title text is readable in both light and dark modes. The base color
+    // is the page background, so light mode fades to white, dark mode fades
+    // to near-black.
+    .project-card-overlay {
       position: absolute;
       inset: 0;
-      pointer-events: none;
-      mix-blend-mode: screen;
-      z-index: 3;
-    }
-
-    .card-glass-glow {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .card-game-title-overlay {
-      position: relative;
-      background: linear-gradient(0deg, rgba(10, 13, 20, 0.95) 0%, rgba(10, 13, 20, 0.7) 70%, rgba(10, 13, 20, 0) 100%);
+      background: linear-gradient(
+        0deg,
+        color-mix(in srgb, var(--bg-primary) 92%, transparent) 0%,
+        color-mix(in srgb, var(--bg-primary) 70%, transparent) 70%,
+        transparent 100%
+      );
       padding: 25px 15px 15px 15px;
       z-index: 4;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       gap: 10px;
+    }
 
-      .card-icon-container {
-        color: var(--brand-color-light, #21e5e5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        svg {
-          font-size: 1.3rem;
-        }
-      }
+    .project-card-icon {
+      color: var(--brand-color-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
 
-      .card-game-title {
-        color: #ffffff;
-        font-size: 0.88rem;
-        font-weight: 700;
-        letter-spacing: 0.03rem;
-        line-height: 1.25;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      svg {
+        font-size: 1.3rem;
       }
+    }
+
+    .project-card-name {
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.03rem;
+      line-height: 1.25;
+      text-align: left;
     }
   }
 
-  /* LED indicator pagination dots */
-  .carousel-pagination-dots {
+  // LED-style indicator dots.
+  .project-pagination-dots {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 12px;
     margin: 5px 0 15px 0;
 
-    .pagination-dot {
+    .project-pagination-dot {
       width: 9px;
       height: 9px;
-      background-color: rgba(255, 255, 255, 0.18);
+      background-color: color-mix(in srgb, var(--text-secondary) 30%, transparent);
       border: none;
       border-radius: 50%;
       cursor: pointer;
@@ -250,244 +181,204 @@
       padding: 0;
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.45);
+        background-color: color-mix(in srgb, var(--text-secondary) 60%, transparent);
         transform: scale(1.2);
       }
 
       &.active {
-        background-color: var(--brand-color-light, #21e5e5);
-        box-shadow: 0 0 10px var(--brand-color-light, #21e5e5);
+        background-color: var(--brand-color-light);
+        box-shadow: 0 0 10px color-mix(in srgb, var(--brand-color-light) 50%, transparent);
         transform: scale(1.3);
       }
     }
   }
 
-  /* Sci-Fi Inspect Pane (Now full-width below slider) */
-  .inspect-details-pane {
-    background: rgba(13, 18, 30, 0.72);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+  // Inspect panel — uses the shared .glass-card surface treatment so it
+  // matches the Reviews/Experience cards.
+  .project-inspect {
+    background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
     border-radius: 16px;
     padding: 20px 15px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 15px 35px color-mix(in srgb, var(--text-primary) 15%, transparent);
     width: 100%;
     margin-top: 10px;
-    height: auto; /* Auto on mobile to prevent overflow; locked at 330px on desktop */
+    height: auto;
     display: flex;
     flex-direction: column;
+  }
 
-    .inspect-content {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      height: 100%;
-      justify-content: space-between;
-    }
+  .project-inspect-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 
-    .inspect-header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+  .project-inspect-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 
-      .inspect-icon-container {
-        width: 50px;
-        height: 50px;
-        background: rgba(60, 131, 246, 0.12);
-        border: 1px solid rgba(60, 131, 246, 0.25);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--brand-color, #3c83f6);
-        flex-shrink: 0;
-
-        svg {
-          font-size: 1.6rem;
-        }
-      }
-
-      .inspect-title-group {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .inspect-project-title {
-        color: #ffffff;
-        font-size: 1.3rem;
-        margin: 0 0 4px 0;
-        font-weight: 700;
-        letter-spacing: 0.01rem;
-      }
-
-      .inspect-project-duration {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.78rem;
-        color: #adadad;
-        margin: 0;
-
-        svg {
-          font-size: 0.95rem;
-          color: var(--brand-color-light, #21e5e5);
-        }
-      }
-    }
-
-    .inspect-body {
-      .inspect-divider {
-        width: 100%;
-        height: 1px;
-        background: linear-gradient(90deg, rgba(60, 131, 246, 0.4) 0%, rgba(60, 131, 246, 0.05) 100%);
-        margin-bottom: 15px;
-      }
-
-      .inspect-description {
-        color: #e0e0e0;
-        line-height: 1.65;
-        font-size: 0.94rem;
-        margin: 0;
-        
-        b {
-          color: var(--brand-color-light, #21e5e5);
-        }
-      }
-    }
-
-    .inspect-footer {
-      margin-top: 10px;
-
-      .inspect-no-links-indicator {
-        border: 1px dashed rgba(255, 255, 255, 0.1);
-        padding: 12px;
-        border-radius: 8px;
-        text-align: center;
-        
-        span {
-          font-family: monospace;
-          font-size: 0.72rem;
-          color: #adadad;
-          letter-spacing: 0.05rem;
-        }
-      }
-    }
-
-    /* Buttons wrapper — stacks vertically on mobile, row on desktop */
-    .inspect-buttons-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-
-      .sci-fi-action-button {
-        width: 100%;
-        max-width: 300px;
-        // The button's own `flex: 0 1 220px` is a width basis for row layout.
-        // Inside this column wrapper it would otherwise set the button's
-        // HEIGHT to 220px. Reset to auto so height is content-driven on mobile.
-        flex: 0 0 auto;
-      }
-    }
-
-    .sci-fi-action-button {
-      flex: 0 1 220px;
-      max-width: 300px;
+    .project-inspect-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(var(--brand-color-rgb), 0.12);
+      border: 1px solid rgba(var(--brand-color-rgb), 0.25);
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      background: linear-gradient(135deg, rgba(60, 131, 246, 0.25) 0%, rgba(60, 131, 246, 0.05) 100%);
-      border: 1px solid rgba(60, 131, 246, 0.4);
-      // Mobile-first: smaller padding/type/icon on small screens; layer up
-      // via min-width tiers at 430px (phablet) and 768px (desktop).
-      padding: 8px 14px;
-      border-radius: 10px;
-      color: #ffffff;
+      color: var(--brand-color);
+      flex-shrink: 0;
+
+      svg {
+        font-size: 1.6rem;
+      }
+    }
+
+    .project-inspect-title-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .project-inspect-title {
+      color: var(--text-primary);
+      font-size: 1.3rem;
+      margin: 0 0 4px 0;
+      font-weight: 700;
+      letter-spacing: 0.01rem;
+    }
+
+    .project-inspect-duration {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.05rem;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+      color: var(--text-secondary);
+      margin: 0;
 
-      .btn-icon {
-        display: flex;
-        align-items: center;
-        color: var(--brand-color-light, #21e5e5);
-
-        svg {
-          font-size: 0.95rem;
-        }
+      svg {
+        font-size: 0.95rem;
+        color: var(--brand-color-light);
       }
+    }
+  }
 
-      // Phablet tier (~430px): step up halfway.
-      @media (min-width: 430px) {
-        padding: 10px 16px;
-        font-size: 0.82rem;
-        gap: 10px;
+  .project-inspect-body {
+    .project-inspect-description {
+      color: var(--text-primary);
+      opacity: 0.85;
+      line-height: 1.65;
+      font-size: 0.94rem;
+      margin: 0;
 
-        .btn-icon svg {
-          font-size: 1rem;
-        }
+      b {
+        color: var(--brand-color-light);
       }
+    }
+  }
 
-      // Desktop tier (768px+): original desktop values.
-      @media (min-width: 768px) {
-        padding: 12px 20px;
-        font-size: 0.88rem;
+  // Buttons wrapper — stacks vertically on mobile, row on desktop.
+  .project-inspect-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 5px;
 
-        .btn-icon svg {
-          font-size: 1.1rem;
-        }
+    .project-action-button {
+      width: 100%;
+      max-width: 300px;
+      flex: 0 0 auto;
+    }
+  }
+
+  .project-action-button {
+    flex: 0 1 220px;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(
+      135deg,
+      rgba(var(--brand-color-rgb), 0.25) 0%,
+      rgba(var(--brand-color-rgb), 0.05) 100%
+    );
+    border: 1px solid rgba(var(--brand-color-rgb), 0.4);
+    // Mobile-first: smaller padding/type/icon on small screens; layer up
+    // via min-width tiers at 430px (phablet) and 768px (desktop).
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+
+    .project-action-icon {
+      display: flex;
+      align-items: center;
+      color: var(--brand-color-light);
+
+      svg {
+        font-size: 0.95rem;
       }
+    }
 
-      &:hover {
-        background: linear-gradient(135deg, rgba(60, 131, 246, 0.45) 0%, rgba(60, 131, 246, 0.15) 100%);
-        border-color: var(--brand-color-light, #21e5e5);
-        box-shadow: 0 0 15px rgba(33, 229, 229, 0.25);
-        transform: translateY(-2px);
-        text-decoration: none;
-      }
+    @media (min-width: 430px) {
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      gap: 10px;
 
-      &:active {
-        transform: translateY(0);
+      .project-action-icon svg {
+        font-size: 1rem;
       }
+    }
+
+    @media (min-width: 768px) {
+      padding: 12px 20px;
+      font-size: 0.88rem;
+
+      .project-action-icon svg {
+        font-size: 1.1rem;
+      }
+    }
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(var(--brand-color-rgb), 0.45) 0%,
+        rgba(var(--brand-color-rgb), 0.15) 100%
+      );
+      border-color: var(--brand-color-light);
+      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color-light) 25%, transparent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 }
 
-@keyframes led-pulse {
-  0% {
-    opacity: 0.4;
-    box-shadow: 0 0 4px var(--brand-color-light, #21e5e5);
-  }
-  50% {
-    opacity: 1;
-    box-shadow: 0 0 14px var(--brand-color-light, #21e5e5);
-  }
-  100% {
-    opacity: 0.4;
-    box-shadow: 0 0 4px var(--brand-color-light, #21e5e5);
-  }
-}
-
-/* Responsive Viewports — mobile-first: base rules target small screens,
-   desktop values layered on top at min-width: 768px. */
+// Desktop tier — base rules above target small screens.
 @media screen and (min-width: 768px) {
   .project-section {
     padding: 4rem 1.5rem;
 
-    .game-dashboard-container {
-      padding: 30px;
-    }
-
-    .carousel-wrapper-layout {
+    .project-carousel {
       gap: 20px;
     }
 
-    /* Full-size arrows on larger screens */
-    .carousel-nav-btn {
+    .project-carousel-btn {
       width: 48px;
       height: 48px;
 
@@ -496,37 +387,38 @@
       }
     }
 
-    .carousel-list {
+    .project-carousel-list {
       padding: 15px 120px 25px 120px;
       gap: 24px;
     }
 
-    .game-card {
+    .project-card {
       flex: 0 0 210px;
       height: 310px;
     }
 
-    .inspect-details-pane {
+    .project-inspect {
       padding: 30px;
-      height: 330px; /* Lock height to prevent vertical shifting/bouncing */
+    }
 
-      .inspect-buttons-wrapper {
-        flex-direction: row;
-        flex-wrap: wrap;
+    .project-inspect-buttons {
+      flex-direction: row;
+      flex-wrap: wrap;
 
-        .sci-fi-action-button {
-          width: auto;
-          // Restore row-layout width basis (button's own flex: 0 1 220px).
-          flex: 0 1 220px;
-        }
+      .project-action-button {
+        width: auto;
+        // Restore row-layout width basis (button's own flex: 0 1 220px).
+        flex: 0 1 220px;
       }
     }
   }
 }
 
-/* Overrides to render the standard Section header above the content instead of side-by-side.
-   Mobile-first: base rules target small screens; desktop padding/type layered
-   at min-width: 768px below. */
+// Section wrapper override: the project section needs a column layout
+// (header on top, content below) instead of the default row layout. The
+// `!important` is unavoidable here without adding a `headerPosition` prop
+// to the shared Section wrapper — kept as a localized override for the
+// project section only.
 .project-section.section-wrapper {
   .section {
     flex-direction: column !important;
@@ -573,4 +465,3 @@
     }
   }
 }
-

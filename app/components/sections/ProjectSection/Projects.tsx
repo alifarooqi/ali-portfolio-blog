@@ -12,6 +12,7 @@ interface Project {
   icon: ReactNode;
   description: React.ReactNode;
   duration: string;
+  coverImage: string;
   links: ProjectLink[];
 }
 
@@ -20,6 +21,7 @@ const Projects: Project[] = [
     name: "Antigravity Telegram Bridge",
     icon: getIcon("smartToy"),
     duration: "2025",
+    coverImage: "/images/projects/antigravity_telegram_bridge.webp",
     description: (
       <>
         A Python application bridging Telegram with the <b>Google Antigravity SDK</b>, enabling remote interaction and task execution on a local Mac-based agent. Supports multi-session isolation, persistence, and strict security sandboxing for git commands.
@@ -37,6 +39,7 @@ const Projects: Project[] = [
     name: "Identity and Access Management",
     icon: getIcon("security"),
     duration: "2020 - 2025",
+    coverImage: "/images/projects/iam_security.webp",
     description: (
       <>
         An IAM system for a cloud-based IoT solution using <b>Scala</b> and <b>React</b>. The system
@@ -52,6 +55,7 @@ const Projects: Project[] = [
     name: "Energy Efficiency Solution",
     icon: getIcon("energy"),
     duration: "2023 - 2024",
+    coverImage: "/images/projects/energy_efficiency.webp",
     description: (
       <>
         A machine energy monitoring dashboard using <b>React</b> and <b>Chart.js</b> for the
@@ -66,6 +70,7 @@ const Projects: Project[] = [
     name: "EczeTrack",
     icon: getIcon("app"),
     duration: "2020",
+    coverImage: "/images/projects/eczetrack.webp",
     description: (
       <>
         A <b>React Native</b> mobile app with <b>NodeJS</b> to track Eczema symptoms in patients,
@@ -89,6 +94,7 @@ const Projects: Project[] = [
     name: "Tic Tac Toe",
     icon: getIcon("smartToy"),
     duration: "2017",
+    coverImage: "/images/projects/tic_tac_toe.webp",
     description: "A Tic Tac Toe game with an unbeatible AI Agent.",
     links: [
       {
@@ -107,6 +113,7 @@ const Projects: Project[] = [
     name: "Simon Game",
     icon: getIcon("videoGame"),
     duration: "2017",
+    coverImage: "/images/projects/simon_game.webp",
     description:
       "Brought back the childhood memories with this Simon Game. A simple game where you have to repeat the sequence of colors shown by the game.",
     links: [
@@ -126,6 +133,7 @@ const Projects: Project[] = [
     name: "Pomodoro Timer",
     icon: getIcon("timer"),
     duration: "2017",
+    coverImage: "/images/projects/pomodoro_timer.webp",
     description:
       "A Pomodoro Timer to help you focus on your work. It has a simple UI and a timer which will help you focus on your work for 25 minutes and then take a break for 5 minutes.",
     links: [
