@@ -36,7 +36,14 @@ const Section = forwardRef<HTMLDivElement, SectionProps>(
     }, [ref]);
 
     const isInView = useInView(internalRef, { amount: 0.2, once: true });
-    const isCurrentlyInView = useInView(internalRef, { amount: 0.5 });
+    // Scroll-spy trigger: section is "active" while its bounding box
+    // intersects the viewport's vertical center line. Rootmargin of -50% top
+    // and -50% bottom shrinks the IntersectionObserver root to a single line
+    // at the viewport midpoint. This works for sections of any height
+    // (including long ones like Experience where amount: 0.5 would never
+    // fire — visible portion of a tall section is bounded by
+    // viewport_height / section_height, which is < 50% in most cases).
+    const isCurrentlyInView = useInView(internalRef, { margin: "-50% 0px -50% 0px" });
 
     useEffect(() => {
       if (!innerDivRef.current) return;
