@@ -37,6 +37,16 @@ const ReviewsConfig: ReviewsConfigType = {
         company: "WeDerm Health",
       },
     },
+    {
+      // Husn-e-Rabbi — three paragraphs preserved verbatim.
+      quote:
+        "I had the pleasure of working with Ali Farooqi, and I found him to be an excellent problem solver with a strong engineering mindset. Whenever he works on a problem, he doesn’t just look for a quick solution; he considers the bigger picture, including security, availability, scalability, maintainability, and the best way to build the application.\n\nAli is also energetic and always willing to explore and adopt new frameworks, technologies, and better approaches. What I particularly appreciate is that he is a collaborative team player who is always ready to support others and contribute toward achieving the team's goals.\n\nIt was a great experience working with him.",
+      reviewer: {
+        name: "Husn-e-Rabbi",
+        title: "DevOps Lead",
+        company: "KM.ON Asia",
+      },
+    },
   ],
 };
 
