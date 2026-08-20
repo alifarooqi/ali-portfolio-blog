@@ -35,18 +35,11 @@
   flex-direction: column;
   gap: 1rem;
   padding: clamp(1.25rem, 4vw, 1.9rem);
-  border-radius: 14px;
-  border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
-  background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  transform-style: preserve-3d;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  // Guard against flex/grid overflow (learned from the About bento fix).
-  min-width: 0;
+  // Surface (background, border, blur, hover border tint) comes from the
+  // shared .glass-card utility; 3D transform context from .tilt-card.
+  transition: box-shadow 0.3s ease;
 
   &:hover {
-    border-color: color-mix(in srgb, var(--brand-color) 45%, transparent);
     box-shadow: 0 12px 40px rgba(var(--brand-color-rgb), 0.18);
   }
 

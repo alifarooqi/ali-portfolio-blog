@@ -1,7 +1,7 @@
 // Experience timeline. Single left rail at every breakpoint — cards stack
 // vertically regardless of viewport width. The card surface comes from the
-// shared .glass-card utility (global.css); this file owns layout, spacing,
-// and type.
+// shared .glass-card utility (global.css); cursor-driven 3D tilt from the
+// shared TiltCard wrapper. This file owns layout, spacing, and type.
 .experience-timeline {
   position: relative;
   width: 100%;
@@ -49,6 +49,13 @@
 
   &__card {
     padding: clamp(1.1rem, 4vw, 1.5rem);
+    // Hover lift matches the Reviews card so both sections feel cohesive
+    // when the cursor lands on a card.
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 12px 40px rgba(var(--brand-color-rgb), 0.18);
+    }
   }
 
   &__period {
