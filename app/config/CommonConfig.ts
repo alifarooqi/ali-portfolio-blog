@@ -12,11 +12,9 @@ interface SignatureConfig {
 }
 
 interface CommonConfigType {
-  addFreePalestine: boolean;
   name: string;
   taglines: string[];
   signature: SignatureConfig;
-  profilePicture: string;
   email: string;
   /** Shown in the Contact section — confirm wording before relying on it. */
   location: string;
@@ -39,7 +37,6 @@ const signature: SignatureConfig = {
 };
 
 const CommonConfig: CommonConfigType = {
-  addFreePalestine: false,
   name: "Ali Farooqi",
   taglines: [
     "Software Engineer",
@@ -49,7 +46,6 @@ const CommonConfig: CommonConfigType = {
     "Tech Enthusiast",
   ],
   signature,
-  profilePicture: "",
   email: "m.ali_farooqi@hotmail.com",
   location: "China · Greater Bay Area",
   availability: "Available for new opportunities",
