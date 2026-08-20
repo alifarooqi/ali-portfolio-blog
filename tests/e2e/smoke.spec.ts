@@ -33,6 +33,7 @@ test.describe("smoke", () => {
     await expect(page.locator("section#about h2")).toHaveText("About");
     await expect(page.locator("section#experience h2")).toHaveText("Experience");
     await expect(page.locator("section#review h2")).toHaveText("Reviews");
+    await expect(page.locator("section#contact h2")).toHaveText("Contact");
 
     expect(errors, "unexpected console errors on /").toEqual([]);
   });
@@ -107,13 +108,14 @@ test.describe("smoke", () => {
     const scrollYBefore = await page.evaluate(() => window.scrollY);
     expect(scrollYBefore).toBe(0);
 
-    // Click the Reviews dot (last dot = Projects, About, Reviews after Home).
-    const reviewsDot = page.locator(".section-nav-dot").last();
-    await reviewsDot.click();
+    // Click the last dot (the final SectionConfig entry — Contact on this
+    // branch; experience joins between About and Reviews on its branch).
+    const lastDot = page.locator(".section-nav-dot").last();
+    await lastDot.click();
 
     // Wait for either Lenis or native smooth scroll to settle, then confirm
-    // the viewport actually moved. Reviews is near the bottom, so any real
-    // scroll will be well past zero.
+    // the viewport actually moved. The last section is near the bottom, so
+    // any real scroll will be well past zero.
     await expect
       .poll(async () => page.evaluate(() => window.scrollY), { timeout: 5000 })
       .toBeGreaterThan(200);

@@ -18,8 +18,20 @@ interface CommonConfigType {
   signature: SignatureConfig;
   profilePicture: string;
   email: string;
+  /** Shown in the Contact section — confirm wording before relying on it. */
+  location: string;
+  /** Availability badge text in the Contact section. */
+  availability: string;
   social: SocialLink[];
 }
+
+/**
+ * Resolve a social entry's link by its iconKey — the single lookup every
+ * surface should use (hero buttons, footer, contact CV link), so there is
+ * one place that knows how entries are keyed.
+ */
+export const getSocialLink = (key: IconKey): string | undefined =>
+  CommonConfig.social.find((s) => s.iconKey === key)?.link;
 
 const signature: SignatureConfig = {
   viewBox: "0 0 434 365",
@@ -39,6 +51,8 @@ const CommonConfig: CommonConfigType = {
   signature,
   profilePicture: "",
   email: "m.ali_farooqi@hotmail.com",
+  location: "China · Greater Bay Area",
+  availability: "Available for new opportunities",
   social: [
     {
       name: "GitHub",

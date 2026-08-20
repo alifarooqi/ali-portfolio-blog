@@ -24,6 +24,11 @@ const SectionConfig = [
     name: "Reviews",
     headerIconKey: "reviewSection",
   },
+  {
+    key: "contact",
+    name: "Contact",
+    headerIconKey: "email",
+  },
 ] as const;
 
 export type Sections = (typeof SectionConfig)[number]["key"];
