@@ -29,6 +29,12 @@ type Uniforms = {
   uColorB: WebGLUniformLocation | null;
   uColorC: WebGLUniformLocation | null;
   uColorD: WebGLUniformLocation | null;
+  uPlanetA: WebGLUniformLocation | null;
+  uPlanetB: WebGLUniformLocation | null;
+  uStarColor: WebGLUniformLocation | null;
+  uStarIntensity: WebGLUniformLocation | null;
+  uAmbientFloor: WebGLUniformLocation | null;
+  uAmbientRange: WebGLUniformLocation | null;
 };
 
 const PALETTE = {
@@ -37,12 +43,30 @@ const PALETTE = {
     b: [0.83, 0.9, 1.0], // soft cyan
     c: [0.55, 0.78, 1.0], // brand-blue tint
     d: [0.13, 0.9, 0.9], // brand-cyan-light
+    // Light mode keeps the airy feel: near-white watercolor planets and faint
+    // dust-star specks, never saturated dark balls punching holes in the page.
+    planetA: [0.92, 0.96, 1.0],
+    planetB: [1.0, 1.0, 1.0],
+    starColor: [0.72, 0.8, 0.92],
+    starIntensity: 0.22,
+    // Light theme: lift the ambient floor so the dark side reads as pale
+    // watercolor, not 22% gray. Range still gives a hint of 3D shading.
+    ambientFloor: 0.78,
+    ambientRange: 0.22,
   },
   dark: {
     a: [0.04, 0.05, 0.08], // near-black blue
     b: [0.06, 0.12, 0.25],
     c: [0.12, 0.32, 0.62], // brand-blue tint
     d: [0.05, 0.55, 0.65], // muted cyan
+    // Dark mode is the showcase: deep brand-blue gas giant, luminous bands.
+    planetA: [0.1, 0.24, 0.55],
+    planetB: [0.38, 0.6, 0.85],
+    starColor: [0.92, 0.96, 1.0],
+    starIntensity: 0.9,
+    // Dark theme: keep the original dramatic shading floor.
+    ambientFloor: 0.22,
+    ambientRange: 0.85,
   },
 } as const;
 
@@ -57,6 +81,12 @@ uniform vec3 uColorA;
 uniform vec3 uColorB;
 uniform vec3 uColorC;
 uniform vec3 uColorD;
+uniform vec3 uPlanetA;
+uniform vec3 uPlanetB;
+uniform vec3 uStarColor;
+uniform float uStarIntensity;
+uniform float uAmbientFloor;
+uniform float uAmbientRange;
 
 // 2D simplex noise — Ashima/Stefan Gustavson.
 vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
@@ -96,11 +126,46 @@ float fbm(vec2 p){
   return v;
 }
 
+float hash21(vec2 p){
+  p = fract(p * vec2(123.34, 456.21));
+  p += dot(p, p + 45.32);
+  return fract(p.x * p.y);
+}
+
+// Sparse twinkling star field on a jittered grid. "size" is the star radius
+// as a fraction of a cell; "density" is the fraction of cells holding a star.
+float starLayer(vec2 p, float scale, float density, float size, float t){
+  vec2 g = p * scale;
+  vec2 id = floor(g);
+  vec2 f = fract(g);
+  float h = hash21(id);
+  float on = step(h, density);
+  vec2 spos = vec2(hash21(id + 13.7), hash21(id + 91.3)) * 0.84 + 0.08;
+  float d = length(f - spos);
+  float core = (1.0 - smoothstep(0.0, size, d)) * on * (0.4 + 0.6 * hash21(id + 5.0));
+  float tw = 0.7 + 0.3 * sin(t * (0.4 + h * 1.1) + h * 40.0);
+  return core * tw;
+}
+
+// Closed-form ray/sphere intersection — returns distance along rd, or -1.
+float iSphere(vec3 ro, vec3 rd, vec3 ce, float ra){
+  vec3 oc = ro - ce;
+  float b = dot(oc, rd);
+  float c = dot(oc, oc) - ra * ra;
+  float h = b * b - c;
+  if (h < 0.0) return -1.0;
+  h = sqrt(h);
+  float t = -b - h;
+  if (t < 0.0) t = -b + h;
+  return t;
+}
+
 void main(){
   vec2 uv = gl_FragCoord.xy / uResolution.xy;
   vec2 p = uv;
   // Correct aspect so noise fields don't stretch.
-  p.x *= uResolution.x / uResolution.y;
+  float aspect = uResolution.x / uResolution.y;
+  p.x *= aspect;
 
   float t = uTime * 0.05;
   // Mouse parallax — small shift toward cursor.
@@ -120,6 +185,89 @@ void main(){
   vec3 col = mix(uColorA, uColorB, mask1);
   col = mix(col, uColorC, mask2 * 0.85);
   col = mix(col, uColorD, mask3 * 0.4);
+
+  // --- Starfield: two parallax depth layers, slow twinkle. ---
+  vec2 sp = uv * vec2(aspect, 1.0) + m * 0.04 + vec2(0.0, -uScroll * 0.06);
+  float stars = starLayer(sp, 22.0, 0.14, 0.10, uTime) * 0.9
+              + starLayer(sp * 1.6 + 17.3, 34.0, 0.11, 0.06, uTime * 1.3) * 0.55;
+  col += uStarColor * stars * uStarIntensity;
+
+  // --- Mini solar system. Analytic ray tracing only — no march loops. ---
+  // Celestial-slow epoch: orbits complete over minutes, not seconds.
+  float et = uTime * 0.015;
+  float ax = min(aspect, 1.7);
+  // Planets drift with the same eased mouse/scroll offsets as the nebula.
+  vec3 par = vec3((uMouse.x - 0.5) * 0.18, (uMouse.y - 0.5) * 0.12, 0.0)
+           + vec3(0.0, uScroll * 0.22, 0.0);
+  vec3 giantC = vec3(0.26 * ax, 0.155, 1.05) + par
+              + vec3(0.03 * sin(et * 0.9), 0.02 * cos(et * 0.7), 0.015 * sin(et * 0.5));
+  float giantR = 0.26;
+  vec3 moonC = giantC + vec3(cos(et * 2.0) * 0.45, sin(et * 1.4) * 0.16, 0.3 * sin(et * 1.7));
+  float moonR = 0.048;
+
+  vec2 q = (uv - 0.5) * vec2(aspect, 1.0);
+  vec3 ro = vec3(0.0, 0.0, -2.0);
+  vec3 rd = normalize(vec3(q, 1.45));
+  vec3 L = normalize(vec3(-0.55, 0.45, 0.8));
+
+  float tG = iSphere(ro, rd, giantC, giantR);
+  float tM = iSphere(ro, rd, moonC, moonR);
+
+  // Atmospheric halo behind the gas giant.
+  vec3 tc = giantC - ro;
+  float pd = length(tc - rd * dot(tc, rd));
+  col += uColorC * exp(-max(pd - giantR, 0.0) * 7.0) * 0.14;
+
+  // Gas giant — banded surface, Lambert + cyan rim. Drawn before the moon
+  // and ring so they composite correctly on top when they pass in front.
+  if (tG > 0.0) {
+    vec3 gp = ro + rd * tG;
+    vec3 gn = normalize(gp - giantC);
+    float gdiff = max(dot(gn, L), 0.0);
+    float warp = fbm(vec2(gn.x * 1.6, gn.y * 2.6) + vec2(uTime * 0.006, 0.0) + 4.2);
+    float band = sin(gn.y * 8.5 + warp * 1.8);
+    vec3 gsurf = mix(uPlanetA, uPlanetB, smoothstep(-0.35, 0.35, band));
+    gsurf *= 1.0 - 0.22 * smoothstep(0.55, 1.0, abs(gn.y)); // polar shading
+    float fres = pow(1.0 - max(dot(gn, -rd), 0.0), 2.5);
+    col = gsurf * (uAmbientFloor + uAmbientRange * gdiff) + uColorD * fres * 0.38;
+  }
+
+  // Moon — only drawn when it is the nearest body (in front of the giant);
+  // when behind (tG < tM) the giant has already covered its pixels.
+  if (tM > 0.0 && (tG < 0.0 || tM < tG)) {
+    vec3 mp = ro + rd * tM;
+    vec3 mn = normalize(mp - moonC);
+    float mdiff = max(dot(mn, L), 0.0);
+    float msp = fbm(mn.xy * 9.0 + 2.7);
+    vec3 msurf = mix(uPlanetB, uPlanetA, 0.5 + 0.5 * msp);
+    col = msurf * (uAmbientFloor + uAmbientRange * mdiff) + uColorD * pow(1.0 - max(dot(mn, -rd), 0.0), 3.0) * 0.3;
+  }
+
+  // Ring — tilted annulus with a Cassini-like gap; hidden where a nearer
+  // body occludes it (giant or moon), drawn over whatever is behind it.
+  vec3 rn = normalize(vec3(0.28, 1.0, 0.12));
+  float denom = dot(rd, rn);
+  if (abs(denom) > 1e-4) {
+    float tR = -dot(ro - giantC, rn) / denom;
+    if (tR > 0.0) {
+      vec3 hp = (ro + rd * tR) - giantC;
+      vec3 e1 = normalize(cross(rn, vec3(1.0, 0.0, 0.0)));
+      vec3 e2 = cross(rn, e1);
+      float rr = length(vec2(dot(hp, e1), dot(hp, e2)));
+      float rIn = giantR * 1.35;
+      float rOut = giantR * 2.3;
+      bool ringNearest = (tG < 0.0 || tR < tG) && (tM < 0.0 || tR < tM);
+      if (rr > rIn && rr < rOut && ringNearest) {
+        float rb = snoise(vec2(rr * 26.0, 3.7)) * 0.5 + 0.5;
+        float gap = smoothstep(0.02, 0.08, abs(rr - giantR * 1.85));
+        float edge = smoothstep(rIn, rIn + giantR * 0.25, rr)
+                   * (1.0 - smoothstep(rOut - giantR * 0.3, rOut, rr));
+        float ralpha = (0.28 + 0.5 * rb) * gap * edge;
+        vec3 rcol = mix(uPlanetB, uColorD, 0.5 + 0.5 * rb);
+        col = mix(col, rcol, clamp(ralpha, 0.0, 0.75));
+      }
+    }
+  }
 
   // Subtle vignette to keep content readable.
   float d = distance(uv, vec2(0.5));
@@ -215,6 +363,12 @@ export default function ShaderBackground() {
       uColorB: gl.getUniformLocation(program, "uColorB"),
       uColorC: gl.getUniformLocation(program, "uColorC"),
       uColorD: gl.getUniformLocation(program, "uColorD"),
+      uPlanetA: gl.getUniformLocation(program, "uPlanetA"),
+      uPlanetB: gl.getUniformLocation(program, "uPlanetB"),
+      uStarColor: gl.getUniformLocation(program, "uStarColor"),
+      uStarIntensity: gl.getUniformLocation(program, "uStarIntensity"),
+      uAmbientFloor: gl.getUniformLocation(program, "uAmbientFloor"),
+      uAmbientRange: gl.getUniformLocation(program, "uAmbientRange"),
     };
 
     // --- Theme detection ---
@@ -226,6 +380,12 @@ export default function ShaderBackground() {
       gl.uniform3f(uniforms.uColorB, p.b[0], p.b[1], p.b[2]);
       gl.uniform3f(uniforms.uColorC, p.c[0], p.c[1], p.c[2]);
       gl.uniform3f(uniforms.uColorD, p.d[0], p.d[1], p.d[2]);
+      gl.uniform3f(uniforms.uPlanetA, p.planetA[0], p.planetA[1], p.planetA[2]);
+      gl.uniform3f(uniforms.uPlanetB, p.planetB[0], p.planetB[1], p.planetB[2]);
+      gl.uniform3f(uniforms.uStarColor, p.starColor[0], p.starColor[1], p.starColor[2]);
+      gl.uniform1f(uniforms.uStarIntensity, p.starIntensity);
+      gl.uniform1f(uniforms.uAmbientFloor, p.ambientFloor);
+      gl.uniform1f(uniforms.uAmbientRange, p.ambientRange);
     };
     applyPalette();
 
