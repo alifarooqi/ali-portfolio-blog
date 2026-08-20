@@ -2,11 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import Parser from "rss-parser";
 
 import { parseMediumFeed } from "./medium";
-import mediumFeed from "./medium-feed.json";
-
-// Cast fixture so the rss2json-shaped JSON (no `content:encoded`, no `isoDate`)
-// doesn't fight the Parser<T> generics used elsewhere.
-const fixture = mediumFeed as unknown as Parser.Output<unknown>;
 
 describe("parseMediumFeed", () => {
   it("maps title / link / isoDate onto the post", () => {
@@ -99,7 +94,7 @@ describe("getMediumPosts", () => {
     vi.resetModules();
   });
 
-  it("returns parsed fixture when parseURL throws", async () => {
+  it("re-throws the underlying error when the feed is unreachable (#42)", async () => {
     vi.doMock("rss-parser", () => ({
       default: class {
         parseURL() {
@@ -109,9 +104,11 @@ describe("getMediumPosts", () => {
     }));
 
     const { getMediumPosts } = await import("./medium");
-    const posts = await getMediumPosts();
 
-    expect(posts.length).toBe(fixture.items!.length);
-    expect(posts[0].title).toBe(fixture.items![0].title);
+    // Blog page should fail loudly when Medium is unreachable rather than
+    // silently serving a stale snapshot. The previous behavior of falling
+    // back to lib/medium-feed.json dropped because the snapshot goes stale
+    // invisibly.
+    await expect(getMediumPosts()).rejects.toThrow("network down");
   });
 });

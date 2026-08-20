@@ -48,10 +48,7 @@ Homepage content is centralized, not scattered across components:
 > To convert custom SVGs and add new icons, use the `svg-icon` skill.
 
 ### Blog = Medium RSS, not local MDX
-Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `@ali_farooqi`, caches it in-memory for 12h (matching `revalidate = 12 * 3600` on the blog routes), and falls back to the committed snapshot at `lib/medium-feed.json` if the fetch fails. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
-
-> [!NOTE]
-> To refresh the fallback snapshot file, use the `medium-feed-refresh` skill.
+Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `@ali_farooqi` (no in-memory cache — ISR on the routes, `revalidate = 12 * 3600`, is the actual caching layer; see `lib/revalidate.ts`). Errors propagate so the blog page fails loudly when Medium is unreachable; there is no committed fallback snapshot. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
 
 ### Theming (dark mode)
 Dark mode is class-based via a `.dark` class on `<html>`. `app/ThemeInitializerScript.tsx` runs `beforeInteractive` to set the class from `localStorage` / `prefers-color-scheme` (prevents flash of wrong theme). The Menu toggle flips it and persists to `localStorage`. Colors are CSS custom properties in `app/global.css` (`:root` and `.dark` blocks).

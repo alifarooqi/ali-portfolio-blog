@@ -1,5 +1,4 @@
 import Parser from "rss-parser";
-import mediumFeed from "./medium-feed.json"; // Updated from: https://rss2json.com/#rss_url=https%3A%2F%2Fmedium.com%2Ffeed%2F%40ali_farooqi
 
 const MY_USERNAME = process.env.MEDIUM_USERNAME ?? "ali_farooqi";
 
@@ -16,15 +15,14 @@ export type MediumPost = Partial<{
 // No module-level cache: on Vercel serverless, in-memory state does not persist
 // across invocations anyway, and ISR (`revalidate = 12 * 3600` on the routes)
 // is the actual caching layer. See lib/revalidate.ts.
+//
+// Errors propagate so the blog page fails loudly when Medium is unreachable.
+// We previously fell back to a committed snapshot at lib/medium-feed.json, but
+// the snapshot goes stale silently and the inference is invisible (#42).
 export async function getMediumPosts(): Promise<MediumPost[]> {
   const parser = new Parser();
-  try {
-    const feed = await parser.parseURL(`https://medium.com/feed/@${MY_USERNAME}`);
-    return parseMediumFeed(feed);
-  } catch (error) {
-    console.error("Error fetching Medium posts:", error);
-    return parseMediumFeed(mediumFeed);
-  }
+  const feed = await parser.parseURL(`https://medium.com/feed/@${MY_USERNAME}`);
+  return parseMediumFeed(feed);
 }
 
 // TODO
