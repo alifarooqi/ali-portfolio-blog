@@ -8,6 +8,14 @@ on:
 permissions:
   contents: read
 
+# Three independent jobs run in parallel. The current job list was lint +
+# typecheck + build only — issue #40 closes the gap by wiring the test
+# suites (Vitest unit + Playwright e2e) into the same quality gate so a
+# PR can't land without them passing.
+#
+# Vercel + the GitHub branch protection rule require this `CI` check to
+# pass before merge, so any failure here blocks the PR.
+
 jobs:
   build:
     name: Lint, Typecheck & Build
@@ -33,3 +41,62 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  unit-tests:
+    name: Unit Tests (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test
+
+  e2e-tests:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e tests
+        run: npm run test:e2e
+
+      # Surface the HTML report on failure so reviewers can inspect trace
+      # videos / screenshots without re-running locally.
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
