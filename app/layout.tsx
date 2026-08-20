@@ -138,7 +138,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollProgress />
         <CustomCursor />
         <Tooltip />
-        <main className="flex-1">
+        {/* flex-col so the 404 page can use `flex-1` on its section to fill
+           the available space (viewport height minus footer) instead of
+           pushing the footer below the fold. Non-404 pages don't set
+           flex-1 on their content, so the layout is unchanged for them. */}
+        <main className="flex flex-1 flex-col">
           <Menu />
           {children}
           <Analytics />

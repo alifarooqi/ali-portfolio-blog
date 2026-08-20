@@ -59,20 +59,32 @@ const Menu: React.FC = () => {
     [isDark, isMuted],
   );
 
-  const [isMobile, setIsMobile] = useState(false);
+  // Media query is the right primitive: the browser fires only when the
+  // (max-width: 768px) breakpoint is actually crossed, so we don't have to
+  // debounce a resize listener that's checking the same condition ourselves.
+  // Lazy initializer sets the value synchronously on first render (no flash
+  // on mobile + no setState-in-effect). SSR snapshot returns false.
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(max-width: 768px)").matches;
+  });
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.matchMedia("(max-width: 768px)").matches);
-
-    checkMobile();
-
-    // Update on resize (optional)
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const mql = window.matchMedia("(max-width: 768px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
   }, []);
 
-  const startAngle = isMobile ? 0 : -90;
-  const rotationAngle = isMobile ? 90 : 180;
+  // Arc geometry: only depends on `isMobile`. Memoize so the angle increment
+  // doesn't recompute when the menu opens/closes (the only thing that re-renders).
+  const { startAngle, increment } = useMemo(() => {
+    const startAngle = isMobile ? 0 : -90;
+    const rotationAngle = isMobile ? 90 : 180;
+    const increment =
+      menuItems.length > 1 ? Math.round(rotationAngle / (menuItems.length - 1)) : 0;
+    return { startAngle, increment };
+  }, [isMobile, menuItems.length]);
 
   return (
     <div className={menuActive ? "menu menu-active" : "menu"}>
@@ -80,24 +92,15 @@ const Menu: React.FC = () => {
       <div className="menu-data" id="menu-data">
         <MenuToggle isMobile={isMobile} toggleMenu={() => setMenuActive((m) => !m)} isOpen={menuActive} />
 
-        {menuItems.map((menuItem, index) => {
-          let angle = startAngle;
-          let increment = 0;
-          if (menuItems.length > 1) {
-            increment = Math.round(rotationAngle / (menuItems.length - 1));
-          }
-          angle += index * increment;
-
-          return (
-            <MenuItem
-              key={menuItem.key}
-              menuItem={menuItem}
-              menuActive={menuActive}
-              isMobile={isMobile}
-              rotationAngle={angle}
-            />
-          );
-        })}
+        {menuItems.map((menuItem, index) => (
+          <MenuItem
+            key={menuItem.key}
+            menuItem={menuItem}
+            menuActive={menuActive}
+            isMobile={isMobile}
+            rotationAngle={startAngle + index * increment}
+          />
+        ))}
       </div>
     </div>
   );
