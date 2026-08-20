@@ -120,17 +120,18 @@
       z-index: 1;
     }
 
-    // Theme-aware gradient that fades the bottom of the cover image so the
-    // title text is readable in both light and dark modes. The base color
-    // is the page background, so light mode fades to white, dark mode fades
-    // to near-black.
+    // Fixed dark scrim at the bottom of the cover image so the title text
+    // stays readable in both themes. The earlier mismatch (using
+    // `var(--bg-primary)` as the gradient base) made light mode fade to
+    // white, which washed out the cover images. The scrim is a design
+    // constant, not a theme token — it's the same near-black in both modes.
     .project-card-overlay {
       position: absolute;
       inset: 0;
       background: linear-gradient(
         0deg,
-        color-mix(in srgb, var(--bg-primary) 92%, transparent) 0%,
-        color-mix(in srgb, var(--bg-primary) 70%, transparent) 70%,
+        rgba(13, 18, 30, 0.92) 0%,
+        rgba(13, 18, 30, 0.7) 70%,
         transparent 100%
       );
       padding: 25px 15px 15px 15px;
@@ -152,8 +153,12 @@
       }
     }
 
+    // Always light — readable on the dark scrim in both light and dark
+    // themes. (Even though the page is dark in dark mode, the scrim sits
+    // over the cover image so the text vs scrim contrast is the same
+    // regardless of theme.)
     .project-card-name {
-      color: var(--text-primary);
+      color: #fafafa;
       font-size: 0.88rem;
       font-weight: 700;
       letter-spacing: 0.03rem;
