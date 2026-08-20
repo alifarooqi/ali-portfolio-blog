@@ -31,6 +31,7 @@ test.describe("smoke", () => {
     await expect(page.locator("section.top-section")).toBeVisible();
     await expect(page.locator("section#projects h2")).toHaveText("Projects");
     await expect(page.locator("section#about h2")).toHaveText("About");
+    await expect(page.locator("section#experience h2")).toHaveText("Experience");
     await expect(page.locator("section#review h2")).toHaveText("Reviews");
     await expect(page.locator("section#contact h2")).toHaveText("Contact");
 

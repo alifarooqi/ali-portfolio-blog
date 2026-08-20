@@ -15,6 +15,11 @@ const SectionConfig = [
     headerIconKey: "aboutSection",
   },
   {
+    key: "experience",
+    name: "Experience",
+    headerIconKey: "schedule",
+  },
+  {
     key: "review",
     name: "Reviews",
     headerIconKey: "reviewSection",
