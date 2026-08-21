@@ -1,0 +1,60 @@
+name: Refresh Medium feed snapshot
+
+on:
+  schedule:
+    # Weekly at 09:00 UTC on Mondays. The snapshot is a fallback for when
+    # medium.com/feed is unreachable (#42), so the refresh cadence can be
+    # much lower than the 12h ISR on the blog routes. Cadence is "weekly
+    # or so" per the maintainer — a fresh Medium post typically lands within
+    # a few days, so weekly catches the user's new posts without noise.
+    - cron: "0 9 * * 1"
+  # Manual trigger so the maintainer can refresh on demand (e.g. right after
+  # publishing a new Medium post) without waiting for the next scheduled run.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    name: Refresh Medium feed snapshot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The refresh script writes Parser.Output JSON to lib/medium-feed.json,
+      # which is the exact shape `parseMediumFeed` expects — see the
+      # comment at the top of the script.
+      - name: Refresh Medium feed snapshot
+        run: node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs
+
+      - name: Check whether the snapshot changed
+        id: check
+        run: |
+          if git diff --quiet lib/medium-feed.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Only commit + push when the snapshot actually changed. The [skip ci]
+      # tag keeps the CI workflow from running on a data-only commit (no
+      # code changed, no need to re-run lint / typecheck / build / e2e).
+      - name: Commit and push if changed
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add lib/medium-feed.json
+          git commit -m "chore(medium): refresh feed snapshot [skip ci]"
+          git push
