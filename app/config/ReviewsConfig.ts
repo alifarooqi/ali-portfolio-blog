@@ -23,8 +23,8 @@ const ReviewsConfig: ReviewsConfigType = {
         "I had the pleasure of working alongside Ali at KM.ON GmbH as Project Manager on several shared projects and initiatives where his broad technical expertise, availability and reliability stood out. Even when managing multiple complex projects, he consistently navigated challenges with confidence and ensured smooth progress, making him an essential asset to our work.\n\nAli has a remarkable talent for remaining calm under pressure and maintaining a focused, solution-driven mindset, making him someone the entire team could rely on. Beyond his professional expertise, he brought a positive energy to the workplace, making collaboration not only productive but genuinely enjoyable. His approachable nature fostered a supportive environment and his contributions were invaluable to our collective success.\n\nIt was truly a pleasure to work with Ali and I am confident that any team would greatly benefit from his expertise, dedication and exceptional professionalism.",
       reviewer: {
         name: "Daniela Baretti",
-        title: "Junior Project Manager",
-        company: "KM.ON GmbH",
+        title: "Project Manager",
+        company: "sovanta AG",
       },
     },
     {
