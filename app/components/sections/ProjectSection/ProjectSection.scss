@@ -120,9 +120,10 @@
       z-index: 1;
     }
 
-    // No scrim — the cover image stays fully visible in both themes. A
-    // soft text-shadow on the title keeps the name readable on darker
-    // cover-image areas without darkening the whole bottom of the card.
+    // Soft bottom-only gradient behind the title+icon row for readability.
+    // The top ~55% stays fully transparent so the cover image is visible;
+    // only the area where the title/icon sit gets a dark backdrop. Pointer
+    // events pass through so the parent button remains clickable.
     .project-card-overlay {
       position: absolute;
       inset: 0;
@@ -131,6 +132,14 @@
       display: flex;
       align-items: flex-end;
       gap: 10px;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.78) 0%,
+        rgba(0, 0, 0, 0.55) 25%,
+        rgba(0, 0, 0, 0.2) 45%,
+        rgba(0, 0, 0, 0) 65%
+      );
+      pointer-events: none;
     }
 
     .project-card-icon {
@@ -139,6 +148,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.8));
 
       svg {
         font-size: 1.3rem;
@@ -152,7 +162,7 @@
       letter-spacing: 0.03rem;
       line-height: 1.25;
       text-align: left;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
     }
   }
 
