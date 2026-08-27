@@ -25,8 +25,8 @@ const Projects: Project[] = [
     description: (
       <>
         A <b>Claude Code</b> companion that pauses your side activity and snaps tmux focus back
-        the moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b>
-        monorepo (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
+        the moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b> monorepo
+        (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
       </>
     ),
     links: [
