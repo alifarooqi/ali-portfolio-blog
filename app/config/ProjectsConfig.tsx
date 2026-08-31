@@ -24,9 +24,9 @@ const ProjectsConfig: Project[] = [
     coverImage: "/images/projects/claude_waiting_room.webp",
     description: (
       <>
-        A <b>Claude Code</b> companion that pauses your side activity and snaps tmux focus back the
-        moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b> monorepo
-        (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
+        A <b>Claude Code</b> companion that pauses your side activity and snaps tmux focus back
+        the moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b>{" "}
+        monorepo (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
       </>
     ),
     links: [
@@ -64,9 +64,9 @@ const ProjectsConfig: Project[] = [
     coverImage: "/images/projects/iam_security.webp",
     description: (
       <>
-        An IAM system for a cloud-based IoT solution using <b>Scala</b> and <b>React</b>. The system
-        features PKI-based authentication for hardware devices and JWT-based authentication for
-        users and services, ensuring secure access control. It also includes a built-in policy
+        An IAM system for a cloud-based IoT solution using <b>Scala</b> and <b>React</b>. The
+        system features PKI-based authentication for hardware devices and JWT-based authentication
+        for users and services, ensuring secure access control. It also includes a built-in policy
         management system for granular access permissions, enhancing security and simplifying
         management.
       </>
