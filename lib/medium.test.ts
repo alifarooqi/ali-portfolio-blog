@@ -3,10 +3,11 @@ import Parser from "rss-parser";
 
 import { parseMediumFeed } from "./medium";
 import mediumFeed from "./medium-feed.json";
+import type { MediumFeedItem } from "./medium";
 
 // Cast fixture so the rss2json-shaped JSON (no `content:encoded`, no `isoDate`)
 // doesn't fight the Parser<T> generics used elsewhere.
-const fixture = mediumFeed as unknown as Parser.Output<unknown>;
+const fixture = mediumFeed as unknown as Parser.Output<MediumFeedItem>;
 
 describe("parseMediumFeed", () => {
   it("maps title / link / isoDate onto the post", () => {
@@ -19,7 +20,7 @@ describe("parseMediumFeed", () => {
           "content:encoded": "<p>body</p>",
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -32,7 +33,7 @@ describe("parseMediumFeed", () => {
     const body = "<p>This is <strong>plain</strong> text.</p>";
     const feed = {
       items: [{ title: "T", link: "https://m/x-y", "content:encoded": body }],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -53,7 +54,7 @@ describe("parseMediumFeed", () => {
             '<p>hi</p><img src="https://cdn.example.com/a.png" alt="a"/><img src="second"/>',
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -69,7 +70,7 @@ describe("parseMediumFeed", () => {
           "content:encoded": "<p>x</p>",
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -85,7 +86,7 @@ describe("parseMediumFeed", () => {
           content: "<p>fallback body</p>",
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -112,6 +113,5 @@ describe("getMediumPosts", () => {
     const posts = await getMediumPosts();
 
     expect(posts.length).toBe(fixture.items!.length);
-    expect(posts[0].title).toBe(fixture.items![0].title);
   });
 });

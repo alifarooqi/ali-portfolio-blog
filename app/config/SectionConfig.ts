@@ -37,9 +37,6 @@ export interface SectionConfigType {
   key: Sections;
   name: string;
   headerIconKey: IconKey;
-  notInMenu?: boolean;
 }
 
-// Cast at the boundary: consumers get the optional-`notInMenu` view while
-// the literal types above keep `Sections` exact.
 export default SectionConfig as ReadonlyArray<SectionConfigType>;

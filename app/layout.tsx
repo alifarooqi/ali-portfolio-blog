@@ -15,6 +15,7 @@ import ShaderBackground from "./components/ShaderBackground/ShaderBackground";
 import CustomCursor from "./components/CustomCursor/CustomCursor";
 import SmoothScroll from "./components/SmoothScroll/SmoothScroll";
 import ScrollProgress from "./components/ScrollProgress/ScrollProgress";
+import CommonConfig from "./config/CommonConfig";
 
 // Viewport — Next.js 13+ requires themeColor/colorScheme here, not in Metadata.
 // Media queries let mobile browser chrome adapt to the user's OS theme.
@@ -26,37 +27,31 @@ export const viewport: Viewport = {
   colorScheme: "light dark",
 };
 
-const defaultOgImage = `/og?title=${encodeURIComponent(
-  "Ali Farooqi | Cloud & IoT Engineer for China & GBA"
-)}`;
+const defaultOgImage = `/og?title=${encodeURIComponent(CommonConfig.ogTitle)}`;
+
+// JSON-LD `sameAs` is derived from CommonConfig.social so the two never drift.
+// Only entries that look like a profile URL (http(s)://, no mailto) are kept.
+const sameAsProfiles = CommonConfig.social
+  .filter((s) => /^https?:\/\//.test(s.link))
+  .map((s) => s.link);
 
 // Layout Metadata
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Ali Farooqi | Software Engineer | China & Greater Bay Area",
-    template: "%s | Ali Farooqi",
+    default: CommonConfig.ogTitle,
+    template: `%s | ${CommonConfig.name}`,
   },
-  description:
-    "Ali Farooqi is a software engineer focused on cloud computing, IoT, and infrastructure strategy in China and the Greater Bay Area. View his projects, publications, and contact details.",
-  authors: [{ name: "Ali Farooqi", url: baseUrl }],
-  creator: "Ali Farooqi",
-  applicationName: "Ali Farooqi Portfolio",
-  keywords: [
-    "Ali Farooqi",
-    "cloud engineer China",
-    "IoT expert GBA",
-    "cloud infrastructure China",
-    "software engineer Hong Kong",
-    "backend engineer China",
-    "Greater Bay Area tech consultant",
-  ],
+  description: CommonConfig.ogDescription,
+  authors: [{ name: CommonConfig.name, url: baseUrl }],
+  creator: CommonConfig.name,
+  applicationName: CommonConfig.siteName,
+  keywords: CommonConfig.ogKeywords,
   openGraph: {
-    title: "Ali Farooqi | Cloud & IoT Engineer for China & GBA",
-    description:
-      "Helping businesses scale cloud-native and IoT solutions in China and the Greater Bay Area. View my portfolio and get in touch.",
+    title: CommonConfig.ogTitle,
+    description: CommonConfig.ogDescription,
     url: baseUrl,
-    siteName: "Ali Farooqi Portfolio",
+    siteName: CommonConfig.siteName,
     locale: "en_US",
     type: "website",
     images: [{ url: defaultOgImage, width: 1200, height: 630 }],
@@ -64,13 +59,12 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     site: baseUrl,
-    title: "Ali Farooqi | Cloud & IoT Engineer for China & GBA",
-    description:
-      "Helping businesses scale cloud-native and IoT solutions in China and the Greater Bay Area. View my portfolio and get in touch.",
+    title: CommonConfig.ogTitle,
+    description: CommonConfig.ogDescription,
     images: [
       {
         url: defaultOgImage,
-        alt: "Ali Portfolio Preview",
+        alt: CommonConfig.ogImageAlt,
       },
     ],
   },
@@ -90,10 +84,10 @@ export const metadata: Metadata = {
     "script:ld+json": JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
-      name: "Ali Farooqi",
-      description: "Software Engineer specializing in Cloud, IoT, and Security",
+      name: CommonConfig.name,
+      description: CommonConfig.role,
       url: baseUrl,
-      sameAs: ["https://linkedin.com/in/ali-farooqi", "https://github.com/alifarooqi"],
+      sameAs: sameAsProfiles,
     }),
   },
   icons: {

@@ -100,3 +100,41 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 7
+
+  # The template is published open-source. Personal data (emails, handles,
+  # GA IDs, signature SVG paths) must never leak in via a PR — even one that
+  # looks innocuous. This guard greps the diff for known leak patterns and
+  # fails the build if any are introduced. It is intentionally permissive
+  # (only `+` lines on this PR's diff) so legacy patterns already in the repo
+  # are not flagged.
+  guard-personal-data:
+    name: Guard against personal data leaks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Grep PR diff for personal-data patterns
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          set -euo pipefail
+          PATTERNS='alifarooqi|ali_farooqi|ali-farooqi|m\.ali_farooqi|C5YZG2MB3Q|Muhammad Ali Farooqi'
+          # Only scan source / config / docs files — skip the workflow file
+          # itself (it necessarily mentions the patterns) and any future
+          # tooling that legitimately needs the regex.
+          LEAKS=$(git diff --unified=0 --diff-filter=ACMR \
+              "origin/${BASE_REF}...HEAD" \
+              -- . \
+              ':!*.yml' ':!*.yaml' \
+            | grep -E '^\+' \
+            | grep -E "${PATTERNS}" || true)
+          if [ -n "${LEAKS}" ]; then
+            echo "::error::Personal data leaked into this PR:"
+            echo "${LEAKS}"
+            exit 1
+          fi
+          echo "No personal-data patterns found in PR diff."

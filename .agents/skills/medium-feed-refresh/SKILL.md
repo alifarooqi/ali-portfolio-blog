@@ -5,14 +5,14 @@ description: Used when regenerating or updating the local Medium RSS feed fallba
 
 # Medium Feed Refresh
 
-This skill is used to refresh the local fallback cache snapshot [medium-feed.json](file:///Users/ali/codes-ali/ali-portfolio-blog/lib/medium-feed.json) which is used if the live Medium RSS feed fetch fails.
+This skill refreshes the local fallback cache snapshot `lib/medium-feed.json` — used by `lib/medium.ts` if the live Medium RSS feed fetch fails.
 
 ## How to Refresh
 
-You can run the helper script in this skill to automatically fetch the latest Medium feed and update the local JSON:
+Run the helper script with `MEDIUM_USERNAME` set in your shell (no `@` prefix):
 
 ```bash
-node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs
+MEDIUM_USERNAME=your_handle node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs
 ```
 
-Or you can manually fetch the feed data from `https://medium.com/feed/@ali_farooqi`, convert it, and overwrite `lib/medium-feed.json`.
+Or fetch the feed manually from `https://medium.com/feed/@<your_handle>` and overwrite `lib/medium-feed.json` with the JSON response.

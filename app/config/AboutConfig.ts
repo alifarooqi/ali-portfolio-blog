@@ -14,15 +14,17 @@ export type AboutConfigType = {
 };
 
 const AboutConfig: AboutConfigType = {
-  bio: "Engineer by trade, bridge-builder by nature — I design secure, scalable platforms and help global tech thrive in the Chinese cloud. Off the clock, you'll find me watching football, probably yelling at the screen like it's a code review :)",
+  bio: "Replace this with a short bio about who you are and what you build. Edit app/config/AboutConfig.ts.",
   stats: [
-    { label: "Years Experience", value: "6+" },
-    { label: "Projects Shipped", value: "12+" },
-    { label: "Tech Stack", value: "12" },
-    { label: "Blog Posts", value: "10+" },
+    { label: "Years Experience", value: "0+" },
+    { label: "Projects Shipped", value: "0+" },
+    { label: "Tech Stack", value: "0" },
+    { label: "Blog Posts", value: "0+" },
   ],
-  programming: ["java", "cpp", "typescript", "scala", "kotlin", "nodejs", "react"],
-  tools: ["graphql", "postgresql", "terraform", "mongodb", "kubernetes"],
+  // Pick from the IconKey union in app/components/icons/Icons.tsx. Common
+  // picks: typescript, javascript, react, nodejs, python, java, cpp, go, rust.
+  programming: ["typescript", "javascript", "react", "nodejs"],
+  tools: ["postgresql", "graphql", "kubernetes", "terraform"],
 };
 
 export default AboutConfig;

@@ -10,13 +10,11 @@ import "./ContactSection.scss";
 const contactSectionConfig = SectionConfig.find((section) => section.key === "contact")!;
 
 // Drafts a starter email — the visitor's mail client (Gmail/Outlook via the
-// OS mailto handler) opens with these prefilled.
-const EMAIL_SUBJECT = "Reaching out from your portfolio";
-const EMAIL_BODY = "Hi Ali,\n\nI found your portfolio and wanted to connect about ";
-
+// OS mailto handler) opens with these prefilled. Edit CommonConfig.emailSubject
+// and CommonConfig.emailBody to customize.
 const emailHref = `mailto:${CommonConfig.email}?subject=${encodeURIComponent(
-  EMAIL_SUBJECT,
-)}&body=${encodeURIComponent(EMAIL_BODY)}`;
+  CommonConfig.emailSubject
+)}&body=${encodeURIComponent(CommonConfig.emailBody)}`;
 
 /**
  * Closing beat of the page: one clear CTA (an "Email me" button that drafts
@@ -32,18 +30,22 @@ const ContactSection = forwardRef<HTMLDivElement>((_, ref) => (
         {CommonConfig.availability}
       </span>
       <h3 className="contact__heading">Let&apos;s build something together</h3>
-      <p className="contact__lede">
-        Cloud platforms, IoT, or cross-border infrastructure — if it sounds interesting, my inbox
-        is open.
-      </p>
+      <p className="contact__lede">Open to interesting work — drop a line and let&apos;s talk.</p>
       <a className="contact__cta" href={emailHref}>
         {getIcon("email")}
         <span>Email me</span>
       </a>
       <div className="contact__meta">
-        <span className="contact__location">{CommonConfig.location}</span>
+        {CommonConfig.location && (
+          <span className="contact__location">{CommonConfig.location}</span>
+        )}
         {getSocialLink("cv") && (
-          <a className="contact__cv" href={getSocialLink("cv")} target="_blank" rel="noopener noreferrer">
+          <a
+            className="contact__cv"
+            href={getSocialLink("cv")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {getIcon("cv")}
             <span>View CV</span>
           </a>

@@ -25,84 +25,81 @@ export const revalidate = 43200;
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const title =
-    searchParams.get("title") || "Ali Farooqi | Software Engineer | China & Greater Bay Area";
-  const subtitle = searchParams.get("subtitle") || "Cloud · IoT · Infrastructure";
+  const title = searchParams.get("title") || CommonConfig.ogFallbackTitle;
+  const subtitle = searchParams.get("subtitle") || CommonConfig.ogFallbackSubtitle;
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#0f131a",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+      }}
+    >
+      {/* Brand-blue accent bar across the top */}
+      <div style={{ height: 10, width: "100%", backgroundColor: "#3c83f6", display: "flex" }} />
+
+      {/* Signature + content */}
       <div
         style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#0f131a",
           display: "flex",
           flexDirection: "column",
-          position: "relative",
+          justifyContent: "center",
+          flex: 1,
+          padding: "0 80px",
         }}
       >
-        {/* Brand-blue accent bar across the top */}
-        <div style={{ height: 10, width: "100%", backgroundColor: "#3c83f6", display: "flex" }} />
+        {/* Signature glyph — the strongest piece of visual identity */}
+        <svg
+          viewBox={CommonConfig.signature.viewBox}
+          style={{ width: 220, height: 185, marginBottom: 20 }}
+        >
+          <path d={CommonConfig.signature.signaturePathD} fill="#3c83f6" />
+        </svg>
 
-        {/* Signature + content */}
+        {/* Title (page name or blog post title) */}
         <div
           style={{
+            color: "#fafafa",
+            fontSize: 56,
+            fontWeight: 700,
+            lineHeight: 1.15,
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            flex: 1,
-            padding: "0 80px",
           }}
         >
-          {/* Signature glyph — the strongest piece of visual identity */}
-          <svg
-            viewBox={CommonConfig.signature.viewBox}
-            style={{ width: 220, height: 185, marginBottom: 20 }}
-          >
-            <path d={CommonConfig.signature.signaturePathD} fill="#3c83f6" />
-          </svg>
-
-          {/* Title (page name or blog post title) */}
-          <div
-            style={{
-              color: "#fafafa",
-              fontSize: 56,
-              fontWeight: 700,
-              lineHeight: 1.15,
-              display: "flex",
-            }}
-          >
-            {title}
-          </div>
-
-          {/* Subtitle / tagline */}
-          <div
-            style={{
-              color: "#adadad",
-              fontSize: 30,
-              marginTop: 18,
-              display: "flex",
-            }}
-          >
-            {subtitle}
-          </div>
+          {title}
         </div>
 
-        {/* Footer: name + role */}
+        {/* Subtitle / tagline */}
         <div
           style={{
+            color: "#adadad",
+            fontSize: 30,
+            marginTop: 18,
             display: "flex",
-            alignItems: "center",
-            padding: "0 80px 50px",
-            color: "#3c83f6",
-            fontSize: 26,
-            letterSpacing: 1,
           }}
         >
-          {CommonConfig.name} · Software Engineer
+          {subtitle}
         </div>
       </div>
-    ),
+
+      {/* Footer: name + role */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          padding: "0 80px 50px",
+          color: "#3c83f6",
+          fontSize: 26,
+          letterSpacing: 1,
+        }}
+      >
+        {CommonConfig.name} · {CommonConfig.role}
+      </div>
+    </div>,
     {
       width: 1200,
       height: 630,

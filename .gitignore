@@ -31,6 +31,7 @@ yarn-error.log*
 
 # env files
 .env
+!.env.example
 
 # vercel
 .vercel
@@ -38,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code session-local files — share skills (in .agents/), keep
+# personal session memory out of the repo
+.claude/settings.local.json
+.claude/tmp.*.txt
+.claude/*.local.json

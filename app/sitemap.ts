@@ -1,11 +1,12 @@
 import { getMediumPosts } from "@/lib/medium";
+import CommonConfig from "@/app/config/CommonConfig";
 
 // Resolves the canonical site URL. Priority:
 //   1. NEXT_PUBLIC_SITE_URL   — set explicitly on Vercel Production
 //   2. NEXT_PUBLIC_VERCEL_URL — manual override (rarely needed)
 //   3. VERCEL_URL              — auto-injected by Vercel on every deploy
 //                               (bare hostname, no protocol — prefixed here)
-//   4. The hardcoded prod URL  — dev/CI "just works" with no .env file
+//   4. CommonConfig.siteUrlFallback — generic placeholder so dev/CI runs
 //
 // All candidates are normalized to include an https:// prefix before return,
 // because `new URL(baseUrl)` (used by Next.js metadataBase) throws on
@@ -18,7 +19,7 @@ function resolveBaseUrl(): string {
     process.env.NEXT_PUBLIC_VERCEL_URL ??
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
 
-  if (!candidate) return "https://alifarooqi.vercel.app";
+  if (!candidate) return CommonConfig.siteUrlFallback;
 
   return /^https?:\/\//.test(candidate) ? candidate : `https://${candidate}`;
 }

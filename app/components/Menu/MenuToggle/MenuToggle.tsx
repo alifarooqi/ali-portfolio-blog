@@ -4,7 +4,6 @@ import "./MenuToggle.scss";
 
 interface MenuToggleProps {
   toggleMenu: () => void;
-  isMobile?: boolean;
   isOpen: boolean;
 }
 

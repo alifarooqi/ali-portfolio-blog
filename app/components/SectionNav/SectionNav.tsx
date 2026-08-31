@@ -13,7 +13,7 @@ type SectionNavItem = { key: string; name: string };
 
 const SECTIONS: SectionNavItem[] = [
   { key: "top", name: "Home" },
-  ...SectionConfig.filter((s) => !s.notInMenu && s.headerIconKey).map((s) => ({
+  ...SectionConfig.filter((s) => s.headerIconKey).map((s) => ({
     key: s.key,
     name: s.name,
   })),
@@ -47,7 +47,7 @@ export default function SectionNav() {
         ([entry]) => {
           if (entry.isIntersecting) setActiveKey(section.key);
         },
-        { rootMargin: "-40% 0px -40% 0px" },
+        { rootMargin: "-40% 0px -40% 0px" }
       );
       obs.observe(el);
       observers.push(obs);
