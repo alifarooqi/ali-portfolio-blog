@@ -61,10 +61,6 @@ interface CommonConfigType {
   /** Last-resort canonical site URL when no env var is set (dev / CI). */
   siteUrlFallback: string;
 
-  // PWA webmanifest (kept as a static file; values mirror these fields).
-  webManifestName: string;
-  webManifestShortName: string;
-
   // Social links — rendered in the hero, footer, and as the Contact CV link.
   social: SocialLink[];
 }
@@ -112,9 +108,6 @@ const CommonConfig: CommonConfigType = {
   ogFallbackTitle: "Your Name | Software Engineer",
   ogFallbackSubtitle: "Build · Ship · Iterate",
   siteUrlFallback: "https://example.com",
-
-  webManifestName: "Your Name",
-  webManifestShortName: "Me",
 
   social: [],
 };

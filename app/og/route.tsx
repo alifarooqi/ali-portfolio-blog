@@ -52,13 +52,17 @@ export function GET(request: Request) {
           padding: "0 80px",
         }}
       >
-        {/* Signature glyph — the strongest piece of visual identity */}
-        <svg
-          viewBox={CommonConfig.signature.viewBox}
-          style={{ width: 220, height: 185, marginBottom: 20 }}
-        >
-          <path d={CommonConfig.signature.signaturePathD} fill="#3c83f6" />
-        </svg>
+        {/* Signature glyph — the strongest piece of visual identity.
+            Empty signaturePathD skips the SVG so the layout doesn't reserve
+            space for an invisible glyph. Matches TopSection's behavior. */}
+        {CommonConfig.signature.signaturePathD && (
+          <svg
+            viewBox={CommonConfig.signature.viewBox}
+            style={{ width: 220, height: 185, marginBottom: 20 }}
+          >
+            <path d={CommonConfig.signature.signaturePathD} fill="#3c83f6" />
+          </svg>
+        )}
 
         {/* Title (page name or blog post title) */}
         <div

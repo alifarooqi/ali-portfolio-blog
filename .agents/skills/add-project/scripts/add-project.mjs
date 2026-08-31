@@ -42,13 +42,14 @@ function run() {
     fs.copyFileSync(args.cover, destCoverPath);
     console.log(`Copied WebP cover image to: ${destCoverPath}`);
   } else if (srcExt === '.jpg' || srcExt === '.jpeg' || srcExt === '.png') {
-    let cwebpCmd = `cwebp -q 90 "${args.cover}" -o "${destCoverPath}"`;
+    const cwebpCmd = `cwebp -q 90 "${args.cover}" -o "${destCoverPath}"`;
     try {
       execSync(cwebpCmd, { stdio: 'ignore' });
-    } catch (e) {
+    } catch {
       // Fallback to /opt/homebrew/bin/cwebp
-      cwebpCmd = `/opt/homebrew/bin/cwebp -q 90 "${args.cover}" -o "${destCoverPath}"`;
-      execSync(cwebpCmd, { stdio: 'inherit' });
+      execSync(`/opt/homebrew/bin/cwebp -q 90 "${args.cover}" -o "${destCoverPath}"`, {
+        stdio: 'inherit',
+      });
     }
     console.log(`Successfully converted cover image to WebP: ${destCoverPath}`);
   } else {
@@ -56,10 +57,13 @@ function run() {
     process.exit(1);
   }
 
-  // 2. Add entry to Projects.tsx
-  const projectsPath = path.join(process.cwd(), 'app/components/sections/ProjectSection/Projects.tsx');
+  // 2. Append the new entry to ProjectsConfig.tsx (the data file for the
+  // ProjectSection). ProjectSection.tsx reads from this file — the
+  // `coverImage` field per entry is the source of truth, so there's no
+  // separate cover-images array to update in ProjectSection.tsx anymore.
+  const projectsPath = path.join(process.cwd(), 'app/config/ProjectsConfig.tsx');
   if (!fs.existsSync(projectsPath)) {
-    console.error(`Could not find Projects.tsx at ${projectsPath}`);
+    console.error(`Could not find ProjectsConfig.tsx at ${projectsPath}`);
     process.exit(1);
   }
 
@@ -94,6 +98,7 @@ function run() {
     name: ${JSON.stringify(args.name)},
     icon: getIcon(${JSON.stringify(args.icon)}),
     duration: ${JSON.stringify(args.duration)},
+    coverImage: "/images/projects/${slug}.webp",
     description: ${descJsx},
     links: ${linksStr},
   },
@@ -101,40 +106,17 @@ function run() {
 
   const lastCloseBracketIndex = projectsContent.lastIndexOf('];');
   if (lastCloseBracketIndex === -1) {
-    console.error("Could not find ending array declaration '];' in Projects.tsx");
+    console.error("Could not find ending array declaration '];' in ProjectsConfig.tsx");
     process.exit(1);
   }
 
-  const updatedProjectsContent = 
-    projectsContent.substring(0, lastCloseBracketIndex) + 
-    newProjectObj + 
+  const updatedProjectsContent =
+    projectsContent.substring(0, lastCloseBracketIndex) +
+    newProjectObj +
     projectsContent.substring(lastCloseBracketIndex);
 
   fs.writeFileSync(projectsPath, updatedProjectsContent, 'utf8');
-  console.log('Appended project data to Projects.tsx');
-
-  // 3. Add cover path to ProjectSection.tsx
-  const sectionPath = path.join(process.cwd(), 'app/components/sections/ProjectSection/ProjectSection.tsx');
-  if (fs.existsSync(sectionPath)) {
-    let sectionContent = fs.readFileSync(sectionPath, 'utf8');
-    const arrayStart = sectionContent.indexOf('const coverImages = [');
-    if (arrayStart !== -1) {
-      const arrayEnd = sectionContent.indexOf('];', arrayStart);
-      if (arrayEnd !== -1) {
-        const arrayContent = sectionContent.substring(arrayStart, arrayEnd);
-        const newCoverPath = `/images/projects/${slug}.webp`;
-        
-        if (!arrayContent.includes(newCoverPath)) {
-          const updatedArrayContent = arrayContent.trim().replace(/\s*$/, '') + `,\n  "${newCoverPath}"\n`;
-          const newSectionContent = sectionContent.replace(arrayContent, updatedArrayContent);
-          fs.writeFileSync(sectionPath, newSectionContent, 'utf8');
-          console.log('Appended cover image path to ProjectSection.tsx');
-        } else {
-          console.log('Cover image path already exists in ProjectSection.tsx');
-        }
-      }
-    }
-  }
+  console.log('Appended project data to ProjectsConfig.tsx');
 
   console.log('Project successfully added!');
 }

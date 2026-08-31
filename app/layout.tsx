@@ -30,7 +30,10 @@ export const viewport: Viewport = {
 const defaultOgImage = `/og?title=${encodeURIComponent(CommonConfig.ogTitle)}`;
 
 // JSON-LD `sameAs` is derived from CommonConfig.social so the two never drift.
-// Only entries that look like a profile URL (http(s)://, no mailto) are kept.
+// Only entries that look like a profile URL (http(s)://, no mailto) are kept,
+// and the field is omitted entirely when the array is empty — Google's Rich
+// Results Test warns on `"sameAs": []`, so an absent key is cleaner than an
+// empty array.
 const sameAsProfiles = CommonConfig.social
   .filter((s) => /^https?:\/\//.test(s.link))
   .map((s) => s.link);
@@ -87,7 +90,7 @@ export const metadata: Metadata = {
       name: CommonConfig.name,
       description: CommonConfig.role,
       url: baseUrl,
-      sameAs: sameAsProfiles,
+      ...(sameAsProfiles.length > 0 ? { sameAs: sameAsProfiles } : {}),
     }),
   },
   icons: {

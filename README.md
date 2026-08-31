@@ -34,8 +34,8 @@ npm run dev                      # http://localhost:3000
 Most users only need to edit two places:
 
 1. **`app/config/CommonConfig.ts`** — your name, role, hero image, signature SVG path, social links, location, contact email, and every SEO field. The OG card, sitemap, layout metadata, and JSON-LD all read from this file.
-2. **`app/config/AboutConfig.ts`**, **`ExperienceConfig.ts`**, **`ReviewsConfig.ts`** — bio, experience timeline, and testimonials. The corresponding sections render the contents of these arrays verbatim.
-3. **`app/components/sections/ProjectSection/Projects.tsx`** — your project list. Each entry has a `coverImage` (drop your cover art under `public/images/projects/`) and an array of `links`.
+2. **`app/config/AboutConfig.ts`**, **`ExperienceConfig.ts`**, **`ReviewsConfig.ts`**, **`ProjectsConfig.tsx`** — bio, experience timeline, testimonials, and project list. The corresponding sections render the contents of these arrays verbatim.
+3. Drop your project cover art under `public/images/projects/` and reference it from each `coverImage` field in `ProjectsConfig.tsx`.
 
 To remove the placeholder portrait, replace `public/images/avatar-placeholder.webp` with your own (any reasonable size; the component renders at 356×466 in the hero and 200×274 in the blog-post footer).
 

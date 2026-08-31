@@ -100,7 +100,16 @@ describe("getMediumPosts", () => {
     vi.resetModules();
   });
 
+  it("returns the empty snapshot when MEDIUM_USERNAME is unset", async () => {
+    delete process.env.MEDIUM_USERNAME;
+    const { getMediumPosts } = await import("./medium");
+    const posts = await getMediumPosts();
+
+    expect(posts).toEqual([]);
+  });
+
   it("returns parsed fixture when parseURL throws", async () => {
+    process.env.MEDIUM_USERNAME = "test_user";
     vi.doMock("rss-parser", () => ({
       default: class {
         parseURL() {
@@ -112,6 +121,12 @@ describe("getMediumPosts", () => {
     const { getMediumPosts } = await import("./medium");
     const posts = await getMediumPosts();
 
-    expect(posts.length).toBe(fixture.items!.length);
+    // The mocked parseURL throws, the catch returns the fixture, and
+    // `fixture.items` is `[]` after the open-source scrub — so the assertion
+    // doubles as a "we hit the catch path" check (any deviation would mean
+    // parseURL was reached, returned non-array, or the fixture was bypassed).
+    expect(posts).toEqual(fixture.items);
+
+    delete process.env.MEDIUM_USERNAME;
   });
 });

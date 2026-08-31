@@ -2,9 +2,11 @@ import Parser from "rss-parser";
 import mediumFeed from "./medium-feed.json";
 
 // Undefined is treated the same as empty string — see the !MY_USERNAME
-// guard in getMediumPosts. No fallback default here so we never silently
-// serve someone else's snapshot.
-const MY_USERNAME = process.env.MEDIUM_USERNAME;
+// guard in getMediumPosts. Trim in case the env var was pasted with
+// surrounding whitespace (a padded settings UI or an org-level secret
+// with stray characters); without this we'd silently build a malformed
+// feed URL and get an empty 200 with no diagnostic.
+const MY_USERNAME = process.env.MEDIUM_USERNAME?.trim();
 
 export type MediumPost = Partial<{
   title: string;
