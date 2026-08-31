@@ -16,7 +16,6 @@ export interface Project {
   links: ProjectLink[];
 }
 
-<<<<<<< HEAD
 const ProjectsConfig: Project[] = [
   {
     name: "Claude Waiting Room",
@@ -25,9 +24,9 @@ const ProjectsConfig: Project[] = [
     coverImage: "/images/projects/claude_waiting_room.webp",
     description: (
       <>
-        A <b>Claude Code</b> companion that pauses your side activity and snaps tmux focus back
-        the moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b>{" "}
-        monorepo (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
+        A <b>Claude Code</b> companion that pauses your side activity and snaps tmux focus back the
+        moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b> monorepo
+        (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
       </>
     ),
     links: [
@@ -48,47 +47,26 @@ const ProjectsConfig: Project[] = [
         A Python application bridging Telegram with the <b>Google Antigravity SDK</b>, enabling
         remote interaction and task execution on a local Mac-based agent. Supports multi-session
         isolation, persistence, and strict security sandboxing for git commands.
-=======
-// Placeholder projects — edit this file to add your own. Cover images default
-// to public/images/bg0{1,2,3}.webp; swap for project-specific artwork when
-// you have it. The data lives in app/config/ so the Section component reads
-// from one place (matches the pattern of ExperienceConfig / ReviewsConfig).
-const ProjectsConfig: Project[] = [
-  {
-    name: "Example Project 1",
-    icon: getIcon("smartToy"),
-    duration: "2025",
-    coverImage: "/images/bg01.webp",
-    description: (
-      <>
-        Replace this with a short description. Lead with the <b>problem</b>, then the <b>tech</b>{" "}
-        you used, then the <b>outcome</b> if it&apos;s interesting.
->>>>>>> upstream/main
       </>
     ),
     links: [
       {
         tooltip: "See source",
-<<<<<<< HEAD
         link: "https://github.com/alifarooqi/agy-telegram-bridge",
-=======
-        link: "https://example.com",
->>>>>>> upstream/main
         icon: getIcon("code"),
       },
     ],
   },
   {
-<<<<<<< HEAD
     name: "Identity and Access Management",
     icon: getIcon("security"),
     duration: "2020 - 2025",
     coverImage: "/images/projects/iam_security.webp",
     description: (
       <>
-        An IAM system for a cloud-based IoT solution using <b>Scala</b> and <b>React</b>. The
-        system features PKI-based authentication for hardware devices and JWT-based authentication
-        for users and services, ensuring secure access control. It also includes a built-in policy
+        An IAM system for a cloud-based IoT solution using <b>Scala</b> and <b>React</b>. The system
+        features PKI-based authentication for hardware devices and JWT-based authentication for
+        users and services, ensuring secure access control. It also includes a built-in policy
         management system for granular access permissions, enhancing security and simplifying
         management.
       </>
@@ -119,21 +97,10 @@ const ProjectsConfig: Project[] = [
       <>
         A <b>React Native</b> mobile app with <b>NodeJS</b> to track Eczema symptoms in patients,
         designed to help them save time recording lifestyle habits.
-=======
-    name: "Example Project 2",
-    icon: getIcon("app"),
-    duration: "2024",
-    coverImage: "/images/bg02.webp",
-    description: (
-      <>
-        Replace this with a short description. One or two sentences is plenty — visitors want the
-        gist, not a thesis.
->>>>>>> upstream/main
       </>
     ),
     links: [
       {
-<<<<<<< HEAD
         tooltip: "See source (Frontend)",
         link: "https://github.com/alifarooqi/EczeTrack-Frontend/",
         icon: getIcon("code"),
@@ -160,21 +127,11 @@ const ProjectsConfig: Project[] = [
       {
         tooltip: "See app",
         link: "https://codepen.io/ali-farooqi/full/RZgExb",
-=======
-        tooltip: "See source",
-        link: "https://example.com",
-        icon: getIcon("code"),
-      },
-      {
-        tooltip: "Live demo",
-        link: "https://example.com",
->>>>>>> upstream/main
         icon: getIcon("link"),
       },
     ],
   },
   {
-<<<<<<< HEAD
     name: "Simon Game",
     icon: getIcon("videoGame"),
     duration: "2017",
@@ -213,19 +170,6 @@ const ProjectsConfig: Project[] = [
         icon: getIcon("link"),
       },
     ],
-=======
-    name: "Example Project 3",
-    icon: getIcon("security"),
-    duration: "2023",
-    coverImage: "/images/bg03.webp",
-    description: (
-      <>
-        Replace this with a short description. You don&apos;t need to list every feature — focus on
-        what makes this one interesting.
-      </>
-    ),
-    links: [],
->>>>>>> upstream/main
   },
 ];
 

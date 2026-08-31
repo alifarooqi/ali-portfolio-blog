@@ -73,7 +73,6 @@ interface CommonConfigType {
 export const getSocialLink = (key: IconKey): string | undefined =>
   CommonConfig.social.find((s) => s.iconKey === key)?.link;
 
-<<<<<<< HEAD
 const signature: SignatureConfig = {
   viewBox: "0 0 434 365",
   signaturePathD:
@@ -154,45 +153,6 @@ const CommonConfig: CommonConfigType = {
       iconKey: "cv",
     },
   ],
-=======
-const CommonConfig: CommonConfigType = {
-  name: "Your Name",
-  shortName: "Me",
-  role: "Software Engineer",
-  location: "",
-
-  heroImage: "/images/avatar-placeholder.webp",
-  heroImageAlt: "Your portrait",
-
-  signature: {
-    viewBox: "0 0 434 365",
-    signaturePathD: "",
-  },
-
-  taglines: ["Software Engineer", "Open Source Contributor", "Tech Enthusiast"],
-
-  avatarImage: "/images/avatar-placeholder.webp",
-  avatarImageAlt: "Your Name",
-  writerBio:
-    "Tell visitors who you are in a sentence or two. Edit this in app/config/CommonConfig.ts.",
-
-  email: "you@example.com",
-  emailSubject: "Reaching out from your portfolio",
-  emailBody: "Hi,\n\nI found your portfolio and wanted to connect about ",
-  availability: "Available for new opportunities",
-
-  siteName: "Your Name Portfolio",
-  ogTitle: "Your Name | Software Engineer",
-  ogDescription:
-    "Your portfolio and projects. Edit app/config/CommonConfig.ts to update this and other site-wide values.",
-  ogKeywords: ["portfolio", "template", "nextjs"],
-  ogImageAlt: "Portfolio preview",
-  ogFallbackTitle: "Your Name | Software Engineer",
-  ogFallbackSubtitle: "Build · Ship · Iterate",
-  siteUrlFallback: "https://example.com",
-
-  social: [],
->>>>>>> upstream/main
 };
 
 export default CommonConfig;

@@ -100,24 +100,16 @@ describe("getMediumPosts", () => {
     vi.resetModules();
   });
 
-<<<<<<< HEAD
   it("returns the snapshot when MEDIUM_USERNAME is unset", async () => {
-=======
-  it("returns the empty snapshot when MEDIUM_USERNAME is unset", async () => {
->>>>>>> upstream/main
     delete process.env.MEDIUM_USERNAME;
     const { getMediumPosts } = await import("./medium");
     const posts = await getMediumPosts();
 
-<<<<<<< HEAD
     // Without a username, getMediumPosts skips the live fetch and returns
     // whatever the bundled snapshot has. After the open-source prep, the
     // snapshot is `{"items":[]}`; on a personal-site fork it can be anything.
     // Assert on count to match the snapshot, regardless of its contents.
     expect(posts.length).toBe(fixture.items.length);
-=======
-    expect(posts).toEqual([]);
->>>>>>> upstream/main
   });
 
   it("returns parsed fixture when parseURL throws", async () => {
@@ -133,7 +125,6 @@ describe("getMediumPosts", () => {
     const { getMediumPosts } = await import("./medium");
     const posts = await getMediumPosts();
 
-<<<<<<< HEAD
     // The mocked parseURL throws, the catch returns the fixture. Assert on
     // count + a few derived fields rather than full equality — parseMediumFeed
     // transforms each item (adds slug / summary / image from content), so
@@ -143,13 +134,6 @@ describe("getMediumPosts", () => {
       expect(posts[0].title).toBe(fixture.items[0].title);
       expect(posts[0].link).toBe(fixture.items[0].link);
     }
-=======
-    // The mocked parseURL throws, the catch returns the fixture, and
-    // `fixture.items` is `[]` after the open-source scrub — so the assertion
-    // doubles as a "we hit the catch path" check (any deviation would mean
-    // parseURL was reached, returned non-array, or the fixture was bypassed).
-    expect(posts).toEqual(fixture.items);
->>>>>>> upstream/main
 
     delete process.env.MEDIUM_USERNAME;
   });
