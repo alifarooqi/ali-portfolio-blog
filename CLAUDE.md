@@ -81,3 +81,18 @@ TypeScript path alias `@/*` -> `./*`. Both `@/...` and relative imports appear i
 
 ## Workflow
 - To validate local code and create a GitHub Pull Request, use the `create-pr` skill.
+
+## Merge strategy
+
+**Use simple merge commits for every PR — never squash, never rebase.**
+
+PRs land as a recognizable merge commit (`Merge pull request #N from ...`) so each PR stays a distinct, named unit in `git log`. The squash strategy the GitHub UI suggests by default collapses everything into one commit and obscures which PR introduced what; rebasing rewrites history and makes `git bisect` and `git log --first-parent` harder to follow.
+
+For sync PRs from the upstream template (`alifarooqi/portfolio-blog-template`), the workflow is:
+
+1. `git fetch upstream`
+2. Branch off `main` and run `git merge --no-ff upstream/main` (resolve any conflicts in favor of HEAD — the personal repo's data files win).
+3. Layer reset commits on top of the merge commit for any files that need manual reconciliation (e.g. binary assets the merge wanted to delete, content tweaks).
+4. Push and merge with `--merge` (the default).
+
+`git log --first-parent` should read like a flat history of "PR N, PR N+1, sync from upstream, sync from upstream, …" — no collapsed squashes.

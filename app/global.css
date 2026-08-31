@@ -21,6 +21,12 @@
   --medium-link: #1a73e8;
   --medium-accent: #7c3aed;
   --medium-border: #e6eef8;
+
+  /* Soft brand-tinted backdrop inside the hero avatar. Pairs with the
+     existing inset border on .avatar — together they read as a tinted
+     blob with a frame rather than a flat shape. color-mix keeps the
+     token theme-aware without needing separate rgba triplets per theme. */
+  --avatar-glow-color: color-mix(in srgb, var(--brand-color) 12%, transparent);
 }
 
 .dark {
@@ -32,6 +38,10 @@
   --medium-link: #7fb4ff;
   --medium-accent: #b58cff;
   --medium-border: rgba(255, 255, 255, 0.06);
+
+  /* Dark backdrop swallows more of the glow, so bump alpha to keep it
+     readable without making it loud. */
+  --avatar-glow-color: color-mix(in srgb, var(--brand-color) 22%, transparent);
 
   body {
     color-scheme: dark;

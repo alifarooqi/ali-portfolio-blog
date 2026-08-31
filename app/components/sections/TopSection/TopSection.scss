@@ -56,6 +56,12 @@
       aspect-ratio: 356 / 466; // faceshot.webp aspect ratio
       animation: morph 8s ease-in-out 1s infinite;
       box-shadow: inset 0 0 0 9px rgba(var(--brand-color-rgb), 0.3);
+      // Subtle theme-aware brand tint inside the morphing blob. The image
+      // uses object-fit: contain, so the tint shows through around the
+      // photo's edges and reads as a soft backdrop rather than a flat fill.
+      // Token colors live in :root / .dark in global.css so this stays
+      // theme-aware without SCSS duplication.
+      background: var(--avatar-glow-color);
       border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
       overflow: hidden;
       margin-bottom: 1rem;
