@@ -1,7 +1,10 @@
 import Parser from "rss-parser";
 import mediumFeed from "./medium-feed.json";
 
-const MY_USERNAME = process.env.MEDIUM_USERNAME ?? "";
+// Undefined is treated the same as empty string — see the !MY_USERNAME
+// guard in getMediumPosts. No fallback default here so we never silently
+// serve someone else's snapshot.
+const MY_USERNAME = process.env.MEDIUM_USERNAME;
 
 export type MediumPost = Partial<{
   title: string;

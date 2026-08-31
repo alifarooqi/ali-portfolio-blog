@@ -11,7 +11,7 @@ import MotionDiv from "../../animaiton/MotionDiv";
 import { slideInUp } from "../../animaiton/presets";
 import { getIcon } from "../../icons/Icons";
 import { playSound } from "@/lib/sound";
-import Projects from "./Projects";
+import Projects from "../../../config/ProjectsConfig";
 import "./ProjectSection.scss";
 
 const projectSectionConfig = SectionConfig.find((section) => section.key === "projects")!;

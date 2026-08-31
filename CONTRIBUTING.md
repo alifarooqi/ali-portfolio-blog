@@ -40,7 +40,9 @@ CI runs **lint + typecheck + build + unit tests + e2e tests + a personal-data gu
 
 ### Personal-data guard
 
-To stay open-source-friendly, the template ships without any personal data. A CI guard greps every PR diff for known personal-data patterns (`alifarooqi`, `ali_farooqi`, `ali-farooqi`, `m.ali_farooqi`, `C5YZG2MB3Q`, `Muhammad Ali Farooqi`) and fails the PR if any are introduced. **Don't add personal data to the template repo** — even in docs or comments.
+To stay open-source-friendly, the template ships without any personal data. A CI guard (`guard-personal-data` job in `.github/workflows/ci.yml`) greps every PR diff for the patterns stored in the `PERSONAL_DATA_PATTERNS` repo variable and fails the PR if any are introduced.
+
+**Maintainer setup:** Settings → Secrets and variables → Actions → Variables → add `PERSONAL_DATA_PATTERNS` as a repo variable. The value is an extended regex (`foo|bar|baz`). The patterns are intentionally not inlined in the workflow file so the file itself stays safe to view in a public repo. Without the variable set, the job passes silently — no false negatives, just no enforcement.
 
 If you forked the template for your own portfolio, the guard does not apply (it's only on the upstream PR diff).
 

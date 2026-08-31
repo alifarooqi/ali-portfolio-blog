@@ -7,11 +7,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Resolve the Medium handle from MEDIUM_USERNAME env var (matches
 // lib/medium.ts). Pass via CLI env: `MEDIUM_USERNAME=your_handle node ...`.
-const username = process.env.MEDIUM_USERNAME;
+// A leading `@` is tolerated and stripped so users can paste handles from
+// profile URLs without thinking about it.
+const rawUsername = process.env.MEDIUM_USERNAME;
+const username = rawUsername?.replace(/^@/, "");
 
 if (!username) {
   console.error(
-    "MEDIUM_USERNAME is not set. Run with `MEDIUM_USERNAME=your_handle node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs` (no @)."
+    "MEDIUM_USERNAME is not set. Run with `MEDIUM_USERNAME=your_handle node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs` (no @, or with @ — it's stripped)."
   );
   process.exit(1);
 }

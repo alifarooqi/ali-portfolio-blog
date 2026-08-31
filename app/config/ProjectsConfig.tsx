@@ -1,13 +1,13 @@
 import React, { ReactNode } from "react";
-import { getIcon } from "../../icons/Icons";
+import { getIcon } from "../components/icons/Icons";
 
-interface ProjectLink {
+export interface ProjectLink {
   tooltip: string;
   link: string;
   icon: ReactNode;
 }
 
-interface Project {
+export interface Project {
   name: string;
   icon: ReactNode;
   description: React.ReactNode;
@@ -16,10 +16,11 @@ interface Project {
   links: ProjectLink[];
 }
 
-// Placeholder projects — edit app/components/sections/ProjectSection/Projects.tsx
-// to add your own. Cover images default to public/images/bg0{1,2,3}.webp; swap
-// for project-specific artwork when you have it.
-const Projects: Project[] = [
+// Placeholder projects — edit this file to add your own. Cover images default
+// to public/images/bg0{1,2,3}.webp; swap for project-specific artwork when
+// you have it. The data lives in app/config/ so the Section component reads
+// from one place (matches the pattern of ExperienceConfig / ReviewsConfig).
+const ProjectsConfig: Project[] = [
   {
     name: "Example Project 1",
     icon: getIcon("smartToy"),
@@ -78,4 +79,4 @@ const Projects: Project[] = [
   },
 ];
 
-export default Projects;
+export default ProjectsConfig;
