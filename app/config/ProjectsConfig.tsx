@@ -1,13 +1,13 @@
 import React, { ReactNode } from "react";
-import { getIcon } from "../../icons/Icons";
+import { getIcon } from "../components/icons/Icons";
 
-interface ProjectLink {
+export interface ProjectLink {
   tooltip: string;
   link: string;
   icon: ReactNode;
 }
 
-interface Project {
+export interface Project {
   name: string;
   icon: ReactNode;
   description: React.ReactNode;
@@ -16,7 +16,7 @@ interface Project {
   links: ProjectLink[];
 }
 
-const Projects: Project[] = [
+const ProjectsConfig: Project[] = [
   {
     name: "Claude Waiting Room",
     icon: getIcon("smartToy"),
@@ -25,8 +25,8 @@ const Projects: Project[] = [
     description: (
       <>
         A <b>Claude Code</b> companion that pauses your side activity and snaps tmux focus back
-        the moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b> monorepo
-        (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
+        the moment an agent needs you. Built as a <b>Go</b> IPC daemon + <b>TypeScript</b>{" "}
+        monorepo (SDK, plugin, activities) talking over a peer-credentialed Unix domain socket.
       </>
     ),
     links: [
@@ -44,7 +44,9 @@ const Projects: Project[] = [
     coverImage: "/images/projects/antigravity_telegram_bridge.webp",
     description: (
       <>
-        A Python application bridging Telegram with the <b>Google Antigravity SDK</b>, enabling remote interaction and task execution on a local Mac-based agent. Supports multi-session isolation, persistence, and strict security sandboxing for git commands.
+        A Python application bridging Telegram with the <b>Google Antigravity SDK</b>, enabling
+        remote interaction and task execution on a local Mac-based agent. Supports multi-session
+        isolation, persistence, and strict security sandboxing for git commands.
       </>
     ),
     links: [
@@ -52,7 +54,7 @@ const Projects: Project[] = [
         tooltip: "See source",
         link: "https://github.com/alifarooqi/agy-telegram-bridge",
         icon: getIcon("code"),
-      }
+      },
     ],
   },
   {
@@ -62,9 +64,9 @@ const Projects: Project[] = [
     coverImage: "/images/projects/iam_security.webp",
     description: (
       <>
-        An IAM system for a cloud-based IoT solution using <b>Scala</b> and <b>React</b>. The system
-        features PKI-based authentication for hardware devices and JWT-based authentication for
-        users and services, ensuring secure access control. It also includes a built-in policy
+        An IAM system for a cloud-based IoT solution using <b>Scala</b> and <b>React</b>. The
+        system features PKI-based authentication for hardware devices and JWT-based authentication
+        for users and services, ensuring secure access control. It also includes a built-in policy
         management system for granular access permissions, enhancing security and simplifying
         management.
       </>
@@ -171,4 +173,4 @@ const Projects: Project[] = [
   },
 ];
 
-export default Projects;
+export default ProjectsConfig;

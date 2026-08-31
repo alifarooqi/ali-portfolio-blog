@@ -3,10 +3,11 @@ import Parser from "rss-parser";
 
 import { parseMediumFeed } from "./medium";
 import mediumFeed from "./medium-feed.json";
+import type { MediumFeedItem } from "./medium";
 
 // Cast fixture so the rss2json-shaped JSON (no `content:encoded`, no `isoDate`)
 // doesn't fight the Parser<T> generics used elsewhere.
-const fixture = mediumFeed as unknown as Parser.Output<unknown>;
+const fixture = mediumFeed as unknown as Parser.Output<MediumFeedItem>;
 
 describe("parseMediumFeed", () => {
   it("maps title / link / isoDate onto the post", () => {
@@ -19,7 +20,7 @@ describe("parseMediumFeed", () => {
           "content:encoded": "<p>body</p>",
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -32,7 +33,7 @@ describe("parseMediumFeed", () => {
     const body = "<p>This is <strong>plain</strong> text.</p>";
     const feed = {
       items: [{ title: "T", link: "https://m/x-y", "content:encoded": body }],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -53,7 +54,7 @@ describe("parseMediumFeed", () => {
             '<p>hi</p><img src="https://cdn.example.com/a.png" alt="a"/><img src="second"/>',
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -69,7 +70,7 @@ describe("parseMediumFeed", () => {
           "content:encoded": "<p>x</p>",
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -85,7 +86,7 @@ describe("parseMediumFeed", () => {
           content: "<p>fallback body</p>",
         },
       ],
-    } as unknown as Parser.Output<unknown>;
+    } as unknown as Parser.Output<MediumFeedItem>;
 
     const [post] = parseMediumFeed(feed);
 
@@ -99,7 +100,20 @@ describe("getMediumPosts", () => {
     vi.resetModules();
   });
 
+  it("returns the snapshot when MEDIUM_USERNAME is unset", async () => {
+    delete process.env.MEDIUM_USERNAME;
+    const { getMediumPosts } = await import("./medium");
+    const posts = await getMediumPosts();
+
+    // Without a username, getMediumPosts skips the live fetch and returns
+    // whatever the bundled snapshot has. After the open-source prep, the
+    // snapshot is `{"items":[]}`; on a personal-site fork it can be anything.
+    // Assert on count to match the snapshot, regardless of its contents.
+    expect(posts.length).toBe(fixture.items.length);
+  });
+
   it("returns parsed fixture when parseURL throws", async () => {
+    process.env.MEDIUM_USERNAME = "test_user";
     vi.doMock("rss-parser", () => ({
       default: class {
         parseURL() {
@@ -111,7 +125,16 @@ describe("getMediumPosts", () => {
     const { getMediumPosts } = await import("./medium");
     const posts = await getMediumPosts();
 
-    expect(posts.length).toBe(fixture.items!.length);
-    expect(posts[0].title).toBe(fixture.items![0].title);
+    // The mocked parseURL throws, the catch returns the fixture. Assert on
+    // count + a few derived fields rather than full equality — parseMediumFeed
+    // transforms each item (adds slug / summary / image from content), so
+    // the parsed output is not byte-identical to fixture.items.
+    expect(posts.length).toBe(fixture.items.length);
+    if (fixture.items[0]) {
+      expect(posts[0].title).toBe(fixture.items[0].title);
+      expect(posts[0].link).toBe(fixture.items[0].link);
+    }
+
+    delete process.env.MEDIUM_USERNAME;
   });
 });

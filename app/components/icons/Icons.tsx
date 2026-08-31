@@ -106,7 +106,7 @@ export const getIcon = (key: IconKey, className?: string): ReactElement => {
 // Human-readable names for icons whose registry key isn't already a clean
 // display name — used for tooltips, alt text, etc. Keys not listed fall back
 // to a Title-cased version of the registry key.
-export const iconLabels: Partial<Record<IconKey, string>> = {
+const iconLabels: Partial<Record<IconKey, string>> = {
   java: "Java",
   cpp: "C++",
   typescript: "TypeScript",
@@ -122,4 +122,4 @@ export const iconLabels: Partial<Record<IconKey, string>> = {
 };
 
 export const getIconLabel = (key: IconKey): string =>
-  iconLabels[key] ?? (key.charAt(0).toUpperCase() + key.slice(1));
+  iconLabels[key] ?? key.charAt(0).toUpperCase() + key.slice(1);

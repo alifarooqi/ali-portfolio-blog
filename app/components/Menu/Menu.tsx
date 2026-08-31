@@ -56,7 +56,7 @@ const Menu: React.FC = () => {
         key: "menu-sound-toggle",
       },
     ],
-    [isDark, isMuted],
+    [isDark, isMuted]
   );
 
   // Media query is the right primitive: the browser fires only when the
@@ -81,8 +81,7 @@ const Menu: React.FC = () => {
   const { startAngle, increment } = useMemo(() => {
     const startAngle = isMobile ? 0 : -90;
     const rotationAngle = isMobile ? 90 : 180;
-    const increment =
-      menuItems.length > 1 ? Math.round(rotationAngle / (menuItems.length - 1)) : 0;
+    const increment = menuItems.length > 1 ? Math.round(rotationAngle / (menuItems.length - 1)) : 0;
     return { startAngle, increment };
   }, [isMobile, menuItems.length]);
 
@@ -90,7 +89,7 @@ const Menu: React.FC = () => {
     <div className={menuActive ? "menu menu-active" : "menu"}>
       <div className="menu-backdrop" onClick={closeMenu}></div>
       <div className="menu-data" id="menu-data">
-        <MenuToggle isMobile={isMobile} toggleMenu={() => setMenuActive((m) => !m)} isOpen={menuActive} />
+        <MenuToggle toggleMenu={() => setMenuActive((m) => !m)} isOpen={menuActive} />
 
         {menuItems.map((menuItem, index) => (
           <MenuItem

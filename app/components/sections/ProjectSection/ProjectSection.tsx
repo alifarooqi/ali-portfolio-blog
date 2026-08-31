@@ -11,7 +11,7 @@ import MotionDiv from "../../animaiton/MotionDiv";
 import { slideInUp } from "../../animaiton/presets";
 import { getIcon } from "../../icons/Icons";
 import { playSound } from "@/lib/sound";
-import Projects from "./Projects";
+import Projects from "@/app/config/ProjectsConfig";
 import "./ProjectSection.scss";
 
 const projectSectionConfig = SectionConfig.find((section) => section.key === "projects")!;
@@ -37,10 +37,11 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
     const cardElement = container.children[index] as HTMLElement;
     if (cardElement) {
       // Center the active card in the viewport
-      const leftPosition = cardElement.offsetLeft - (container.offsetWidth / 2) + (cardElement.offsetWidth / 2);
+      const leftPosition =
+        cardElement.offsetLeft - container.offsetWidth / 2 + cardElement.offsetWidth / 2;
       container.scrollTo({
         left: leftPosition,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
     setSelectedIndex(index);
@@ -109,7 +110,8 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
       if (!container) return;
       const cardElement = container.children[selectedIndex] as HTMLElement;
       if (cardElement) {
-        const leftPosition = cardElement.offsetLeft - (container.offsetWidth / 2) + (cardElement.offsetWidth / 2);
+        const leftPosition =
+          cardElement.offsetLeft - container.offsetWidth / 2 + cardElement.offsetWidth / 2;
         container.scrollLeft = leftPosition;
       }
     }, 100);

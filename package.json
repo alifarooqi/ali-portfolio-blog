@@ -1,4 +1,7 @@
 {
+  "name": "portfolio-blog-starter",
+  "version": "0.1.0",
+  "description": "A Next.js App Router portfolio + blog starter — animated sections, dynamic OG images, Medium RSS feed, Tailwind v4, MIT-licensed.",
   "private": true,
   "engines": {
     "node": ">=18.18.0"
@@ -14,6 +17,28 @@
     "test:e2e": "playwright test",
     "fix": "eslint . --fix && prettier --write .",
     "analyze": "cross-env ANALYZE=true next build"
+  },
+  "keywords": [
+    "nextjs",
+    "portfolio",
+    "blog",
+    "template",
+    "starter",
+    "tailwindcss",
+    "react",
+    "typescript",
+    "vercel",
+    "rss"
+  ],
+  "license": "MIT",
+  "author": "Ali Farooqi",
+  "homepage": "https://github.com/alifarooqi/portfolio-blog-starter",
+  "bugs": {
+    "url": "https://github.com/alifarooqi/portfolio-blog-starter/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alifarooqi/portfolio-blog-starter.git"
   },
   "dependencies": {
     "@tailwindcss/postcss": "4.0.0-alpha.13",

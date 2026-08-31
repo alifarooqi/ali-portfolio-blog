@@ -64,22 +64,24 @@ const TopSection: React.FC = () => {
         <div className="avatar">
           <Image
             className="profile-picture"
-            src="/images/faceshot.webp"
-            alt="Ali Farooqi portrait"
+            src={CommonConfig.heroImage}
+            alt={CommonConfig.heroImageAlt}
             width={356}
             height={466}
             priority
           />
         </div>
-        <svg viewBox={CommonConfig.signature?.viewBox}>
-          <path
-            ref={pathRef}
-            id="signature-path"
-            stroke="var(--text-primary)"
-            fill="none"
-            d={CommonConfig.signature?.signaturePathD}
-          />
-        </svg>
+        {CommonConfig.signature.signaturePathD && (
+          <svg viewBox={CommonConfig.signature.viewBox} aria-hidden="true">
+            <path
+              ref={pathRef}
+              id="signature-path"
+              stroke="var(--text-primary)"
+              fill="none"
+              d={CommonConfig.signature.signaturePathD}
+            />
+          </svg>
+        )}
       </div>
 
       <div className="intro">
@@ -103,11 +105,7 @@ const TopSection: React.FC = () => {
       <div className="social">
         {CommonConfig.social.map((socialDetails, index) => (
           <Magnetic key={`top-section-social-${index}`} strength={0.4}>
-            <CircleButton
-              tooltip={socialDetails.name}
-              link={socialDetails.link}
-              target="_blank"
-            >
+            <CircleButton tooltip={socialDetails.name} link={socialDetails.link} target="_blank">
               {socialDetails.iconKey
                 ? getIcon(socialDetails.iconKey)
                 : getIcon(socialDetails.name.toLowerCase() as IconKey)}

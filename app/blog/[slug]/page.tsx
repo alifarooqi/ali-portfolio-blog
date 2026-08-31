@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props) {
   }
 
   // Derive commonly used metadata values from the fetched post
-  const title = post.title ?? "Blogs | Ali Farooqi";
+  const title = post.title ?? `Blog | ${CommonConfig.name}`;
   const description = post.summary;
   const publishedTime = post.date;
 
@@ -80,7 +80,7 @@ async function Blog({ params }: Props) {
             description: post.summary,
             image:
               post.image ??
-              `${baseUrl}/og?title=${encodeURIComponent(post.title ?? "Blog | Ali Farooqi")}`,
+              `${baseUrl}/og?title=${encodeURIComponent(post.title ?? `Blog | ${CommonConfig.name}`)}`,
             url: `${baseUrl}/blog/${post.slug}`,
             author: {
               "@type": "Person",

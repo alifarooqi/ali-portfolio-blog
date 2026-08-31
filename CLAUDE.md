@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Ali Farooqi's personal portfolio + blog (Next.js App Router, deployed on Vercel). The home page is a single-page scroll of animated sections; `/blog` renders posts pulled live from a Medium RSS feed.
+A Next.js App Router portfolio + blog starter (single-page scroll of animated sections; `/blog` renders posts pulled from a Medium RSS feed). Fork-friendly template — site identity lives in `app/config/CommonConfig.ts`. Designed for Vercel deploy, but any Next.js-compatible host works.
 
 ## Commands
 
@@ -20,15 +20,15 @@ Ali Farooqi's personal portfolio + blog (Next.js App Router, deployed on Vercel)
 
 Package manager is **npm** (`package-lock.json`). The README mentions pnpm but the lockfile is npm.
 
-CI (`.github/workflows/ci.yml`) runs `lint` -> `typecheck` -> `build` on every PR and on pushes to `main`. It does **not** run the test suites yet — that wiring is deferred. Do not merge with red CI.
+CI (`.github/workflows/ci.yml`) runs `lint` → `typecheck` → `build` → `unit-tests` → `e2e-tests` → `guard-personal-data` on every PR and on pushes to `main`. Do not merge with red CI.
 
 ## Architecture
 
 ### Config-driven home page
 Homepage content is centralized, not scattered across components:
-- `app/config/CommonConfig.ts` — name, taglines, signature SVG path, email, and social links.
-- `app/config/SectionConfig.ts` — registry of sections (`key`, `name`, `headerIconKey`, optional `notInMenu`). Drives both the `Section` header and the `Menu` items.
-- Per-section data files (e.g. `app/components/sections/ProjectSection/Projects.tsx`) hold the actual section content.
+- `app/config/CommonConfig.ts` — name, taglines, signature SVG path, email, social links, and every SEO/OG/JSON-LD field.
+- `app/config/SectionConfig.ts` — registry of sections (`key`, `name`, `headerIconKey`). Drives both the `Section` header and the `Menu` items.
+- Per-section data files (`app/config/AboutConfig.ts`, `ExperienceConfig.ts`, `ReviewsConfig.ts`, `ProjectsConfig.tsx`) hold the actual section content.
 
 > [!NOTE]
 > To add a new project to the portfolio, use the `add-project` skill.
@@ -48,7 +48,7 @@ Homepage content is centralized, not scattered across components:
 > To convert custom SVGs and add new icons, use the `svg-icon` skill.
 
 ### Blog = Medium RSS, not local MDX
-Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `@ali_farooqi`, caches it in-memory for 12h (matching `revalidate = 12 * 3600` on the blog routes), and falls back to the committed snapshot at `lib/medium-feed.json` if the fetch fails. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
+Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `MEDIUM_USERNAME` (env var), caches it in-memory for 12h (matching `revalidate = 12 * 3600` on the blog routes), and falls back to the committed snapshot at `lib/medium-feed.json` if the fetch fails. Empty `MEDIUM_USERNAME` returns the (empty) snapshot. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
 
 > [!NOTE]
 > To refresh the fallback snapshot file, use the `medium-feed-refresh` skill.
@@ -62,13 +62,14 @@ Tailwind v4 (alpha) is configured via `@import "tailwindcss"` in `app/global.css
 **Design is mobile-first.** New and modified SCSS must target small screens in the base rules and layer larger-viewport behavior on top via `min-width` media queries (never `max-width` overrides that walk backwards from desktop). Use `clamp()` for fluid type/spacing where it removes the need for per-breakpoint overrides. Verify at ≥320px, ~430px, ~768px, and ~1024px before considering a layout done.
 
 ### SEO / metadata
-`app/layout.tsx` owns the root `Metadata` (incl. JSON-LD `Person` schema, OG/Twitter images). `app/blog/[slug]/page.tsx` uses `generateMetadata` and emits `BlogPosting` JSON-LD per post. `app/og/route.tsx` generates dynamic OG images. `app/sitemap.ts` exports `baseUrl` (hardcoded to `https://alifarooqi.vercel.app`) — reuse it for any absolute URLs.
+`app/layout.tsx` owns the root `Metadata` (incl. JSON-LD `Person` schema, OG/Twitter images). `app/blog/[slug]/page.tsx` uses `generateMetadata` and emits `BlogPosting` JSON-LD per post. `app/og/route.tsx` generates dynamic OG images. `app/sitemap.ts` exports `baseUrl`, which resolves `NEXT_PUBLIC_SITE_URL` → `NEXT_PUBLIC_VERCEL_URL` → `VERCEL_URL` → `CommonConfig.siteUrlFallback` (last-resort placeholder) — reuse it for any absolute URLs.
 
 ### Testing
 Two layers, sized for a portfolio (no broad component / snapshot coverage):
 - **Unit (Vitest)** — `*.test.ts` co-located with the code. Covers pure logic only: `formatDate` (`app/blog/utils.test.ts`) and the Medium feed parser (`lib/medium.test.ts`, which is why `parseMediumFeed` is exported). Uses `vi.useFakeTimers` + `process.env.TZ="UTC"` for stable date tests.
 - **E2e (Playwright)** — `tests/e2e/smoke.spec.ts`. Runs against `next build && next start` on `:3000` (matches what Vercel ships). Four flows: home sections render, `/blog` → first post, theme toggle flips `dark` on `<html>`, `/no-such-page` → 404. The webServer config boots the prod server automatically; `reuseExistingServer: true` locally so a stray `next start` doesn't trip it.
 - `getMediumPosts` swallows network errors and falls back to `lib/medium-feed.json`, logging `Error fetching Medium posts: ...` first. E2e's no-unexpected-console-errors check filters that one message plus asset 404s; anything else fails the test.
+- E2E's blog-index test handles the empty-Medium case (no `MEDIUM_USERNAME`, empty snapshot) by asserting the index page renders without errors and skipping the post-navigation half. With a real username, the full flow is exercised.
 
 ### Imports
 TypeScript path alias `@/*` -> `./*`. Both `@/...` and relative imports appear in the codebase; prefer `@/` for cross-`app` references.
