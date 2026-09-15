@@ -51,7 +51,7 @@ Homepage content is centralized, not scattered across components:
 Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `MEDIUM_USERNAME` (env var). Empty `MEDIUM_USERNAME` short-circuits to the committed snapshot at `lib/medium-feed.json`; the live fetch (when a username is set) is what `revalidate = 12 * 3600` on the blog routes controls the freshness of. On any fetch failure the route falls back to the same snapshot. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
 
 > [!NOTE]
-> To refresh the fallback snapshot file, run `npm run refresh:medium -- <medium-handle>` (script at `scripts/refresh-medium-feed.mjs`). It overwrites `lib/medium-feed.json` with a fresh parse using the same `rss-parser` dep `lib/medium.ts` uses.
+> To refresh the fallback snapshot file, run `npm run refresh:medium` (the script body in `package.json` bakes in `MEDIUM_USERNAME=ali_farooqi` via `cross-env`; edit it for your handle or pass a positional arg to override). It overwrites `lib/medium-feed.json` with a fresh parse using the same `rss-parser` dep `lib/medium.ts` uses.
 
 ### Theming (dark mode)
 Dark mode is class-based via a `.dark` class on `<html>`. `app/ThemeInitializerScript.tsx` runs `beforeInteractive` to set the class from `localStorage` / `prefers-color-scheme` (prevents flash of wrong theme). The Menu toggle flips it and persists to `localStorage`. Colors are CSS custom properties in `app/global.css` (`:root` and `.dark` blocks).
