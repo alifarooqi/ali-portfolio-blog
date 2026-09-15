@@ -109,7 +109,7 @@ The `refresh-medium-feed.yml` workflow runs weekly and refreshes the local Mediu
 
 ### Other hosts
 
-Any Next.js-compatible host works — set the three env vars, run `npm ci && npm run build`, and serve with `npm start`. The `refresh-medium-feed.yml` workflow only runs on GitHub Actions; for other CI, call the script directly with `MEDIUM_USERNAME=... node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs`.
+Any Next.js-compatible host works — set the three env vars, run `npm ci && npm run build`, and serve with `npm start`. The `refresh-medium-feed.yml` workflow only runs on GitHub Actions; for other CI, call the script directly with `npm run refresh:medium` (bakes `MEDIUM_USERNAME=ali_farooqi` into the script body, edit it for your handle) or `MEDIUM_USERNAME=... node scripts/refresh-medium-feed.mjs`.
 
 ## Testing
 

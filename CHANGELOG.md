@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `CommonConfig` is now the single source of truth for site identity — `app/layout.tsx`, `app/og/route.tsx`, `app/sitemap.ts`, `app/blog/[slug]/page.tsx`, `app/components/AboutWriter.tsx`, `app/components/sections/TopSection/TopSection.tsx`, and `app/components/sections/ContactSection/ContactSection.tsx` all read from it instead of carrying duplicate strings.
 - `lib/medium.ts` no longer falls back to a hardcoded username; `MEDIUM_USERNAME` defaults to `undefined`, which the empty-string guard in `getMediumPosts` already handles. No fallback default in code — never silently serve someone else's snapshot.
-- `.agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs` now strips a leading `@` from `MEDIUM_USERNAME` so handles pasted from profile URLs work.
+- Medium feed snapshot refresh moved to a top-level script at `scripts/refresh-medium-feed.mjs` with an `npm run refresh:medium` shortcut. The `.agents/skills/medium-feed-refresh/` skill (and its `scripts/refresh-feed.mjs`) is removed; `.github/workflows/refresh-medium-feed.yml` and `README.md` now reference the new location.
 - Project data moved to `app/config/ProjectsConfig.tsx` to match the pattern of `ExperienceConfig` / `ReviewsConfig` / `AboutConfig`.
 - Personal content scrubbed to placeholders: `ProjectsConfig.tsx`, `ReviewsConfig.ts`, `ExperienceConfig.ts`, `AboutConfig.ts`, `lib/medium-feed.json`.
 - Personal image assets removed; `public/images/avatar-placeholder.webp` is a copy of `bg01.webp` — replace with your own portrait.

@@ -41,7 +41,7 @@ jobs:
       # which is the exact shape `parseMediumFeed` expects — see the
       # comment at the top of the script.
       - name: Refresh Medium feed snapshot
-        run: node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs
+        run: node scripts/refresh-medium-feed.mjs
 
       - name: Check whether the snapshot changed
         id: check
