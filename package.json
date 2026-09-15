@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "fix": "eslint . --fix && prettier --write .",
+    "refresh:medium": "node scripts/refresh-medium-feed.mjs",
     "analyze": "cross-env ANALYZE=true next build"
   },
   "keywords": [
