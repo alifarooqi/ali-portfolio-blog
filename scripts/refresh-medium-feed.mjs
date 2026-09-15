@@ -18,7 +18,12 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Parser from "rss-parser";
 
-const username = (process.argv[2] ?? process.env.MEDIUM_USERNAME ?? "").trim();
+// Resolve the Medium handle from the first argv, MEDIUM_USERNAME env var, or
+// fall back to empty. A leading `@` is tolerated and stripped so users can
+// paste handles from profile URLs without thinking about it.
+const rawUsername = (process.argv[2] ?? process.env.MEDIUM_USERNAME ?? "").trim();
+const username = rawUsername?.replace(/^@/, "");
+
 if (!username) {
   console.error(
     "Refresh aborted: no Medium username. Pass one as the first arg or set MEDIUM_USERNAME.",
