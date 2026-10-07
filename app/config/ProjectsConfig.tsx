@@ -38,6 +38,26 @@ const ProjectsConfig: Project[] = [
     ],
   },
   {
+    name: "Private Prompter",
+    icon: getIcon("smartToy"),
+    duration: "2026",
+    coverImage: "/images/projects/private_prompter.webp",
+    description: (
+      <>
+        A <b>macOS</b> menu-bar app that rewrites highlighted text into structured prompts via a
+        global hotkey. Built as a <b>Tauri v2</b> shell around an embedded <b>llama.cpp</b>{" "}
+        sidecar — fully on-device, no telemetry, no accounts.
+      </>
+    ),
+    links: [
+      {
+        tooltip: "See source",
+        link: "https://github.com/alifarooqi/private-prompter",
+        icon: getIcon("code"),
+      },
+    ],
+  },
+  {
     name: "Antigravity Telegram Bridge",
     icon: getIcon("smartToy"),
     duration: "2025",
