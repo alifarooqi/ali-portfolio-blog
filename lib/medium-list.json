@@ -1,0 +1,121 @@
+{
+  "posts": [
+    {
+      "slug": "laya-vs-jev-can-open-source-decision-models-kill-managed-service-jev-78862ee535bd",
+      "hash": "8b4f41831c3f0280cab0bd2a7eaa8d1f038acc64d423c94f5087f52798d2c7da",
+      "title": "Laya vs Jev: Can Open-Source Decision Models kill managed service Jev?",
+      "subtitle": " Laya vs Jev: Can Open-Source Decision Models kill Jev?  Most AI applications today follow a familiar pattern:   Input → LLM → generated text → parse the respon…",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*_X-yUwqHZ7MgKihhtxAaGw.png",
+      "date": "2026-10-05T05:41:27.000Z",
+      "link": "https://medium.com/@ali_farooqi/laya-vs-jev-can-open-source-decision-models-kill-managed-service-jev-78862ee535bd"
+    },
+    {
+      "slug": "from-github-issue-to-pull-request-building-a-self-hosted-autonomous-coding-agent-blitzlog-0cf65a5ecd5b",
+      "hash": "6742a07cf877df7fa2089dc98fe2b7727b9617a721b5ee316a6bc92a8493cadb",
+      "title": "From GitHub Issue to Pull Request: Building a Self-Hosted Autonomous Coding Agent — Blitzlog",
+      "subtitle": "    AI coding agents have changed how quickly we can write software. But there is still a surprisingly simple bottleneck:   You usually have to be sitting at yo…",
+      "image": "https://cdn-images-1.medium.com/max/1000/0*IgSzzEqCS1uf7XwS",
+      "date": "2026-09-21T07:58:10.000Z",
+      "link": "https://medium.com/@ali_farooqi/from-github-issue-to-pull-request-building-a-self-hosted-autonomous-coding-agent-blitzlog-0cf65a5ecd5b"
+    },
+    {
+      "slug": "agentic-browsing-is-the-new-seo-why-ui-ux-needs-an-aix-layer-40112083457f",
+      "hash": "e3dd2a81cab6822131d9d1aa212e6c490c7955fe97fd50ed3d94ad4678e95a15",
+      "title": "Agentic Browsing Is the New SEO: Why UI/UX Needs an AIx Layer",
+      "subtitle": " I was working on my personal blog and ran it through Google Lighthouse and I noticed something new:    Agentic Browsing.    That caught my attention.     Why w…",
+      "image": "https://cdn-images-1.medium.com/max/527/1*hECCE7a8zXkVyo3nVi28xQ.png",
+      "date": "2026-09-15T03:28:14.000Z",
+      "link": "https://medium.com/@ali_farooqi/agentic-browsing-is-the-new-seo-why-ui-ux-needs-an-aix-layer-40112083457f"
+    },
+    {
+      "slug": "how-to-safely-control-a-local-ai-coding-agent-from-your-phone-using-python-telegram-and-a-be5dcb08cfcf",
+      "hash": "f6762fd5b8a501a4a7bae2bd4767b0cb655e1b03b77321391df614c63c6b8e1b",
+      "title": "How to safely control a local AI coding agent from your phone using Python, Telegram, and a…",
+      "subtitle": " How to safely control a local AI coding agent from your phone using Python, Telegram, and a least-privilege security model    Controlling AI Agent from your mo…",
+      "image": "https://cdn-images-1.medium.com/max/1024/0*r6eoss17H-_kMl2P",
+      "date": "2026-07-20T03:51:57.000Z",
+      "link": "https://medium.com/@ali_farooqi/how-to-safely-control-a-local-ai-coding-agent-from-your-phone-using-python-telegram-and-a-be5dcb08cfcf"
+    },
+    {
+      "slug": "china-digital-strategy-two-rules-every-foreign-enterprise-must-follow-to-succeed-1f8f73dde916",
+      "hash": "8a7f74595a33c5ccdd1eacb9a38cac6f8bb30513c0db25f5df677168a6b355a2",
+      "title": "China Digital Strategy: Two Rules Every Foreign Enterprise Must Follow to Succeed",
+      "subtitle": " Entering China is not a market expansion exercise — it is a strategic transformation. Many global enterprises fail not because of product-market fit, but becau…",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*82k5lHTB851eTRFWC_bj3g.png",
+      "date": "2026-03-30T10:10:26.000Z",
+      "link": "https://medium.com/@ali_farooqi/china-digital-strategy-two-rules-every-foreign-enterprise-must-follow-to-succeed-1f8f73dde916"
+    },
+    {
+      "slug": "my-ai-agent-tried-to-read-my-aws-credentials-heres-why-that-should-worry-you-2c982b764159",
+      "hash": "d154e553d2bbbb768536a7585b165d4256806d0bac36519b2d46fb0ebb488dae",
+      "title": "My AI Agent Tried to Read My AWS Credentials — Here’s Why That Should Worry You",
+      "subtitle": " I was using an AI coding agent when it suggested running this command:  cat ~/.aws/credentials 2&gt;/dev/null || echo &quot;No credentials file&quot;  Then it …",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*RZlV0GyNrNVfkchlYWZrBw.png",
+      "date": "2026-02-19T08:01:54.000Z",
+      "link": "https://medium.com/@ali_farooqi/my-ai-agent-tried-to-read-my-aws-credentials-heres-why-that-should-worry-you-2c982b764159"
+    },
+    {
+      "slug": "how-a-meme-helped-me-tackle-the-hardest-problem-in-computer-science-cache-invalidation-d605613c7539",
+      "hash": "353468a01a3c43d5aa6da01d6029e9905a8af8af060e85f18b8db797e6e0f366",
+      "title": "How a Meme Helped Me Tackle the “Hardest Problem” in Computer Science: Cache Invalidation",
+      "subtitle": " There’s a famous quote in computer science:  “There are only two hard things in Computer Science: naming things and cache invalidation.”  It’s funny because it…",
+      "image": "https://cdn-images-1.medium.com/max/1020/1*ZBUHG3oGZnXY9hCfu9DROQ.png",
+      "date": "2025-12-19T03:01:04.000Z",
+      "link": "https://medium.com/@ali_farooqi/how-a-meme-helped-me-tackle-the-hardest-problem-in-computer-science-cache-invalidation-d605613c7539"
+    },
+    {
+      "slug": "how-to-integrate-medium-articles-into-next-js-portfolio-for-better-seo-discovery-a50d8a804ea2",
+      "hash": "001e186e5ec27b99277eeb7296788e9e2dabbbd416bd44b52feea5019ac4fcdc",
+      "title": "How to integrate Medium articles into Next.js portfolio for better SEO discovery",
+      "subtitle": "  Short version:  I pulled my Medium RSS feed into my Next.js App Router, rendered posts server-side as real HTML pages (with proper metadata, canonical links a…",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*BkF9TW_s1mreFXhXVe4l4Q.png",
+      "date": "2025-12-02T11:05:36.000Z",
+      "link": "https://medium.com/@ali_farooqi/how-to-integrate-medium-articles-into-next-js-portfolio-for-better-seo-discovery-a50d8a804ea2"
+    },
+    {
+      "slug": "react-vs-next-js-how-switching-my-portfolio-improved-seo-performance-and-core-web-vitals-756f9ff6c37d",
+      "hash": "921c8a5ad07ace2e1228d150a5e236657bfba4ce677daabf332a9fbb3b7c0dc1",
+      "title": "React vs Next.js: How Switching My Portfolio Improved SEO, Performance, and Core Web Vitals",
+      "subtitle": " React vs Next.js: How Switching My Portfolio Improved SEO, Performance, and Core Web Vitals by Over 40%   And how a simple plan to add a blog turned into a ful…",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*xLZDsyguz_HiQKgEpetDcA.png",
+      "date": "2025-12-02T10:20:47.000Z",
+      "link": "https://medium.com/@ali_farooqi/react-vs-next-js-how-switching-my-portfolio-improved-seo-performance-and-core-web-vitals-756f9ff6c37d"
+    },
+    {
+      "slug": "aws-azure-or-alibaba-cloud-how-to-open-a-cloud-account-in-china-7fe6870d9b57",
+      "hash": "c19f10aba8f5b5fe90a1f765c6a5794da7b9ba9ec3fa0c16cb6e5861a756aea7",
+      "title": "AWS, Azure, or Alibaba Cloud: How to Open a Cloud Account in China",
+      "subtitle": " The Trend I Couldn’t Ignore  A few weeks ago, while checking Google Trends for regional cloud interest, I noticed a sudden spike in searches for  “cloud accoun…",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*SwKkSEcKUcPqdqk4SXyywQ.png",
+      "date": "2025-11-07T02:39:28.000Z",
+      "link": "https://medium.com/@ali_farooqi/aws-azure-or-alibaba-cloud-how-to-open-a-cloud-account-in-china-7fe6870d9b57"
+    },
+    {
+      "slug": "make-your-app-china-ready-how-to-deploy-web-services-inside-the-great-chinese-firewall-5aab4e1b08bd",
+      "hash": "1b8802f13d187bda2d641b217f374a828ac05601db3a4fcf6f6e12d268d068f4",
+      "title": "Make Your App China-Ready: How to Deploy Web Services Inside the Great Chinese Firewall",
+      "subtitle": "     Make Your App China-Ready: How to Deploy Web Services Inside the Great Chinese Firewall  \n      * {\n        font-family: Georgia, Cambria, \"Times New Roman…",
+      "image": "https://cdn-images-1.medium.com/max/800/1*4cXfk3FQB29ysC_v5SPfuQ.png",
+      "date": "2025-10-28T05:33:27.871Z",
+      "link": "https://medium.com/@ali_farooqi/make-your-app-china-ready-how-to-deploy-web-services-inside-the-great-chinese-firewall-5aab4e1b08bd"
+    },
+    {
+      "slug": "smarter-tolls-smoother-commutes-an-ai-idea-for-hong-kongs-traffic-6c67601587ac",
+      "hash": "9a6fe654b9f5d0826c7c7b6bf60697358dde5f194afdfa916d312e3d108e7c22",
+      "title": "Smarter Tolls, Smoother Commutes: An AI Idea for Hong Kong’s Traffic",
+      "subtitle": "     Smarter Tolls, Smoother Commutes: An AI Idea for Hong Kong’s Traffic  \n      * {\n        font-family: Georgia, Cambria, \"Times New Roman\", Times, serif;\n  …",
+      "image": "https://cdn-images-1.medium.com/max/800/1*FMWXnkjK0hxwziq7XCGTzQ.jpeg",
+      "date": "2025-10-01T15:27:59.604Z",
+      "link": "https://medium.com/@ali_farooqi/smarter-tolls-smoother-commutes-an-ai-idea-for-hong-kongs-traffic-6c67601587ac"
+    },
+    {
+      "slug": "integrating-ejbca-community-with-scala-play-framework-using-cmp-72330b4da4e5",
+      "hash": "d88ae634fd40ec7cf8a616f62a88119255bd367012414423f454fb48cb0c7663",
+      "title": "Integrating EJBCA (Community) with Scala & Play Framework using CMP",
+      "subtitle": "     Integrating EJBCA (Community) with Scala &amp; Play Framework using CMP  \n      * {\n        font-family: Georgia, Cambria, \"Times New Roman\", Times, serif;…",
+      "image": "https://cdn-images-1.medium.com/max/1200/1*DZWSImeR70xT4Gnie3vppw.jpeg",
+      "date": "2025-10-28T03:29:37.142Z",
+      "link": "https://medium.com/@ali_farooqi/integrating-ejbca-community-with-scala-play-framework-using-cmp-72330b4da4e5"
+    }
+  ]
+}

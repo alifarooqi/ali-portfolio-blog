@@ -38,6 +38,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# local Medium HTML downloads (Cloudflare blocks bots, so we save these by hand)
+# the matching per-post files live in lib/posts-data/ instead
+/posts
 next-env.d.ts
 
 # claude code session-local files — share skills (in .agents/), keep
