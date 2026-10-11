@@ -47,11 +47,17 @@ Homepage content is centralized, not scattered across components:
 > [!NOTE]
 > To convert custom SVGs and add new icons, use the `svg-icon` skill.
 
-### Blog = Medium RSS, not local MDX
-Blog posts are **not** local MDX. `lib/medium.ts` fetches the Medium RSS feed for `MEDIUM_USERNAME` (env var). Empty `MEDIUM_USERNAME` short-circuits to the committed snapshot at `lib/medium-feed.json`; the live fetch (when a username is set) is what `revalidate = 12 * 3600` on the blog routes controls the freshness of. On any fetch failure the route falls back to the same snapshot. `app/blog/[slug]/page.tsx` renders the post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
+### Blog = content-addressed Medium snapshot, not local MDX
+Blog posts are **not** local MDX. The runtime reads from two committed sources, both in `lib/`:
 
-> [!NOTE]
-> To refresh the fallback snapshot file, run `npm run refresh:medium` (the script body in `package.json` bakes in `MEDIUM_USERNAME=ali_farooqi` via `cross-env`; edit it for your handle or pass a positional arg to override). It overwrites `lib/medium-feed.json` with a fresh parse using the same `rss-parser` dep `lib/medium.ts` uses.
+- `lib/medium-list.json` — index used by `/blog`. Each entry: `slug`, `hash`, `title`, `subtitle`, `image`, `date`, `link`. `hash` is SHA-256 of the post's `content:encoded` and is internal storage only.
+- `lib/posts-data/<slug>.json` — full per-post content (`title`, `link`, `slug`, `isoDate`, `content`, `subtitle`, `image`) used by `/blog/[slug]`.
+
+`lib/medium.ts` does no network I/O: it statically imports the list and reads per-post files from disk at runtime. ISR (`revalidate = 12 * 3600` on the blog routes) is the only cache layer.
+
+The `medium-feed-refresh` skill (and its `.github/workflows/refresh-medium-feed.yml` runner) merges live RSS items into the snapshot: per-post files are only rewritten when the SHA-256 of `content:encoded` changes; new slugs are appended; items in the snapshot whose slug is **not** in the live feed are kept (history is never pruned — solves Medium's ~10-item RSS cap from dropping older posts). To add a post older than the live RSS window, backfill its per-post file and add a list entry by hand.
+
+`app/blog/[slug]/page.tsx` renders each post's HTML via `dangerouslySetInnerHTML`, sanitized first through `lib/sanitize.ts` (`sanitizeMediumHtml`) — a 17-tag allowlist backed by `isomorphic-dompurify`. The sanitizer also runs in `lib/sanitize.test.ts`; extend those tests when changing the allowlist.
 
 ### Theming (dark mode)
 Dark mode is class-based via a `.dark` class on `<html>`. `app/ThemeInitializerScript.tsx` runs `beforeInteractive` to set the class from `localStorage` / `prefers-color-scheme` (prevents flash of wrong theme). The Menu toggle flips it and persists to `localStorage`. Colors are CSS custom properties in `app/global.css` (`:root` and `.dark` blocks).
@@ -66,10 +72,10 @@ Tailwind v4 (alpha) is configured via `@import "tailwindcss"` in `app/global.css
 
 ### Testing
 Two layers, sized for a portfolio (no broad component / snapshot coverage):
-- **Unit (Vitest)** — `*.test.ts` co-located with the code. Covers pure logic only: `formatDate` (`app/blog/utils.test.ts`) and the Medium feed parser (`lib/medium.test.ts`, which is why `parseMediumFeed` is exported). Uses `vi.useFakeTimers` + `process.env.TZ="UTC"` for stable date tests.
+- **Unit (Vitest)** — `*.test.ts` co-located with the code. Covers pure logic only: `formatDate` (`app/blog/utils.test.ts`), the Medium sanitizer (`lib/sanitize.test.ts`), and the Medium runtime (`lib/medium.test.ts`, which mocks the static `medium-list.json` import and the `fs/promises.readFile` calls — that's how the index/per-post file split is testable without touching disk). Uses `vi.useFakeTimers` + `process.env.TZ="UTC"` for stable date tests.
 - **E2e (Playwright)** — `tests/e2e/smoke.spec.ts`. Runs against `next build && next start` on `:3000` (matches what Vercel ships). Four flows: home sections render, `/blog` → first post, theme toggle flips `dark` on `<html>`, `/no-such-page` → 404. The webServer config boots the prod server automatically; `reuseExistingServer: true` locally so a stray `next start` doesn't trip it.
-- `getMediumPosts` swallows network errors and falls back to `lib/medium-feed.json`, logging `Error fetching Medium posts: ...` first. E2e's no-unexpected-console-errors check filters that one message plus asset 404s; anything else fails the test.
-- E2E's blog-index test handles the empty-Medium case (no `MEDIUM_USERNAME`, empty snapshot) by asserting the index page renders without errors and skipping the post-navigation half. With a real username, the full flow is exercised.
+- The runtime (`lib/medium.ts`) does no network I/O — it reads `lib/medium-list.json` (static import) and `lib/posts-data/<slug>.json` (fs.readFile). E2e's no-unexpected-console-errors check accepts only asset 404s and `_vercel` script refusals; anything else fails the test.
+- E2E's blog-index test handles the empty-snapshot case (`lib/medium-list.json` has `posts: []`) by asserting the index page renders without errors and skipping the post-navigation half. With any posts committed, the full flow is exercised.
 
 ### Imports
 TypeScript path alias `@/*` -> `./*`. Both `@/...` and relative imports appear in the codebase; prefer `@/` for cross-`app` references.
@@ -81,18 +87,3 @@ TypeScript path alias `@/*` -> `./*`. Both `@/...` and relative imports appear i
 
 ## Workflow
 - To validate local code and create a GitHub Pull Request, use the `create-pr` skill.
-
-## Merge strategy
-
-**Use simple merge commits for every PR — never squash, never rebase.**
-
-PRs land as a recognizable merge commit (`Merge pull request #N from ...`) so each PR stays a distinct, named unit in `git log`. The squash strategy the GitHub UI suggests by default collapses everything into one commit and obscures which PR introduced what; rebasing rewrites history and makes `git bisect` and `git log --first-parent` harder to follow.
-
-For sync PRs from the upstream template (`alifarooqi/portfolio-blog-template`), the workflow is:
-
-1. `git fetch upstream`
-2. Branch off `main` and run `git merge --no-ff upstream/main` (resolve any conflicts in favor of HEAD — the personal repo's data files win).
-3. Layer reset commits on top of the merge commit for any files that need manual reconciliation (e.g. binary assets the merge wanted to delete, content tweaks).
-4. Push and merge with `--merge` (the default).
-
-`git log --first-parent` should read like a flat history of "PR N, PR N+1, sync from upstream, sync from upstream, …" — no collapsed squashes.

@@ -13,7 +13,7 @@ A Next.js App Router portfolio + blog starter. Animated single-page home, dynami
 
 - **Animated sections** powered by [motion](https://motion.dev) — staggered entrance, scroll-spy, magnetic buttons.
 - **Config-driven home page** — name, tagline, social, signature SVG, and metadata all live in `app/config/CommonConfig.ts`. Edit one file, the whole site updates.
-- **Blog backed by a Medium RSS feed** — `lib/medium.ts` fetches and parses the feed, falls back to a committed snapshot if the network fails, sanitizes content with an allowlist via `isomorphic-dompurify`.
+- **Blog backed by a content-addressed Medium snapshot** — `lib/medium-list.json` (index) + `lib/posts-data/<slug>.json` (per-post) are merged from the live RSS feed by a weekly GitHub Action that hashes each item and only rewrites what changed. Older posts that age out of Medium's ~10-item RSS window stay in the snapshot forever.
 - **Dynamic Open Graph cards** — `app/og/route.tsx` renders a branded 1200×630 image per page and per blog post.
 - **SEO built in** — sitemap, robots, JSON-LD `Person` and `BlogPosting` schemas, per-page metadata via `generateMetadata`.
 - **Dark mode** — class-based, no flash on first paint (`ThemeInitializerScript` runs `beforeInteractive`).
@@ -49,7 +49,7 @@ Environment variables (see [`.env.example`](.env.example)):
 | ---------------------- | ---------- | -------------------------------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL` | Production | Canonical URL used in sitemap, OG tags, JSON-LD. Vercel preview auto-resolves via `VERCEL_URL` if unset. |
 | `NEXT_PUBLIC_GA_ID`    | Optional   | Google Analytics 4 measurement ID (e.g. `G-XXXXXXXXXX`). Empty disables analytics.                       |
-| `MEDIUM_USERNAME`      | Optional   | Medium handle (no `@`) that powers `/blog`. Empty renders an empty list.                                 |
+| `MEDIUM_USERNAME`      | Optional   | Medium handle (no `@`) used by the refresh script (`refresh-medium-feed.yml` + skill). Empty disables refreshes. `/blog` reads from the snapshot, not the network. |
 
 Everything else lives in code under `app/config/`. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the schema-stability policy that keeps your fork forward-compatible.
 
@@ -105,7 +105,7 @@ The fastest path. After forking:
 3. Set the three env vars from the [Configuration table](#configuration) in **Settings → Environment Variables** for Production.
 4. Deploy.
 
-The `refresh-medium-feed.yml` workflow runs weekly and refreshes the local Medium snapshot. Set `MEDIUM_USERNAME` as a repo variable at **Settings → Secrets and variables → Actions → Variables** so the workflow can read it.
+The `refresh-medium-feed.yml` workflow runs weekly and on manual dispatch. It calls the merge-on-hash refresh script — every existing post that's still in the live RSS window gets a per-post file write only if its content changed; new posts are appended; older posts in the snapshot are kept. Set `MEDIUM_USERNAME` as a repo variable at **Settings → Secrets and variables → Actions → Variables** so the workflow can read it.
 
 ### Other hosts
 
