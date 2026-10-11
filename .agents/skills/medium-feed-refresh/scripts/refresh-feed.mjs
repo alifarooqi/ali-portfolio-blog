@@ -121,7 +121,7 @@ async function run() {
       title: item.title,
       link,
       slug,
-      isoDate: item.isoDate,
+      date: item.isoDate,
       content: body,
       subtitle: extractSubtitle(body),
       image: extractImage(body),

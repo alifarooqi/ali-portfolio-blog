@@ -64,7 +64,7 @@ const postFile = {
   title: args.title,
   link: args.link,
   slug: args.slug,
-  isoDate: args.date,
+  date: args.date,
   content: body,
   subtitle,
   image,

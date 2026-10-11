@@ -8,7 +8,7 @@ description: Used when running the Medium blog refresh — merges the live RSS f
 This skill refreshes the content-addressed snapshot of the user's Medium blog:
 
 - `lib/medium-list.json` — index/metadata (one entry per post: `slug`, `hash`, `title`, `subtitle`, `image`, `date`, `link`). Used by `/blog`.
-- `lib/posts-data/<slug>.json` — full per-post content (Medium `title`, `link`, `slug`, `isoDate`, `content`, `subtitle`, `image`). Used by `/blog/[slug]`.
+- `lib/posts-data/<slug>.json` — full per-post content (`title`, `link`, `slug`, `date`, `content`, `subtitle`, `image`). Used by `/blog/[slug]`.
 
 ## How it merges
 
