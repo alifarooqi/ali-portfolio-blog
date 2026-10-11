@@ -45,7 +45,7 @@ export default function BlogCard({ post }: { post: MediumPost }) {
         {post.date && (
           <p className="text-sm mt-1 italic">{new Date(post.date).toDateString()}</p>
         )}
-        <p className="mt-3 line-clamp-3">{post.summary}</p>
+        <p className="mt-3 line-clamp-3">{post.subtitle}</p>
       </div>
     </Link>
   );

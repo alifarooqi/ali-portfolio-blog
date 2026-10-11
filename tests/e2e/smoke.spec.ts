@@ -1,12 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
 
 // Errors we accept as non-fatal:
-// - `getMediumPosts` (lib/medium.ts) catches network failures and falls back
-//   to the bundled JSON fixture, but logs the error before doing so.
+// - `getMediumPosts` (lib/medium.ts) previously caught network failures and
+//   logged to the console before falling back to a snapshot. The lib no
+//   longer touches the network at runtime, so the Medium-specific pattern is
+//   no longer needed.
 // - Resource 404s (missing favicon / og:image assets) surface as console
 //   errors in Chromium but don't affect functionality. Tracked separately.
 const ACCEPTED_ERROR_PATTERNS = [
-  /Error fetching Medium posts/i,
   /Failed to load resource.*404/i,
   /Refused to execute script from.*_vercel/i,
 ];
@@ -44,10 +45,10 @@ test.describe("smoke", () => {
     const firstCard = page.locator("a.blog-card").first();
     const cardCount = await firstCard.count();
 
-    // CI runs against a fresh build with an empty MEDIUM_USERNAME and an
-    // empty lib/medium-feed.json snapshot — the index page should render
-    // without errors in that case. The post-navigation half only runs when
-    // a card is present (i.e. MEDIUM_USERNAME was set in the test env).
+    // CI runs against a fresh build with an empty lib/medium-list.json
+    // (`{ "posts": [] }`) — the index page should render without errors in
+    // that case. The post-navigation half only runs when a card is present
+    // (i.e. posts were committed).
     if (cardCount === 0) {
       await expect(page.locator("h1")).toContainText(/blog/i);
       return;

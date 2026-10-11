@@ -1,132 +1,186 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import Parser from "rss-parser";
 
-import { parseMediumFeed } from "./medium";
-import mediumFeed from "./medium-feed.json";
-import type { MediumFeedItem } from "./medium";
+import type { MediumPost } from "./medium";
 
-// Cast fixture so the rss2json-shaped JSON (no `content:encoded`, no `isoDate`)
-// doesn't fight the Parser<T> generics used elsewhere.
-const fixture = mediumFeed as unknown as Parser.Output<MediumFeedItem>;
+// `lib/medium.ts` reads the curated list from a static JSON import and per-post
+// files from disk at runtime. We mock both layers so the tests don't depend on
+// what's actually on disk in CI.
+//
+// `vi.mock()` is hoisted above the import, so the `vi.mock` calls have to
+// reference variables that don't exist yet at the top — that's why we read
+// from `vi.hoisted` and only set the values inside `beforeEach`.
 
-describe("parseMediumFeed", () => {
-  it("maps title / link / isoDate onto the post", () => {
-    const feed = {
-      items: [
-        {
-          title: "Hello World",
-          link: "https://medium.com/@user/hello-world-abc123?source=rss-1",
-          isoDate: "2024-01-05T00:00:00.000Z",
-          "content:encoded": "<p>body</p>",
-        },
-      ],
-    } as unknown as Parser.Output<MediumFeedItem>;
+const { mockList, readFileMock } = vi.hoisted(() => ({
+  mockList: { current: { posts: [] } as { posts: unknown[] } },
+  readFileMock: { current: undefined as unknown },
+}));
 
-    const [post] = parseMediumFeed(feed);
+vi.mock("./medium-list.json", () => ({
+  default: { get posts() { return mockList.current.posts; } },
+}));
 
-    expect(post.title).toBe("Hello World");
-    expect(post.link).toBe("https://medium.com/@user/hello-world-abc123?source=rss-1");
-    expect(post.date).toBe("2024-01-05T00:00:00.000Z");
-  });
+vi.mock("fs", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("fs")>();
+  return {
+    ...actual,
+    promises: {
+      ...actual.promises,
+      readFile: (...args: unknown[]) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (readFileMock.current as any)?.(...args),
+    },
+  };
+});
 
-  it("strips tags, slices 160 and appends ellipsis for summary", () => {
-    const body = "<p>This is <strong>plain</strong> text.</p>";
-    const feed = {
-      items: [{ title: "T", link: "https://m/x-y", "content:encoded": body }],
-    } as unknown as Parser.Output<MediumFeedItem>;
-
-    const [post] = parseMediumFeed(feed);
-
-    // Each tag is replaced with a single space (leading/double spaces result).
-    // Note: this also characterizes a minor pre-existing whitespace bug; if the
-    // strip logic is later improved to collapse/drop empty space, update this.
-    const stripped = body.replace(/<[^>]+>/g, " ");
-    expect(post.summary).toBe(`${stripped.slice(0, 160)}...`);
-  });
-
-  it("extracts the first <img src> as image", () => {
-    const feed = {
-      items: [
-        {
-          title: "T",
-          link: "https://m/x-y",
-          "content:encoded":
-            '<p>hi</p><img src="https://cdn.example.com/a.png" alt="a"/><img src="second"/>',
-        },
-      ],
-    } as unknown as Parser.Output<MediumFeedItem>;
-
-    const [post] = parseMediumFeed(feed);
-
-    expect(post.image).toBe("https://cdn.example.com/a.png");
-  });
-
-  it("derives slug from last path segment of link, stripping the query", () => {
-    const feed = {
-      items: [
-        {
-          title: "T",
-          link: "https://medium.com/@user/my-slug-123?source=rss-abc&ref=test",
-          "content:encoded": "<p>x</p>",
-        },
-      ],
-    } as unknown as Parser.Output<MediumFeedItem>;
-
-    const [post] = parseMediumFeed(feed);
-
-    expect(post.slug).toBe("my-slug-123");
-  });
-
-  it("falls back to item.content when content:encoded is absent", () => {
-    const feed = {
-      items: [
-        {
-          title: "T",
-          link: "https://m/x-y",
-          content: "<p>fallback body</p>",
-        },
-      ],
-    } as unknown as Parser.Output<MediumFeedItem>;
-
-    const [post] = parseMediumFeed(feed);
-
-    expect(post.content).toBe("<p>fallback body</p>");
-    expect(post.summary).toContain("fallback body");
-  });
+beforeEach(() => {
+  mockList.current = { posts: [] };
+  readFileMock.current = undefined;
+  vi.resetModules();
 });
 
 describe("getMediumPosts", () => {
-  beforeEach(() => {
-    vi.resetModules();
-  });
+  it("returns one MediumPost per item in the curated list, in stored order", async () => {
+    mockList.current = {
+      posts: [
+        {
+          slug: "a-1",
+          hash: "h1",
+          title: "Alpha",
+          subtitle: "Alpha teaser",
+          image: "https://cdn/a.png",
+          date: "2024-01-02T00:00:00.000Z",
+          link: "https://medium.com/@u/a-1",
+        },
+        {
+          slug: "b-2",
+          hash: "h2",
+          title: "Bravo",
+          subtitle: "Bravo teaser",
+          image: "https://cdn/b.png",
+          date: "2024-01-01T00:00:00.000Z",
+          link: "https://medium.com/@u/b-2",
+        },
+      ],
+    };
 
-  it("returns the empty snapshot when MEDIUM_USERNAME is unset", async () => {
-    delete process.env.MEDIUM_USERNAME;
     const { getMediumPosts } = await import("./medium");
     const posts = await getMediumPosts();
 
-    expect(posts).toEqual([]);
-  });
-
-  it("returns parsed fixture when parseURL throws", async () => {
-    process.env.MEDIUM_USERNAME = "test_user";
-    vi.doMock("rss-parser", () => ({
-      default: class {
-        parseURL() {
-          throw new Error("network down");
-        }
+    expect(posts).toEqual([
+      {
+        title: "Alpha",
+        subtitle: "Alpha teaser",
+        image: "https://cdn/a.png",
+        date: "2024-01-02T00:00:00.000Z",
+        link: "https://medium.com/@u/a-1",
+        slug: "a-1",
       },
-    }));
+      {
+        title: "Bravo",
+        subtitle: "Bravo teaser",
+        image: "https://cdn/b.png",
+        date: "2024-01-01T00:00:00.000Z",
+        link: "https://medium.com/@u/b-2",
+        slug: "b-2",
+      },
+    ]);
+  });
+
+  it("returns [] when the list is empty", async () => {
+    const { getMediumPosts } = await import("./medium");
+    expect(await getMediumPosts()).toEqual([]);
+  });
+
+  it("returns [] when the list is malformed (no `posts` array)", async () => {
+    // @ts-expect-error — deliberately malformed mock
+    mockList.current = {};
+    const { getMediumPosts } = await import("./medium");
+    expect(await getMediumPosts()).toEqual([]);
+  });
+
+  it("uses '' for `subtitle` when the entry has none", async () => {
+    mockList.current = {
+      posts: [
+        {
+          slug: "a-1",
+          hash: "h1",
+          title: "Alpha",
+          image: "https://cdn/a.png",
+          date: "2024-01-02T00:00:00.000Z",
+          link: "https://medium.com/@u/a-1",
+        },
+      ],
+    };
 
     const { getMediumPosts } = await import("./medium");
-    const posts = await getMediumPosts();
+    const [post] = await getMediumPosts();
+    expect(post?.subtitle).toBe("");
+  });
+});
 
-    // The mocked parseURL throws, the catch returns the fixture, and
-    // `fixture.items` is `[]` after the open-source scrub — so the assertion
-    // doubles as a "we hit the catch path" check (any deviation would mean
-    // parseURL was reached, returned non-array, or the fixture was bypassed).
-    expect(posts).toEqual(fixture.items);
+describe("getMediumPost", () => {
+  it("returns the parsed per-post file when both list and file are present", async () => {
+    mockList.current = {
+      posts: [
+        {
+          slug: "a-1",
+          hash: "h1",
+          title: "Alpha",
+          subtitle: "Alpha teaser",
+          image: "https://cdn/a.png",
+          date: "2024-01-02T00:00:00.000Z",
+          link: "https://medium.com/@u/a-1",
+        },
+      ],
+    };
 
-    delete process.env.MEDIUM_USERNAME;
+    const filePayload: MediumPost = {
+      title: "Alpha (full)",
+      link: "https://medium.com/@u/a-1",
+      slug: "a-1",
+      isoDate: "2024-01-02T00:00:00.000Z",
+      content: "<p>body</p>",
+      subtitle: "long-form teaser",
+      image: "https://cdn/a.png",
+    };
+    readFileMock.current = async (filePath: string) => {
+      if (String(filePath).endsWith("a-1.json")) return JSON.stringify(filePayload);
+      throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+    };
+
+    const { getMediumPost } = await import("./medium");
+    const post = await getMediumPost("a-1");
+
+    expect(post).toEqual(filePayload);
+  });
+
+  it("returns `undefined` when the slug is not in the list", async () => {
+    // readFile would explode if it were called — proves we don't read the disk
+    // when the list lookup fails.
+    readFileMock.current = async () => {
+      throw new Error("should not be called");
+    };
+
+    const { getMediumPost } = await import("./medium");
+    expect(await getMediumPost("not-in-list")).toBeUndefined();
+  });
+
+  it("returns `undefined` when the per-post file is missing on disk", async () => {
+    mockList.current = {
+      posts: [
+        {
+          slug: "a-1",
+          hash: "h1",
+          title: "Alpha",
+          link: "https://medium.com/@u/a-1",
+        },
+      ],
+    };
+    readFileMock.current = async () => {
+      throw Object.assign(new Error("ENOENT"), { code: "ENOENT" });
+    };
+
+    const { getMediumPost } = await import("./medium");
+    expect(await getMediumPost("a-1")).toBeUndefined();
   });
 });
