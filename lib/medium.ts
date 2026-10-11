@@ -11,6 +11,7 @@ export type MediumPost = Partial<{
   link: string;
   content: string; // sanitized HTML body
   date: string;
+  isoDate: string; // per-post file's `isoDate` (Medium's `pubDate`); `date` on the list entry is the same value but typed separately
   slug: string;
   subtitle: string; // auto-extracted first ~160 chars (HTML-stripped) + ellipsis
   image: string;
