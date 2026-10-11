@@ -138,7 +138,7 @@ describe("getMediumPost", () => {
       title: "Alpha (full)",
       link: "https://medium.com/@u/a-1",
       slug: "a-1",
-      isoDate: "2024-01-02T00:00:00.000Z",
+      date: "2024-01-02T00:00:00.000Z",
       content: "<p>body</p>",
       subtitle: "long-form teaser",
       image: "https://cdn/a.png",
