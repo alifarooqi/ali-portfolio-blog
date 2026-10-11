@@ -51,7 +51,7 @@ Homepage content is centralized, not scattered across components:
 Blog posts are **not** local MDX. The runtime reads from two committed sources, both in `lib/`:
 
 - `lib/medium-list.json` — index used by `/blog`. Each entry: `slug`, `hash`, `title`, `subtitle`, `image`, `date`, `link`. `hash` is SHA-256 of the post's `content:encoded` and is internal storage only.
-- `lib/posts-data/<slug>.json` — full per-post content (`title`, `link`, `slug`, `isoDate`, `content`, `subtitle`, `image`) used by `/blog/[slug]`.
+- `lib/posts-data/<slug>.json` — full per-post content (`title`, `link`, `slug`, `date`, `content`, `subtitle`, `image`) used by `/blog/[slug]`.
 
 `lib/medium.ts` does no network I/O: it statically imports the list and reads per-post files from disk at runtime. ISR (`revalidate = 12 * 3600` on the blog routes) is the only cache layer.
 
