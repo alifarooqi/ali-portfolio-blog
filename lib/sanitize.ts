@@ -1,6 +1,6 @@
 import DOMPurify from "isomorphic-dompurify";
 
-// Allowlist derived from the actual content of lib/medium-feed.json
+// Allowlist derived from the actual content of the Medium posts snapshot
 // (13 tags observed: em, strong, blockquote, h3, h4, p, figcaption, figure,
 // img, li, ol, ul, a) plus tags the issue anticipates for future posts
 // (h2, pre, code, hr). See lib/sanitize.test.ts for the contract.

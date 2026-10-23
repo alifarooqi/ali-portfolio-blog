@@ -142,7 +142,7 @@ async function run() {
           title: postFile.title,
           subtitle: postFile.subtitle,
           image: postFile.image,
-          date: postFile.isoDate,
+          date: postFile.date,
           link: postFile.link,
         },
       };
@@ -156,7 +156,7 @@ async function run() {
         title: postFile.title,
         subtitle: postFile.subtitle,
         image: postFile.image,
-        date: postFile.isoDate,
+        date: postFile.date,
         link: postFile.link,
       });
       added++;
