@@ -1,6 +1,15 @@
 {
   "posts": [
     {
+      "slug": "a-new-digital-divide-the-ai-you-use-can-decide-what-jobs-you-get-df3e54856cf6",
+      "hash": "78d89e62a5d20724cf185958740e70dbd0f4a1bfb4bd646510fe5fc31020b07f",
+      "title": "A new digital divide: The AI you use can decide what jobs you get",
+      "subtitle": " AI screeners are 23–60% more likely to shortlist CVs written by their own model — and the model you use is quietly becoming a marker of where you land in socie…",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*X6FNkmq3VC4q0JR7T_KRhg.png",
+      "date": "2026-10-22T13:01:37.000Z",
+      "link": "https://medium.com/@ali_farooqi/a-new-digital-divide-the-ai-you-use-can-decide-what-jobs-you-get-df3e54856cf6"
+    },
+    {
       "slug": "laya-vs-jev-can-open-source-decision-models-kill-managed-service-jev-78862ee535bd",
       "hash": "8b4f41831c3f0280cab0bd2a7eaa8d1f038acc64d423c94f5087f52798d2c7da",
       "title": "Laya vs Jev: Can Open-Source Decision Models kill managed service Jev?",

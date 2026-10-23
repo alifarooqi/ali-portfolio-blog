@@ -2,11 +2,12 @@ name: Refresh Medium feed snapshot
 
 on:
   schedule:
-    # Weekly at 09:00 UTC on Mondays. The snapshot is a fallback for when
-    # medium.com/feed is unreachable (#42), so the refresh cadence can be
-    # much lower than the 12h ISR on the blog routes. Cadence is "weekly
+    # Weekly at 09:00 UTC on Mondays. The committed snapshot is the blog's
+    # only content source (the runtime does no network I/O), so this
+    # workflow is how new Medium posts land in the repo. Cadence is "weekly
     # or so" per the maintainer — a fresh Medium post typically lands within
-    # a few days, so weekly catches the user's new posts without noise.
+    # a few days, so weekly catches the user's new posts without noise;
+    # the manual trigger below covers "published just now".
     - cron: "0 9 * * 1"
   # Manual trigger so the maintainer can refresh on demand (e.g. right after
   # publishing a new Medium post) without waiting for the next scheduled run.
@@ -37,16 +38,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # The refresh script writes Parser.Output JSON to lib/medium-feed.json,
-      # which is the exact shape `parseMediumFeed` expects — see the
-      # comment at the top of the script.
+      # The merge-on-hash refresh script merges the live RSS feed into the
+      # content-addressed snapshot: lib/posts-data/<slug>.json is rewritten
+      # only when a post's content hash changes, new slugs are appended to
+      # lib/medium-list.json, and posts that aged out of Medium's ~10-item
+      # RSS window are never pruned. See the script header for details.
       - name: Refresh Medium feed snapshot
-        run: node scripts/refresh-medium-feed.mjs
+        run: node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs
 
       - name: Check whether the snapshot changed
         id: check
         run: |
-          if git diff --quiet lib/medium-feed.json; then
+          # git status (not git diff) so a brand-new, still-untracked
+          # per-post file in lib/posts-data/ also counts as a change.
+          if [ -z "$(git status --porcelain -- lib/medium-list.json lib/posts-data)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -60,6 +65,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add lib/medium-feed.json
+          git add lib/medium-list.json lib/posts-data
           git commit -m "chore(medium): refresh feed snapshot [skip ci]"
           git push
