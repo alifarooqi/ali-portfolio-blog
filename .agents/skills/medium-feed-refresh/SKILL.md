@@ -46,4 +46,4 @@ node .agents/skills/medium-feed-refresh/scripts/backfill-post.mjs \
 
 ## Workflow
 
-`.github/workflows/refresh-medium-feed.yml` runs this script weekly and on manual dispatch. It is the same script — no separate logic.
+`.github/workflows/refresh-medium-feed.yml` runs this script daily and on manual dispatch. It is the same script — no separate logic.
