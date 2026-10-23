@@ -2,13 +2,13 @@ name: Refresh Medium feed snapshot
 
 on:
   schedule:
-    # Weekly at 09:00 UTC on Mondays. The committed snapshot is the blog's
-    # only content source (the runtime does no network I/O), so this
-    # workflow is how new Medium posts land in the repo. Cadence is "weekly
-    # or so" per the maintainer — a fresh Medium post typically lands within
-    # a few days, so weekly catches the user's new posts without noise;
-    # the manual trigger below covers "published just now".
-    - cron: "0 9 * * 1"
+    # Daily at 09:00 UTC. The committed snapshot is the blog's only content
+    # source (the runtime does no network I/O), so this workflow is how new
+    # Medium posts land in the repo. Daily is cheap: the merge-on-hash
+    # script is idempotent, so a run with no Medium changes writes nothing
+    # and the commit step skips — a fresh post is live within ~24h,
+    # hands-free. The manual trigger below covers "published just now".
+    - cron: "0 9 * * *"
   # Manual trigger so the maintainer can refresh on demand (e.g. right after
   # publishing a new Medium post) without waiting for the next scheduled run.
   workflow_dispatch:

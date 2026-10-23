@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Personal image assets removed; `public/images/avatar-placeholder.webp` is a copy of `bg01.webp` — replace with your own portrait.
 - `public/site.webmanifest` updated to placeholders; edit it directly to match `CommonConfig.name` / `shortName`.
 - `package.json` gains `name`, `description`, `keywords`, `license`, `repository`, `bugs`, `homepage`, `author`.
+- `refresh-medium-feed.yml` cadence: weekly (Mon 09:00 UTC) → daily (09:00 UTC). The merge-on-hash refresh is idempotent — a run with no Medium changes writes nothing and the bot's commit step skips — so the tighter cadence costs a ~30s Actions run and lands a freshly published Medium post within ~24h without manual dispatch.
 
 ### Fixed
 
