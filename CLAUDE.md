@@ -53,7 +53,7 @@ Blog posts are **not** local MDX. The runtime reads from two committed sources, 
 - `lib/medium-list.json` — index used by `/blog`. Each entry: `slug`, `hash`, `title`, `subtitle`, `image`, `date`, `link`. `hash` is SHA-256 of the post's `content:encoded` and is internal storage only.
 - `lib/posts-data/<slug>.json` — full per-post content (`title`, `link`, `slug`, `date`, `content`, `subtitle`, `image`) used by `/blog/[slug]`.
 
-`lib/medium.ts` does no network I/O: it statically imports the list and reads per-post files from disk at runtime. ISR (`revalidate = 12 * 3600` on the blog routes) is the only cache layer.
+`lib/medium.ts` does no network I/O: it statically imports the list and reads per-post files from disk at runtime. All blog routes are pure build-time SSG — no ISR anywhere (the former `revalidate = 43200` was vestigial: data is baked per-deployment, and its cold-re-render path caused the GoogleBot/unfurl 500s of issue #2). Deployments are the cache boundary; the only runtime cache is the OG route's CDN `cache-control` (TTL in `lib/revalidate.ts`).
 
 The `medium-feed-refresh` skill (and its `.github/workflows/refresh-medium-feed.yml` runner) merges live RSS items into the snapshot: per-post files are only rewritten when the SHA-256 of `content:encoded` changes; new slugs are appended; items in the snapshot whose slug is **not** in the live feed are kept (history is never pruned — solves Medium's ~10-item RSS cap from dropping older posts). To add a post older than the live RSS window, backfill its per-post file and add a list entry by hand.
 

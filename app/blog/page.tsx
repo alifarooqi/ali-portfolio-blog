@@ -8,9 +8,11 @@ export const metadata = {
   description: "Read my blog.",
 };
 
-// 12h. Duplicated across sitemap.ts, blog/[slug]/page.tsx, og/route.tsx —
-// Next.js requires literals here; see lib/revalidate.ts for the source of truth.
-export const revalidate = 43200;
+// Fully static at build: the committed snapshot is baked into each deployment,
+// and new posts land via git push → rebuild (the Medium refresh workflow),
+// never via ISR. The former revalidate = 43200 was vestigial — a re-render
+// could only reproduce identical HTML and reopened the cold-render 500 path
+// (issue #2).
 
 export default async function Page() {
   const posts = await getMediumPosts();

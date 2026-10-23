@@ -27,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - `refresh-medium-feed.yml` still ran the pre-migration raw-RSS script and diffed the since-deleted `lib/medium-feed.json`, so every scheduled or manual refresh was a silent no-op (the "commit if changed" step always skipped — the freshly written file was untracked, and `git diff` never sees untracked files). It now runs the merge-on-hash refresh and commits `lib/medium-list.json` + `lib/posts-data/` when either changes.
 - `refresh-feed.mjs` wrote `date: postFile.isoDate` into `medium-list.json` entries for new/updated posts — `undefined` (silently dropped by `JSON.stringify`) since the per-post field was renamed to `date`, so new list entries lost their date. Now writes `postFile.date`.
+- Blog routes are now pure build-time SSG: removed the vestigial `revalidate = 43200` from `app/blog/page.tsx`, `app/blog/[slug]/page.tsx`, and `app/sitemap.ts` (plus the inert copy on the OG route — it reads searchParams, so route handlers are uncached regardless). The snapshot is baked into each deployment, so ISR re-renders could never produce new HTML — they only reopened the cold-re-render path whose jsdom bundling 500s intermittently broke GoogleBot indexing and LinkedIn unfurl previews (issue #2). Deployments are the cache boundary.
 
 ### Removed
 
