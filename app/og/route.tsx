@@ -13,15 +13,12 @@ import { REVALIDATE_INTERVAL_SECONDS } from "@/lib/revalidate";
 // edge-compatible font fetch; the signature SVG carries enough branding that
 // the system sans is fine.
 //
-// ISR revalidate matches the blog routes (12h) so a single rendered card is
-// reused across crawlers/share previews; the cache-control header does the
-// same for downstream CDNs (Vercel respects it for the edge cache).
-//
-// 43200 is duplicated across sitemap.ts, blog/page.tsx, blog/[slug]/page.tsx
-// — Next.js requires literals here; see lib/revalidate.ts for the source of
-// truth. The cache-control header below imports the constant (runtime code
-// is not subject to the segment-config literal restriction).
-export const revalidate = 43200;
+// Dynamic route (reads searchParams) — Next route handlers that use the
+// request are uncached by default, so the former `export const revalidate`
+// was inert here and was removed along with the blog routes' ISR. The real
+// caching is the explicit cache-control header below: Vercel's edge caches
+// each rendered card for s-maxage and serves stale up to a week while
+// revalidating (the TTL comes from lib/revalidate.ts).
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);
