@@ -22,6 +22,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `public/site.webmanifest` updated to placeholders; edit it directly to match `CommonConfig.name` / `shortName`.
 - `package.json` gains `name`, `description`, `keywords`, `license`, `repository`, `bugs`, `homepage`, `author`.
 
+### Fixed
+
+- `refresh-medium-feed.yml` checked for and committed `lib/medium-feed.json` — deleted by the content-addressed snapshot migration — while the refresh script actually writes `lib/medium-list.json` + `lib/posts-data/`. The change check therefore always came back empty and every scheduled or manual refresh was a silent no-op. It now detects changes via `git status --porcelain` (which also sees brand-new per-post files) and commits the real snapshot paths.
+- `refresh-feed.mjs` wrote `date: postFile.isoDate` into `medium-list.json` entries for new/updated posts — `undefined` (silently dropped by `JSON.stringify`) since the per-post field was renamed to `date` in 7d0c11d, so new list entries lost their date. Now writes `postFile.date`.
+
 ### Removed
 
 - `public/googlec0f592f80742d3e8.html` (personal Google Search Console token).
