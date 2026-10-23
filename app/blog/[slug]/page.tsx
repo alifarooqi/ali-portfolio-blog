@@ -8,9 +8,13 @@ import AboutWriter from "@/app/components/AboutWriter";
 import CommonConfig from "@/app/config/CommonConfig";
 import "./style.scss";
 
-// 12h. Duplicated across sitemap.ts, blog/page.tsx, og/route.tsx —
-// Next.js requires literals here; see lib/revalidate.ts for the source of truth.
-export const revalidate = 43200;
+// Fully static at build: generateStaticParams covers every snapshot slug, and
+// the snapshot is baked into each deployment — new posts land via git push →
+// rebuild (the Medium refresh workflow), never via ISR (the former
+// revalidate = 43200 was vestigial; see app/blog/page.tsx). dynamicParams =
+// false serves a static 404 for unknown slugs instead of an on-demand render,
+// so no runtime render path exists at all.
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const posts = await getMediumPosts();

@@ -26,10 +26,6 @@ function resolveBaseUrl(): string {
 
 export const baseUrl = resolveBaseUrl();
 
-// 12h. Duplicated across blog/page.tsx, blog/[slug]/page.tsx, og/route.tsx —
-// Next.js requires literals here; see lib/revalidate.ts for the source of truth.
-export const revalidate = 43200;
-
 export default async function sitemap() {
   const posts = await getMediumPosts();
   const blogs = posts.map((post) => ({

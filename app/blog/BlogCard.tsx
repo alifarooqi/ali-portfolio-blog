@@ -7,7 +7,8 @@ import { playSound } from "@/lib/sound";
 
 // Extracted from the /blog listing (app/blog/page.tsx) so the card can attach
 // hover/click sound handlers as a client component while the page itself stays
-// server-side (it owns the Medium fetch + revalidate + metadata).
+// server-side (it owns the metadata; post data comes from the committed
+// snapshot, rendered fully at build).
 export default function BlogCard({ post }: { post: MediumPost }) {
   return (
     <Link
