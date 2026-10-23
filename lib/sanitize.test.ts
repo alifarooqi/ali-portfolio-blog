@@ -56,7 +56,7 @@ describe("sanitizeMediumHtml — allowlist preservation", () => {
     expect(out).not.toContain("title=");
   });
 
-  it("round-trips a real excerpt from lib/medium-feed.json without dropping content", () => {
+  it("round-trips a real excerpt from a Medium post without dropping content", () => {
     // Representative slice of an actual Medium post: figure, em, blockquote,
     // h3, ol, li, strong, code-ish content, a, img.
     const realExcerpt =
