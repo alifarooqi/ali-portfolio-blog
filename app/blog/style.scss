@@ -7,9 +7,16 @@
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   border: 1px solid var(--hairline);
   box-shadow: var(--shadow-card);
+  // Animate only what changes on hover, but note that the lift and scale come
+  // from Tailwind's `hover:-translate-y-1` / `hover:scale-[1.02]` on the same
+  // element — those set the standalone `translate` and `scale` properties, not
+  // `transform`. This rule is unlayered, so it wins over Tailwind's
+  // `transition-all`; if `translate`/`scale` are omitted here the lift snaps.
   transition:
     border-color 0.3s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    translate 0.3s ease,
+    scale 0.3s ease;
 
   &:hover {
     border-color: color-mix(in srgb, var(--brand-color) 50%, transparent);
