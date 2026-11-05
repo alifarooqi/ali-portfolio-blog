@@ -49,3 +49,6 @@ next-env.d.ts
 .claude/settings.local.json
 .claude/tmp.*.txt
 .claude/*.local.json
+
+# Graphify
+/graphify-out

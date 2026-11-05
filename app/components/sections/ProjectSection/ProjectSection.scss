@@ -19,12 +19,13 @@
     width: 100%;
   }
 
-  // Visual nav arrows flanking the carousel.
+  // Visual nav arrows flanking the carousel. Surface comes from the same
+  // glass tokens as the cards so the arrows read as UI, not decoration.
   .project-carousel-btn {
     width: 40px;
     height: 40px;
-    background: color-mix(in srgb, var(--text-secondary) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--text-secondary) 18%, transparent);
+    background: var(--surface-card);
+    border: 1px solid var(--hairline);
     border-radius: 50%;
     color: var(--brand-color);
     cursor: pointer;
@@ -42,10 +43,10 @@
     }
 
     &:hover {
-      background: rgba(var(--brand-color-rgb), 0.15);
-      border-color: var(--brand-color-light);
-      color: var(--text-primary);
-      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color-light) 25%, transparent);
+      background: color-mix(in srgb, var(--brand-color) 12%, var(--surface-card));
+      border-color: color-mix(in srgb, var(--brand-color) 70%, transparent);
+      color: var(--brand-color-strong);
+      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 28%, transparent);
       transform: scale(1.08);
     }
 
@@ -85,21 +86,27 @@
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
-    background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+    border: 1px solid var(--hairline);
+    background: var(--surface-card);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 10px 25px color-mix(in srgb, var(--text-primary) 18%, transparent);
-    transition: border-color 0.3s, box-shadow 0.3s;
+    box-shadow: var(--shadow-card);
+    transition:
+      border-color 0.3s,
+      box-shadow 0.3s;
     scroll-snap-align: center;
 
     &:hover {
-      border-color: color-mix(in srgb, var(--brand-color-light) 45%, transparent);
+      border-color: color-mix(in srgb, var(--brand-color) 55%, transparent);
+      box-shadow: var(--shadow-lift);
     }
 
     &.selected {
-      border-color: var(--brand-color-light);
-      box-shadow: 0 0 25px color-mix(in srgb, var(--brand-color-light) 35%, transparent);
+      border-color: var(--brand-color);
+      box-shadow:
+        var(--shadow-lift),
+        0 0 0 1px color-mix(in srgb, var(--brand-color) 55%, transparent),
+        0 0 26px color-mix(in srgb, var(--brand-color) 32%, transparent);
     }
 
     .project-card-cover {
@@ -177,7 +184,9 @@
     .project-pagination-dot {
       width: 9px;
       height: 9px;
-      background-color: color-mix(in srgb, var(--text-secondary) 30%, transparent);
+      // 70% of --text-secondary clears the 3:1 non-text UI threshold on both
+      // themes; the previous 30% mix was effectively invisible.
+      background-color: color-mix(in srgb, var(--text-secondary) 70%, transparent);
       border: none;
       border-radius: 50%;
       cursor: pointer;
@@ -185,28 +194,22 @@
       padding: 0;
 
       &:hover {
-        background-color: color-mix(in srgb, var(--text-secondary) 60%, transparent);
+        background-color: var(--text-secondary);
         transform: scale(1.2);
       }
 
       &.active {
-        background-color: var(--brand-color-light);
-        box-shadow: 0 0 10px color-mix(in srgb, var(--brand-color-light) 50%, transparent);
+        background-color: var(--brand-color);
+        box-shadow: 0 0 10px color-mix(in srgb, var(--brand-color) 50%, transparent);
         transform: scale(1.3);
       }
     }
   }
 
-  // Inspect panel — uses the shared .glass-card surface treatment so it
-  // matches the Reviews/Experience cards.
+  // Inspect panel — surface comes from the shared .glass-card treatment so it
+  // matches the Reviews/Experience cards; this block owns layout only.
   .project-inspect {
-    background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
-    border-radius: 16px;
     padding: 20px 15px;
-    box-shadow: 0 15px 35px color-mix(in srgb, var(--text-primary) 15%, transparent);
     width: 100%;
     margin-top: 10px;
     height: auto;
@@ -266,7 +269,7 @@
 
       svg {
         font-size: 0.95rem;
-        color: var(--brand-color-light);
+        color: var(--brand-color-ink);
       }
     }
   }
@@ -280,7 +283,7 @@
       margin: 0;
 
       b {
-        color: var(--brand-color-light);
+        color: var(--brand-color-ink);
       }
     }
   }
@@ -324,12 +327,16 @@
     letter-spacing: 0.05rem;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+    transition:
+      background 0.3s,
+      border-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.2s;
 
     .project-action-icon {
       display: flex;
       align-items: center;
-      color: var(--brand-color-light);
+      color: var(--brand-color-ink);
 
       svg {
         font-size: 0.95rem;
@@ -361,8 +368,8 @@
         rgba(var(--brand-color-rgb), 0.45) 0%,
         rgba(var(--brand-color-rgb), 0.15) 100%
       );
-      border-color: var(--brand-color-light);
-      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color-light) 25%, transparent);
+      border-color: var(--brand-color);
+      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 28%, transparent);
       transform: translateY(-2px);
       text-decoration: none;
     }
@@ -431,7 +438,7 @@
 
     .section-header {
       border-right: none !important;
-      border-bottom: 1px solid var(--text-primary) !important;
+      border-bottom: 1px solid var(--hairline) !important;
       padding: 0 0 15px 0 !important;
       margin-bottom: 30px !important;
       justify-content: center !important;

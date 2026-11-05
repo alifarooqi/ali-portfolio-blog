@@ -37,7 +37,7 @@ export function GET(request: Request) {
       }}
     >
       {/* Brand-blue accent bar across the top */}
-      <div style={{ height: 10, width: "100%", backgroundColor: "#3c83f6", display: "flex" }} />
+      <div style={{ height: 10, width: "100%", backgroundColor: "#7fb2ff", display: "flex" }} />
 
       {/* Signature + content */}
       <div
@@ -57,7 +57,7 @@ export function GET(request: Request) {
             viewBox={CommonConfig.signature.viewBox}
             style={{ width: 220, height: 185, marginBottom: 20 }}
           >
-            <path d={CommonConfig.signature.signaturePathD} fill="#3c83f6" />
+            <path d={CommonConfig.signature.signaturePathD} fill="#7fb2ff" />
           </svg>
         )}
 
@@ -77,7 +77,7 @@ export function GET(request: Request) {
         {/* Subtitle / tagline */}
         <div
           style={{
-            color: "#adadad",
+            color: "#c3ccdb",
             fontSize: 30,
             marginTop: 18,
             display: "flex",
@@ -93,7 +93,7 @@ export function GET(request: Request) {
           display: "flex",
           alignItems: "center",
           padding: "0 80px 50px",
-          color: "#3c83f6",
+          color: "#7fb2ff",
           fontSize: 26,
           letterSpacing: 1,
         }}
