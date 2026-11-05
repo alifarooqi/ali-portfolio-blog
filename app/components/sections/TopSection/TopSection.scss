@@ -12,12 +12,24 @@
     width: 40%;
 
     &__kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
       margin: 0 0 0.75rem;
       font-size: 0.85rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--brand-color);
       font-weight: 600;
+
+      // Short brand rule before the kicker — adds a little editorial
+      // structure to the hero without introducing new markup.
+      &::before {
+        content: "";
+        width: 1.75rem;
+        height: 1px;
+        background: linear-gradient(90deg, var(--brand-color), var(--brand-color-ink));
+      }
     }
 
     h1 {

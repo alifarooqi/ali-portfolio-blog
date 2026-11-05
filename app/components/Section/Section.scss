@@ -5,14 +5,16 @@
 
   .section-active {
     // Translucent backdrop over the animated shader background so content
-    // stays readable. color-mix() on --bg-primary makes it theme-aware —
-    // light mode gets a frosted white, dark mode a frosted near-black —
-    // without hardcoded rgba per theme. backdrop-filter stabilizes contrast
-    // over the moving gradient.
-    background: color-mix(in srgb, var(--bg-primary) 82%, transparent);
-    backdrop-filter: blur(14px) saturate(120%);
-    -webkit-backdrop-filter: blur(14px) saturate(120%);
-    box-shadow: 0 0 40px var(--brand-color-light);
+    // stays readable. --surface-section is theme-aware: a frosted white in
+    // light mode, a frosted near-black in dark. The hairline border + shadow
+    // separate the panel from the artwork instead of relying on a neon glow.
+    background: var(--surface-section);
+    backdrop-filter: blur(16px) saturate(115%);
+    -webkit-backdrop-filter: blur(16px) saturate(115%);
+    border: 1px solid var(--hairline);
+    box-shadow:
+      var(--shadow-card),
+      0 0 70px -24px color-mix(in srgb, var(--brand-color) 38%, transparent);
     transform: translateY(-5px) !important;
   }
 
@@ -20,13 +22,19 @@
     padding: 5rem;
     display: flex;
     border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     .section-header {
       font-size: 3rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
       padding-right: 2rem;
       padding-top: 4rem;
-      border-right: 1px solid var(--text-primary);
+      border-right: 1px solid var(--hairline);
       display: flex;
       align-items: center;
 
@@ -55,7 +63,7 @@
         }
       }
       b {
-        color: var(--brand-color-light);
+        color: var(--brand-color-ink);
       }
     }
 
@@ -66,7 +74,7 @@
         border-right: none;
         padding-right: 0;
         padding-left: 2rem;
-        border-left: 1px solid var(--text-primary);
+        border-left: 1px solid var(--hairline);
       }
 
       .section-content {
@@ -98,7 +106,7 @@
         padding: 0;
         padding-bottom: 0.7rem;
         border: none;
-        border-bottom: 1px solid var(--text-primary);
+        border-bottom: 1px solid var(--hairline);
         text-align: center;
         justify-content: center;
       }

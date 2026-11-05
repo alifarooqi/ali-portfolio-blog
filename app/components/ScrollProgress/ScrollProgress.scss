@@ -9,9 +9,9 @@
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    var(--brand-color) 0%,
-    var(--brand-color-light) 50%,
-    #7dffff 100%
+    var(--brand-color-strong) 0%,
+    var(--brand-color) 45%,
+    var(--brand-color-ink) 100%
   );
   box-shadow: 0 0 12px rgba(var(--brand-color-rgb), 0.5);
 }
