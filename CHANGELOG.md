@@ -22,12 +22,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `public/site.webmanifest` updated to placeholders; edit it directly to match `CommonConfig.name` / `shortName`.
 - `package.json` gains `name`, `description`, `keywords`, `license`, `repository`, `bugs`, `homepage`, `author`.
 - `refresh-medium-feed.yml` cadence: weekly (Mon 09:00 UTC) → daily (09:00 UTC). The merge-on-hash refresh is idempotent — a run with no Medium changes writes nothing and the bot's commit step skips — so the tighter cadence costs a ~30s Actions run and lands a freshly published Medium post within ~24h without manual dispatch.
+- Design token system reworked into named roles: `--brand-color` (text-safe), `--brand-color-strong`, `--brand-color-ink` (accent text on light), `--brand-color-light` (decorative), plus `--bg-elevated`, `--hairline`, `--surface-card`, `--surface-section`, `--shadow-card`, `--shadow-lift`, `--on-brand`.
+- Light-mode shader palette muted (softer blue, muted teal, star intensity 0.22 → 0.14, higher ambient floor) and covered by a readability veil; dark mode kept its palette and gained a corner vignette so the fixed nav rails sit on a stable backdrop.
+- Section panels, blog cards, blog post surface, project cards and the project inspect panel now share one hairline + layered-shadow surface language. The duplicated card treatment was extracted into a shared `.glass-card` utility with a lit top edge and hover lift.
+- Typography polish: `text-wrap: balance` on headings, tighter tracking, antialiased body text, tinted text selection, and a short gradient rule before the hero kicker.
+- Added `@media (prefers-contrast: more)` overrides for secondary ink and hairlines.
+- OG social card recoloured to the new dark-theme palette.
 
 ### Fixed
 
 - `refresh-medium-feed.yml` checked for and committed `lib/medium-feed.json` — deleted by the content-addressed snapshot migration — while the refresh script actually writes `lib/medium-list.json` + `lib/posts-data/`. The change check therefore always came back empty and every scheduled or manual refresh was a silent no-op. It now detects changes via `git status --porcelain` (which also sees brand-new per-post files) and commits the real snapshot paths.
 - `refresh-feed.mjs` wrote `date: postFile.isoDate` into `medium-list.json` entries for new/updated posts — `undefined` (silently dropped by `JSON.stringify`) since the per-post field was renamed to `date` in 7d0c11d, so new list entries lost their date. Now writes `postFile.date`.
 - Blog routes are now pure build-time SSG: removed the vestigial `revalidate = 43200` from `app/blog/page.tsx`, `app/blog/[slug]/page.tsx`, and `app/sitemap.ts` (plus the inert copy on the OG route — it reads searchParams, so route handlers are uncached regardless). The snapshot is baked into each deployment, so ISR re-renders could never produce new HTML — they only reopened the cold-re-render path whose jsdom bundling 500s intermittently broke GoogleBot indexing and LinkedIn unfurl previews (issue #2). Deployments are the cache boundary.
+- Light-theme contrast failures site-wide: `--text-secondary` moved from `#adadad` (2.2:1) to `#5b6472` (5.7:1), the brand accent from `#3c83f6` (3.5:1) to `#2563eb` (4.95:1), and cyan-as-text (1.5:1) replaced by a text-safe `--brand-color-ink` (`#0e7490`, 5.1:1). `--brand-color-light` is now documented as decorative-only. Dark-theme accent raised from 5.1:1 to 8.6:1 (`#7fb2ff`).
+- Carousel pagination dots (30% → 70% of `--text-secondary`) and section-nav indicators (0.35 → 0.5 opacity) now clear the 3:1 non-text threshold.
+- Focus rings are visible on every interactive element (`:focus-visible`, 2px brand outline with offset) instead of relying on component-specific and inconsistent styles.
 
 ### Removed
 

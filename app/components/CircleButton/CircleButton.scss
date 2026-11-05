@@ -1,5 +1,5 @@
 .circle-button {
-  border: 0.2rem solid rgba(var(--brand-color-rgb), 0.6);
+  border: 0.2rem solid rgba(var(--brand-color-rgb), 0.75);
   color: var(--text-primary);
   background: var(--bg-primary);
   border-radius: 50%;
@@ -28,7 +28,7 @@
   // Keyboard / programmatic focus only — :focus-visible does not fire on
   // mouse clicks, so mouse users see no ring.
   &:focus-visible {
-    outline: 2px solid var(--brand-color-light, #21e5e5);
+    outline: 2px solid var(--brand-color);
     outline-offset: 2px;
   }
 

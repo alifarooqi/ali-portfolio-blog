@@ -3,24 +3,54 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 ::selection {
-  background-color: #47a3f3;
+  background-color: color-mix(in srgb, var(--brand-color) 88%, black);
   color: #fefefe;
 }
 
+/*
+ * Design tokens.
+ *
+ * Two rules keep this honest:
+ *   1. --text-* and --brand-color are TEXT-SAFE: every pairing below passes
+ *      WCAG AA (4.5:1) on --bg-primary. --text-secondary is the smallest text
+ *      the site ships (#5b6472 on #fafafa = 5.7:1, was #adadad at 2.2:1).
+ *   2. --brand-color-light is DECORATIVE ONLY (glows, gradients, fills,
+ *      indicators over dark imagery). It is far too luminous to carry body
+ *      copy in light mode. Use --brand-color-ink when an accent needs to be
+ *      read as text on a light surface.
+ */
 :root {
-  /* TODO convert to tailwind colors */
+  color-scheme: light;
+
+  /* Surfaces */
   --bg-primary: #fafafa;
-  --bg-secondary: #3c83f611; /* 7% opacity of brand color */
+  --bg-secondary: #eef2f8;
+  --bg-elevated: #ffffff;
+
+  /* Text — 17.9:1 and 5.7:1 on --bg-primary */
   --text-primary: #0f131a;
-  --text-secondary: #adadad;
-  --brand-color: #3c83f6;
-  --brand-color-light: #21e5e5;
-  --brand-color-rgb: 60, 131, 246;
+  --text-secondary: #5b6472;
+
+  /* Brand — #2563eb is 4.95:1 on #fafafa; the cyan is fill-only. */
+  --brand-color: #2563eb;
+  --brand-color-strong: #1d4ed8;
+  --brand-color-light: #22b8cf;
+  --brand-color-ink: #0e7490;
+  --brand-color-rgb: 37, 99, 235;
+  --on-brand: #ffffff;
+
+  /* Surfaces composed from the tokens above so glass stays legible over the
+     shader without per-component rgba. */
+  --hairline: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  --surface-card: color-mix(in srgb, var(--bg-elevated) 88%, transparent);
+  --surface-section: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  --shadow-card: 0 1px 2px rgba(15, 19, 26, 0.04), 0 12px 32px rgba(15, 19, 26, 0.06);
+  --shadow-lift: 0 2px 4px rgba(15, 19, 26, 0.05), 0 20px 48px rgba(15, 19, 26, 0.1);
 
   --medium-muted: #475569;
-  --medium-link: #1a73e8;
-  --medium-accent: #7c3aed;
-  --medium-border: #e6eef8;
+  --medium-link: #1a5fb8;
+  --medium-accent: #6d28d9;
+  --medium-border: #e1e8f2;
 
   /* Soft brand-tinted backdrop inside the hero avatar. Pairs with the
      existing inset border on .avatar — together they read as a tinted
@@ -30,14 +60,32 @@
 }
 
 .dark {
+  color-scheme: dark;
+
   --bg-primary: #0f131a;
-  --text-primary: #fafafa;
-  --text-secondary: #e0e0e0;
+  --bg-secondary: #16202e;
+  --bg-elevated: #151b24;
+
+  --text-primary: #f5f7fb;
+  --text-secondary: #c3ccdb;
+
+  --brand-color: #7fb2ff;
+  --brand-color-strong: #a9cbff;
+  --brand-color-light: #3adcd8;
+  --brand-color-ink: #6fe4df;
+  --brand-color-rgb: 127, 178, 255;
+  --on-brand: #071019;
+
+  --hairline: rgba(255, 255, 255, 0.1);
+  --surface-card: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+  --surface-section: color-mix(in srgb, var(--bg-primary) 86%, transparent);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 22px 52px rgba(0, 0, 0, 0.5);
 
   --medium-muted: #a8b3c7;
-  --medium-link: #7fb4ff;
+  --medium-link: #8fbcff;
   --medium-accent: #b58cff;
-  --medium-border: rgba(255, 255, 255, 0.06);
+  --medium-border: rgba(255, 255, 255, 0.08);
 
   /* Dark backdrop swallows more of the glow, so bump alpha to keep it
      readable without making it loud. */
@@ -59,8 +107,12 @@ body {
   color: var(--text-primary);
   font-family: var(--font-varela-round), sans-serif;
   font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   /* Transition for dark mode */
-  transition: all 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 input,
@@ -76,6 +128,16 @@ h4,
 h5,
 h6 {
   color: var(--brand-color);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* Visible, theme-aware keyboard focus everywhere. Components with their own
+   ring (menu toggle, carousel arrows) still override this. */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand-color);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 a {
@@ -83,6 +145,7 @@ a {
   text-decoration: none;
 
   &:hover {
+    color: var(--brand-color);
     text-decoration: underline;
   }
 }
@@ -109,7 +172,9 @@ svg.lucide {
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: 0% 1px;
-  transition: background-size 0.28s ease, color 0.2s ease;
+  transition:
+    background-size 0.28s ease,
+    color 0.2s ease;
 
   &:hover,
   &:focus-visible {
@@ -142,26 +207,61 @@ svg.lucide {
    Experience timeline, Reviews). Compose with a component class that
    owns layout + padding — this owns only the surface treatment. */
 .glass-card {
-  background: color-mix(in srgb, var(--bg-primary) 72%, transparent);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  border: 1px solid color-mix(in srgb, var(--text-secondary) 22%, transparent);
+  position: relative;
+  background: var(--surface-card);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid var(--hairline);
   border-radius: 14px;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  box-shadow: var(--shadow-card);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+/* A 1px top highlight reads as a lit edge — the difference between a printed
+   panel and a sheet of frosted glass. Purely decorative, pointer-transparent. */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--bg-elevated) 90%, transparent) 22%,
+    color-mix(in srgb, var(--bg-elevated) 90%, transparent) 78%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.dark .glass-card::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14) 22%,
+    rgba(255, 255, 255, 0.14) 78%,
+    transparent
+  );
 }
 
 .glass-card:hover {
-  border-color: color-mix(in srgb, var(--brand-color) 45%, transparent);
+  border-color: color-mix(in srgb, var(--brand-color) 42%, var(--hairline));
+  box-shadow: var(--shadow-lift);
 }
 
 /* Brand-tinted pill for tech chips and status badges. Size-specific
-   padding/font-size come from the composing class. */
+   padding/font-size come from the composing class. --text-secondary is
+   AA-safe on both themes, so chips stay readable instead of decorative. */
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--text-secondary) 25%, transparent);
+  border: 1px solid var(--hairline);
   background: color-mix(in srgb, var(--brand-color) 8%, transparent);
   color: var(--text-secondary);
 }
@@ -236,6 +336,20 @@ table {
 @media screen and (max-width: 768px) {
   body {
     padding-top: 3rem;
+  }
+}
+
+/* Users who explicitly ask for more contrast get a stronger secondary ink and
+   more visible hairlines — all other design choices stay untouched. */
+@media (prefers-contrast: more) {
+  :root {
+    --text-secondary: #3d4552;
+    --hairline: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  }
+
+  .dark {
+    --text-secondary: #e2e8f2;
+    --hairline: rgba(255, 255, 255, 0.26);
   }
 }
 
