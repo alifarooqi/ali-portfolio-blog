@@ -40,14 +40,16 @@ function MarqueeRow({ items, direction }: { items: IconKey[]; direction: "left" 
 const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
   <Section ref={ref} sectionConfig={aboutSectionConfig} isReversed extraClass="about-section">
     <div className="about-bento">
-      <MotionDiv variants={slideInRight} className="about-bento__card about-bento__bio">
-        <h3>
-          {getIcon("helpoutline")} Who is this guy?
-        </h3>
+      <MotionDiv variants={slideInRight} className="about-bento__card glass-card about-bento__bio">
+        <h3>{getIcon("helpoutline")} Who is this guy?</h3>
         <p>{AboutConfig.bio}</p>
       </MotionDiv>
 
-      <MotionDiv variants={zoomIn} className="about-bento__card about-bento__stats" delay={0.15}>
+      <MotionDiv
+        variants={zoomIn}
+        className="about-bento__card glass-card about-bento__stats"
+        delay={0.15}
+      >
         {AboutConfig.stats.map((stat) => (
           <div key={stat.label} className="about-bento__stat">
             <span className="about-bento__stat-value">{stat.value}</span>
@@ -58,7 +60,7 @@ const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
 
       <MotionDiv
         variants={slideInLeft}
-        className="about-bento__card about-bento__marquee about-bento__marquee--prog"
+        className="about-bento__card glass-card about-bento__marquee about-bento__marquee--prog"
         delay={0.2}
       >
         <h3>{getIcon("code")} Programming</h3>
@@ -67,7 +69,7 @@ const AboutSection = forwardRef<HTMLDivElement>((_, ref) => (
 
       <MotionDiv
         variants={slideInLeft}
-        className="about-bento__card about-bento__marquee about-bento__marquee--tools"
+        className="about-bento__card glass-card about-bento__marquee about-bento__marquee--tools"
         delay={0.3}
       >
         <h3>{getIcon("tools")} Tools</h3>

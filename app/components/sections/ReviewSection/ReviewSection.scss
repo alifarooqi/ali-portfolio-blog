@@ -78,7 +78,7 @@
     align-items: center;
     gap: 0.85rem;
     padding-top: 0.75rem;
-    border-top: 1px solid color-mix(in srgb, var(--text-secondary) 18%, transparent);
+    border-top: 1px solid var(--hairline);
   }
 }
 
@@ -92,8 +92,10 @@
   font-family: var(--font-bricolage), var(--font-varela-round), sans-serif;
   font-weight: 700;
   font-size: clamp(0.95rem, 3vw, 1.1rem);
-  color: #fff;
-  background: linear-gradient(135deg, var(--brand-color), var(--brand-color-light));
+  // --on-brand flips with the theme so the initials stay AA-safe on the
+  // gradient in both modes (white on deep blue, ink on light blue).
+  color: var(--on-brand);
+  background: linear-gradient(135deg, var(--brand-color-strong), var(--brand-color-ink));
   box-shadow: 0 4px 14px rgba(var(--brand-color-rgb), 0.35);
   user-select: none;
 }

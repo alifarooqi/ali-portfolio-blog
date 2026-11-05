@@ -190,7 +190,7 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
         ))}
       </div>
 
-      <div className="project-inspect">
+      <div className="project-inspect glass-card">
         <MotionDiv key={selectedIndex} variants={slideInUp} className="project-inspect-content">
           <div className="project-inspect-header">
             <div className="project-inspect-icon">{activeProject.icon}</div>

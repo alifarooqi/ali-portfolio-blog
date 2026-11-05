@@ -47,11 +47,14 @@
     padding: 0.7rem 1.6rem;
     border-radius: 999px;
     background: var(--brand-color);
-    color: #fefefe;
+    color: var(--on-brand);
     font-weight: 600;
     letter-spacing: 0.02em;
     box-shadow: 0 4px 14px rgba(var(--brand-color-rgb), 0.35);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      background 0.25s ease;
 
     svg {
       width: 1rem;
@@ -60,14 +63,16 @@
 
     &:hover {
       transform: translateY(-2px);
-      background: color-mix(in srgb, var(--brand-color) 85%, black);
+      // Mixing toward --brand-color-strong darkens in light mode and
+      // brightens in dark mode, so --on-brand keeps its contrast either way.
+      background: color-mix(in srgb, var(--brand-color) 82%, var(--brand-color-strong));
       box-shadow: 0 6px 20px rgba(var(--brand-color-rgb), 0.45);
       text-decoration: none;
     }
 
     &:focus-visible {
-      outline: 2px solid var(--brand-color-light, #21e5e5);
-      outline-offset: 2px;
+      outline: 2px solid var(--brand-color);
+      outline-offset: 3px;
     }
   }
 

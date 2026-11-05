@@ -39,20 +39,19 @@ type Uniforms = {
 
 const PALETTE = {
   light: {
-    a: [0.96, 0.97, 0.99], // #f5f7fb-ish
-    b: [0.83, 0.9, 1.0], // soft cyan
-    c: [0.55, 0.78, 1.0], // brand-blue tint
-    d: [0.13, 0.9, 0.9], // brand-cyan-light
+    a: [0.975, 0.978, 0.99], // paper
+    b: [0.9, 0.94, 0.985], // cool haze
+    c: [0.72, 0.82, 0.96], // soft brand-blue
+    d: [0.42, 0.72, 0.82], // muted teal
     // Light mode keeps the airy feel: near-white watercolor planets and faint
     // dust-star specks, never saturated dark balls punching holes in the page.
-    planetA: [0.92, 0.96, 1.0],
-    planetB: [1.0, 1.0, 1.0],
+    planetA: [0.88, 0.92, 0.99],
+    planetB: [0.97, 0.98, 1.0],
     starColor: [0.72, 0.8, 0.92],
-    starIntensity: 0.22,
-    // Light theme: lift the ambient floor so the dark side reads as pale
-    // watercolor, not 22% gray. Range still gives a hint of 3D shading.
-    ambientFloor: 0.78,
-    ambientRange: 0.22,
+    starIntensity: 0.14,
+    // Lift the ambient floor so the dark side reads as pale watercolor.
+    ambientFloor: 0.86,
+    ambientRange: 0.14,
   },
   dark: {
     a: [0.04, 0.05, 0.08], // near-black blue
@@ -390,7 +389,10 @@ export default function ShaderBackground() {
     applyPalette();
 
     const themeObserver = new MutationObserver(applyPalette);
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     // --- Pointer + scroll state ---
     const mouse = { x: 0.5, y: 0.5 };
