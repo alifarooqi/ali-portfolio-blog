@@ -1,0 +1,121 @@
+// Shared labeled CTA. Visual language is the site's existing project action
+// (gradient outline, 10px radius, uppercase 600 label) plus the blog/contact
+// solid-brand primary. Mobile-first sizing; the desktop tier matches the
+// project action button's larger padding and icon.
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s,
+    color 0.3s,
+    transform 0.2s;
+
+  @media (min-width: 430px) {
+    gap: 0.625rem;
+  }
+
+  @media (min-width: 768px) {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.88rem;
+  }
+
+  &:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-color);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+  }
+
+  &__icon {
+    display: inline-flex;
+    // Drives the global svg.lucide { width/height: 1em } sizing.
+    font-size: 0.95rem;
+    transition: transform 0.25s ease;
+
+    @media (min-width: 430px) {
+      font-size: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      font-size: 1.1rem;
+    }
+  }
+
+  // Trailing icons that imply "open" (e.g. ArrowUpRight) nudge diagonally,
+  // matching the old `.arrow-nudge` treatment.
+  &--icon-after:hover &__icon,
+  &--icon-after:focus-visible &__icon {
+    transform: translate(0.18em, -0.18em);
+  }
+
+  // Solid brand surface — the main action in its area.
+  &--primary {
+    background: var(--brand-color);
+    border-color: var(--brand-color);
+    color: var(--on-brand);
+
+    &:hover {
+      // Mixing toward --brand-color-strong darkens in light mode and brightens
+      // in dark mode, so --on-brand keeps its contrast either way.
+      background: color-mix(in srgb, var(--brand-color) 82%, var(--brand-color-strong));
+      border-color: color-mix(in srgb, var(--brand-color) 82%, var(--brand-color-strong));
+      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 28%, transparent);
+      color: var(--on-brand);
+    }
+  }
+
+  // Brand-tinted gradient outline — secondary actions.
+  &--secondary {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--brand-color-rgb), 0.25) 0%,
+      rgba(var(--brand-color-rgb), 0.05) 100%
+    );
+    border-color: rgba(var(--brand-color-rgb), 0.4);
+    color: var(--text-primary);
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(var(--brand-color-rgb), 0.45) 0%,
+        rgba(var(--brand-color-rgb), 0.15) 100%
+      );
+      border-color: var(--brand-color);
+      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 28%, transparent);
+      color: var(--text-primary);
+    }
+
+    .button__icon {
+      color: var(--brand-color-ink);
+    }
+  }
+}
