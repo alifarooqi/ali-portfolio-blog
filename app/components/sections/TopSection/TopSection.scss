@@ -48,6 +48,16 @@
       margin: 0.5rem 0 0;
       color: var(--text-secondary);
     }
+
+    // CTA layout only — surface, type, icon spacing, hover, and focus styling
+    // live in the shared <Button> component.
+    &__actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
   }
 
   .signature {
@@ -110,6 +120,16 @@
   }
 }
 
+// Mobile-first: the hero copy is centered below 769px, so the CTAs are too.
+// On wider viewports the copy is left-aligned — match that alignment, as
+// Atlassian's button guidance recommends for left-aligned groups.
+@media screen and (min-width: 769px) {
+  .top-section .intro__actions {
+    justify-content: flex-start;
+    margin-top: 2rem;
+  }
+}
+
 @media screen and (max-width: 1300px) {
   .top-section {
     .intro {
@@ -121,6 +141,9 @@
 @media screen and (max-width: 768px) {
   .top-section {
     flex-direction: column;
+    // Reserve room for the fixed section-nav dots at the bottom edge so the
+    // hero CTAs don't collide with them on short viewports (e.g. 320×568).
+    padding-bottom: 6rem;
 
     .intro {
       text-align: center;

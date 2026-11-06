@@ -8,11 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Hero CTAs: "Blogs" (links to `/blog`) and "Projects" (smooth-scrolls to the projects section), each with a leading icon, using the new shared `Button` component.
 - Personal-data guard in CI: a new `guard-personal-data` job greps every PR diff for the patterns stored in the `PERSONAL_DATA_PATTERNS` repo variable and fails the build if any leak. The patterns are intentionally not inlined in the workflow file so the file stays safe to view publicly.
 - `reactStrictMode: true` in `next.config.mjs`.
 
 ### Changed
 
+- All labeled CTAs now render through one shared `app/components/Button` component: the hero actions, project "See source" links, Contact "Email me", and the blog post's Medium link. It owns surface variants, type scale, icon spacing, hover lift, sound, focus ring, and internal/external link behavior; icon-only controls keep `CircleButton`, while pagination dots and carousel arrows remain specialized control primitives.
 - `CommonConfig` is now the single source of truth for site identity — `app/layout.tsx`, `app/og/route.tsx`, `app/sitemap.ts`, `app/blog/[slug]/page.tsx`, `app/components/AboutWriter.tsx`, `app/components/sections/TopSection/TopSection.tsx`, and `app/components/sections/ContactSection/ContactSection.tsx` all read from it instead of carrying duplicate strings.
 - `lib/medium.ts` no longer falls back to a hardcoded username; `MEDIUM_USERNAME` defaults to `undefined`, which the empty-string guard in `getMediumPosts` already handles. No fallback default in code — never silently serve someone else's snapshot.
 - Medium feed snapshot is content-addressed — `lib/medium-list.json` (index) + `lib/posts-data/<slug>.json` (per-post content) — refreshed by the merge-on-hash script at `.agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs` with an `npm run refresh:medium` shortcut; the raw-RSS `scripts/refresh-medium-feed.mjs` and `lib/medium-feed.json` are gone.

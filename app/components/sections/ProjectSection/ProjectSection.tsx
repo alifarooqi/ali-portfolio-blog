@@ -4,6 +4,7 @@ import React, { forwardRef, useCallback, useEffect, useRef, useState } from "rea
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import Button from "../../Button/Button";
 import Section from "../../Section/Section";
 import SectionConfig from "../../../config/SectionConfig";
 import { TiltCard } from "../../TiltCard/TiltCard";
@@ -210,17 +211,16 @@ const ProjectSection = forwardRef<HTMLDivElement>((_, ref) => {
           {activeProject.links.length > 0 && (
             <div className="project-inspect-buttons">
               {activeProject.links.map((link) => (
-                <a
+                <Button
                   key={link.link}
                   href={link.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-action-button"
-                  onMouseEnter={() => playSound("hover")}
+                  external
+                  variant="secondary"
+                  icon={link.icon}
+                  className="project-inspect-button"
                 >
-                  <span className="project-action-icon">{link.icon}</span>
-                  <span className="project-action-text">{link.tooltip}</span>
-                </a>
+                  {link.tooltip}
+                </Button>
               ))}
             </div>
           )}
