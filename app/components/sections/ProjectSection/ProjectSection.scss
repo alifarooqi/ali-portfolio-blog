@@ -288,7 +288,8 @@
     }
   }
 
-  // Buttons wrapper — stacks vertically on mobile, row on desktop.
+  // Buttons wrapper — stacks vertically on mobile, row on desktop. The Button
+  // component owns surface/type/hover; this owns only layout.
   .project-inspect-buttons {
     display: flex;
     flex-direction: column;
@@ -297,85 +298,10 @@
     gap: 15px;
     margin-top: 5px;
 
-    .project-action-button {
+    .project-inspect-button {
       width: 100%;
       max-width: 300px;
       flex: 0 0 auto;
-    }
-  }
-
-  .project-action-button {
-    flex: 0 1 220px;
-    max-width: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: linear-gradient(
-      135deg,
-      rgba(var(--brand-color-rgb), 0.25) 0%,
-      rgba(var(--brand-color-rgb), 0.05) 100%
-    );
-    border: 1px solid rgba(var(--brand-color-rgb), 0.4);
-    // Mobile-first: smaller padding/type/icon on small screens; layer up
-    // via min-width tiers at 430px (phablet) and 768px (desktop).
-    padding: 8px 14px;
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.05rem;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition:
-      background 0.3s,
-      border-color 0.3s,
-      box-shadow 0.3s,
-      transform 0.2s;
-
-    .project-action-icon {
-      display: flex;
-      align-items: center;
-      color: var(--brand-color-ink);
-
-      svg {
-        font-size: 0.95rem;
-      }
-    }
-
-    @media (min-width: 430px) {
-      padding: 10px 16px;
-      font-size: 0.82rem;
-      gap: 10px;
-
-      .project-action-icon svg {
-        font-size: 1rem;
-      }
-    }
-
-    @media (min-width: 768px) {
-      padding: 12px 20px;
-      font-size: 0.88rem;
-
-      .project-action-icon svg {
-        font-size: 1.1rem;
-      }
-    }
-
-    &:hover {
-      background: linear-gradient(
-        135deg,
-        rgba(var(--brand-color-rgb), 0.45) 0%,
-        rgba(var(--brand-color-rgb), 0.15) 100%
-      );
-      border-color: var(--brand-color);
-      box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 28%, transparent);
-      transform: translateY(-2px);
-      text-decoration: none;
-    }
-
-    &:active {
-      transform: translateY(0);
     }
   }
 }
@@ -416,9 +342,8 @@
       flex-direction: row;
       flex-wrap: wrap;
 
-      .project-action-button {
+      .project-inspect-button {
         width: auto;
-        // Restore row-layout width basis (button's own flex: 0 1 220px).
         flex: 0 1 220px;
       }
     }

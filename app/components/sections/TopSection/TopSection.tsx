@@ -4,9 +4,11 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 import { motion, useMotionValue, useSpring } from "motion/react";
+import Button from "../../Button/Button";
 import CircleButton from "../../CircleButton/CircleButton";
 import Magnetic from "../../Magnetic/Magnetic";
 import { useCursorMotionGate } from "../../animaiton/useCursorMotionGate";
+import { scrollToSection } from "@/lib/scrollToSection";
 import CommonConfig from "../../../config/CommonConfig";
 import { getIcon, IconKey } from "../../icons/Icons";
 import "./TopSection.scss";
@@ -101,6 +103,23 @@ const TopSection: React.FC = () => {
           className="intro__tagline"
           repeat={Infinity}
         />
+        {/* One primary CTA per area: Blogs is primary, Projects secondary. */}
+        <div className="intro__actions">
+          <Button href="/blog" icon={getIcon("blog")}>
+            Blogs
+          </Button>
+          <Button
+            href="#projects"
+            variant="secondary"
+            icon={getIcon("projectSection")}
+            onClick={(event) => {
+              event.preventDefault();
+              scrollToSection("projects");
+            }}
+          >
+            Projects
+          </Button>
+        </div>
       </div>
       <div className="social">
         {CommonConfig.social.map((socialDetails, index) => (
