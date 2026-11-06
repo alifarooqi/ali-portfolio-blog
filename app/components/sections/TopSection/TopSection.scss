@@ -49,117 +49,14 @@
       color: var(--text-secondary);
     }
 
-    // Hero CTAs reuse the site's existing button language: the project
-    // "See source" action (10px radius, 600 weight, uppercase, leading icon,
-    // gradient-outline surface) and the blog "Originally posted on Medium"
-    // CTA (solid brand surface). Keeping the pair on those shared patterns
-    // makes the hero feel native rather than like a second design system.
-    // The 2px focus ring is retained for keyboard accessibility.
+    // CTA layout only — surface, type, icon spacing, hover, and focus styling
+    // live in the shared <Button> component.
     &__actions {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 0.5rem;
       margin-top: 1.5rem;
-    }
-
-    &__action {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.625rem 1rem;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      line-height: 1.2;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition:
-        background 0.3s,
-        border-color 0.3s,
-        box-shadow 0.3s,
-        color 0.3s,
-        transform 0.2s;
-
-      @media (min-width: 430px) {
-        gap: 0.625rem;
-      }
-
-      @media (min-width: 768px) {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.88rem;
-      }
-
-      &:hover {
-        text-decoration: none;
-        transform: translateY(-2px);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--brand-color);
-        outline-offset: 2px;
-      }
-
-      &-icon {
-        display: inline-flex;
-        // Drives the global svg.lucide { width/height: 1em } sizing.
-        font-size: 0.95rem;
-
-        @media (min-width: 430px) {
-          font-size: 1rem;
-        }
-
-        @media (min-width: 768px) {
-          font-size: 1.1rem;
-        }
-      }
-
-      // Primary — solid brand surface, matching the blog CTA.
-      &--primary {
-        background: var(--brand-color);
-        border-color: var(--brand-color);
-        color: var(--on-brand);
-
-        &:hover {
-          // Mixing toward --brand-color-strong darkens in light mode and
-          // brightens in dark mode, so --on-brand keeps its contrast.
-          background: color-mix(in srgb, var(--brand-color) 82%, var(--brand-color-strong));
-          border-color: color-mix(in srgb, var(--brand-color) 82%, var(--brand-color-strong));
-          box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 28%, transparent);
-          color: var(--on-brand);
-        }
-      }
-
-      // Secondary — brand-tinted gradient outline, matching the project
-      // "See source" action.
-      &--secondary {
-        background: linear-gradient(
-          135deg,
-          rgba(var(--brand-color-rgb), 0.25) 0%,
-          rgba(var(--brand-color-rgb), 0.05) 100%
-        );
-        border-color: rgba(var(--brand-color-rgb), 0.4);
-        color: var(--text-primary);
-
-        &:hover {
-          background: linear-gradient(
-            135deg,
-            rgba(var(--brand-color-rgb), 0.45) 0%,
-            rgba(var(--brand-color-rgb), 0.15) 100%
-          );
-          border-color: var(--brand-color);
-          box-shadow: 0 0 15px color-mix(in srgb, var(--brand-color) 28%, transparent);
-          color: var(--text-primary);
-        }
-      }
     }
   }
 

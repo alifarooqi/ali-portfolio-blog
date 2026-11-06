@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import Button from "../../Button/Button";
 import Section from "../../Section/Section";
 import SectionConfig from "../../../config/SectionConfig";
 import CommonConfig, { getSocialLink } from "../../../config/CommonConfig";
@@ -31,10 +32,9 @@ const ContactSection = forwardRef<HTMLDivElement>((_, ref) => (
       </span>
       <h3 className="contact__heading">Let&apos;s build something together</h3>
       <p className="contact__lede">Open to interesting work — drop a line and let&apos;s talk.</p>
-      <a className="contact__cta" href={emailHref}>
-        {getIcon("email")}
-        <span>Email me</span>
-      </a>
+      <Button href={emailHref} icon={getIcon("email")}>
+        Email me
+      </Button>
       <div className="contact__meta">
         {CommonConfig.location && (
           <span className="contact__location">{CommonConfig.location}</span>
