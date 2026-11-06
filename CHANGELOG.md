@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Hero CTAs: "Blogs" (links to `/blog`) and "Projects" (smooth-scrolls to the projects section), each with a leading icon. Styled with the site's existing button language — solid brand primary (blog CTA) and gradient-outline secondary (project "See source" action), 10px radius, 600 weight, uppercase labels, 8px icon gap, hover lift, and a 2px focus ring.
 - Personal-data guard in CI: a new `guard-personal-data` job greps every PR diff for the patterns stored in the `PERSONAL_DATA_PATTERNS` repo variable and fails the build if any leak. The patterns are intentionally not inlined in the workflow file so the file stays safe to view publicly.
 - `reactStrictMode: true` in `next.config.mjs`.
 

@@ -2,11 +2,13 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { TypeAnimation } from "react-type-animation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import CircleButton from "../../CircleButton/CircleButton";
 import Magnetic from "../../Magnetic/Magnetic";
 import { useCursorMotionGate } from "../../animaiton/useCursorMotionGate";
+import { scrollToSection } from "@/lib/scrollToSection";
 import CommonConfig from "../../../config/CommonConfig";
 import { getIcon, IconKey } from "../../icons/Icons";
 import "./TopSection.scss";
@@ -101,6 +103,30 @@ const TopSection: React.FC = () => {
           className="intro__tagline"
           repeat={Infinity}
         />
+        {/* Links, not buttons: both navigate. Atlassian's button guidance asks
+            for one primary CTA per area, so Blogs is primary and Projects is
+            the default (secondary) action. */}
+        <div className="intro__actions">
+          <Link href="/blog" className="intro__action intro__action--primary">
+            <span className="intro__action-icon" aria-hidden="true">
+              {getIcon("blog")}
+            </span>
+            Blogs
+          </Link>
+          <a
+            href="#projects"
+            className="intro__action intro__action--secondary"
+            onClick={(event) => {
+              event.preventDefault();
+              scrollToSection("projects");
+            }}
+          >
+            <span className="intro__action-icon" aria-hidden="true">
+              {getIcon("projectSection")}
+            </span>
+            Projects
+          </a>
+        </div>
       </div>
       <div className="social">
         {CommonConfig.social.map((socialDetails, index) => (
