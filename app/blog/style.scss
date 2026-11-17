@@ -24,5 +24,36 @@
   }
 }
 
+// Cover-art matte. Blog covers are third-party Medium artwork across many
+// aspect ratios, so the image is `contain`ed and this matte fills what is
+// left. The tone is a constant dark neutral rather than a theme token: the
+// artwork is the only content that should carry colour, and holding the matte
+// steady in both themes keeps a card looking identical from one theme to the
+// other (Atlassian's data-viz guidance — chrome stays neutral, content
+// carries hue). The brand wash and the lit top edge stop it reading as a flat
+// black box; both are additive over the matte, so contrast for the image is
+// unaffected.
+.blog-card__media {
+  --media-matte: #0d1117;
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--media-matte);
+  background-image:
+    // Top vignette: lifts the top edge off pure black, matching the lit-edge
+    // trick used by .glass-card::before.
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.08), transparent 70%),
+    // Faint brand glow from the bottom, theme-aware via --brand-color without
+    // introducing a second palette entry.
+    radial-gradient(
+        100% 100% at 50% 100%,
+        color-mix(in srgb, var(--brand-color) 22%, transparent),
+        transparent 65%
+      );
+  border-bottom: 1px solid var(--hairline);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
 // Per-section webp background removed — background is rendered globally by
 // <ShaderBackground />.
