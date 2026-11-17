@@ -1,6 +1,15 @@
 {
   "posts": [
     {
+      "slug": "ai-transformation-for-small-businesses-be-the-tortoise-not-the-hare-f95b2c1b69fe",
+      "hash": "ae9658785278736b9c0990f70e65ccebcbe4c8790d48c1313eda02b93339272f",
+      "title": "AI Transformation for Small Businesses: Be the Tortoise, Not the Hare",
+      "subtitle": " 61% of small businesses now use AI. Only 3.6% run it in a way that changes how the company works. The gap between those numbers is not a technology gap — it is…",
+      "image": "https://cdn-images-1.medium.com/max/1024/1*YT1WCf4MF5SkWhpht5DW1Q.png",
+      "date": "2026-11-17T04:51:15.000Z",
+      "link": "https://medium.com/@ali_farooqi/ai-transformation-for-small-businesses-be-the-tortoise-not-the-hare-f95b2c1b69fe"
+    },
+    {
       "slug": "a-new-digital-divide-the-ai-you-use-can-decide-what-jobs-you-get-df3e54856cf6",
       "hash": "78d89e62a5d20724cf185958740e70dbd0f4a1bfb4bd646510fe5fc31020b07f",
       "title": "A new digital divide: The AI you use can decide what jobs you get",
@@ -109,15 +118,6 @@
       "link": "https://medium.com/@ali_farooqi/make-your-app-china-ready-how-to-deploy-web-services-inside-the-great-chinese-firewall-5aab4e1b08bd"
     },
     {
-      "slug": "smarter-tolls-smoother-commutes-an-ai-idea-for-hong-kongs-traffic-6c67601587ac",
-      "hash": "9a6fe654b9f5d0826c7c7b6bf60697358dde5f194afdfa916d312e3d108e7c22",
-      "title": "Smarter Tolls, Smoother Commutes: An AI Idea for Hong Kong’s Traffic",
-      "subtitle": "     Smarter Tolls, Smoother Commutes: An AI Idea for Hong Kong’s Traffic  \n      * {\n        font-family: Georgia, Cambria, \"Times New Roman\", Times, serif;\n  …",
-      "image": "https://cdn-images-1.medium.com/max/800/1*FMWXnkjK0hxwziq7XCGTzQ.jpeg",
-      "date": "2025-10-01T15:27:59.604Z",
-      "link": "https://medium.com/@ali_farooqi/smarter-tolls-smoother-commutes-an-ai-idea-for-hong-kongs-traffic-6c67601587ac"
-    },
-    {
       "slug": "integrating-ejbca-community-with-scala-play-framework-using-cmp-72330b4da4e5",
       "hash": "d88ae634fd40ec7cf8a616f62a88119255bd367012414423f454fb48cb0c7663",
       "title": "Integrating EJBCA (Community) with Scala & Play Framework using CMP",
@@ -127,13 +127,13 @@
       "link": "https://medium.com/@ali_farooqi/integrating-ejbca-community-with-scala-play-framework-using-cmp-72330b4da4e5"
     },
     {
-      "slug": "ai-transformation-for-small-businesses-be-the-tortoise-not-the-hare-f95b2c1b69fe",
-      "hash": "ae9658785278736b9c0990f70e65ccebcbe4c8790d48c1313eda02b93339272f",
-      "title": "AI Transformation for Small Businesses: Be the Tortoise, Not the Hare",
-      "subtitle": " 61% of small businesses now use AI. Only 3.6% run it in a way that changes how the company works. The gap between those numbers is not a technology gap — it is…",
-      "image": "https://cdn-images-1.medium.com/max/1024/1*YT1WCf4MF5SkWhpht5DW1Q.png",
-      "date": "2026-11-17T04:51:15.000Z",
-      "link": "https://medium.com/@ali_farooqi/ai-transformation-for-small-businesses-be-the-tortoise-not-the-hare-f95b2c1b69fe"
+      "slug": "smarter-tolls-smoother-commutes-an-ai-idea-for-hong-kongs-traffic-6c67601587ac",
+      "hash": "9a6fe654b9f5d0826c7c7b6bf60697358dde5f194afdfa916d312e3d108e7c22",
+      "title": "Smarter Tolls, Smoother Commutes: An AI Idea for Hong Kong’s Traffic",
+      "subtitle": "     Smarter Tolls, Smoother Commutes: An AI Idea for Hong Kong’s Traffic  \n      * {\n        font-family: Georgia, Cambria, \"Times New Roman\", Times, serif;\n  …",
+      "image": "https://cdn-images-1.medium.com/max/800/1*FMWXnkjK0hxwziq7XCGTzQ.jpeg",
+      "date": "2025-10-01T15:27:59.604Z",
+      "link": "https://medium.com/@ali_farooqi/smarter-tolls-smoother-commutes-an-ai-idea-for-hong-kongs-traffic-6c67601587ac"
     }
   ]
 }
