@@ -1,5 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
+import mediumList from "../../lib/medium-list.json";
+
 // Errors we accept as non-fatal:
 // - `getMediumPosts` (lib/medium.ts) previously caught network failures and
 //   logged to the console before falling back to a snapshot. The lib no
@@ -55,6 +57,16 @@ test.describe("smoke", () => {
     }
 
     await expect(firstCard).toBeVisible();
+
+    // Newest-first is a read-time guarantee (lib/medium.ts sorts on `date`),
+    // not a property of the array order in medium-list.json — the refresh
+    // script appends new slugs, which used to render every new post at the
+    // bottom of the page (issue #126). Assert the first card is the newest
+    // entry, computed independently of the snapshot's stored order.
+    const newest = [...mediumList.posts].sort(
+      (a, b) => Date.parse(b.date ?? "") - Date.parse(a.date ?? "")
+    )[0];
+    await expect(firstCard.locator("h2")).toHaveText(newest.title);
 
     const href = await firstCard.getAttribute("href");
     expect(href).toMatch(/^\/blog\//);
