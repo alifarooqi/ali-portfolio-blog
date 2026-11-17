@@ -40,7 +40,7 @@ export default function BlogCard({ post }: { post: MediumPost }) {
             alt={post.title ?? ""}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-contain opacity-80 transition-opacity duration-300 group-hover:opacity-100"
+            className="object-contain opacity-80 transition-all duration-300 group-hover:opacity-100"
           />
         </div>
       )}
