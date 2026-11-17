@@ -31,13 +31,16 @@ export default function BlogCard({ post }: { post: MediumPost }) {
       onClick={() => playSound("select")}
     >
       {post.image && (
-        <div className="relative w-full h-48 overflow-hidden">
+        // `contain` (not `cover`) so third-party cover art of any aspect ratio
+        // is shown whole; the leftover space is filled by the card's dark
+        // media matte (.blog-card__media) rather than by cropping the image.
+        <div className="blog-card__media h-48 md:h-52">
           <Image
             src={post.image}
             alt={post.title ?? ""}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover opacity-80 transition-all duration-300 group-hover:opacity-100"
+            className="object-contain opacity-80 transition-all duration-300 group-hover:opacity-100"
           />
         </div>
       )}
