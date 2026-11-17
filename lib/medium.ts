@@ -38,11 +38,37 @@ function readList(): ListEntry[] {
   return Array.isArray(items) ? (items as ListEntry[]) : [];
 }
 
-// Returns the index for `/blog`: one row per post in the curated list, in
-// stored order. No network, no parsing — the refresh script is responsible
+// Parses an entry's `date` (ISO 8601 from RSS) to epoch millis, or `null` when
+// it is missing/unparseable so those entries can be sorted to the end.
+function timestampOf(entry: { date?: string }): number | null {
+  const parsed = Date.parse(entry.date ?? "");
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+// Ordering is presentation, not storage. The refresh script appends new slugs
+// to the end of `medium-list.json`, and the documented backfill flow tells you
+// to paste entries there too — so the stored array is append-ordered. Reading
+// it verbatim put every newly published post at the *bottom* of `/blog`.
+// Sorting here makes newest-first a guarantee for every consumer (`/blog`,
+// `sitemap`, `generateStaticParams`) regardless of how the snapshot was
+// written; the refresh script also writes the snapshot in this order so diffs
+// read the same way. `sort` is stable, so equal dates keep their stored order.
+function newestFirst<T extends { date?: string }>(entries: readonly T[]): T[] {
+  return [...entries].sort((a, b) => {
+    const aTime = timestampOf(a);
+    const bTime = timestampOf(b);
+    if (aTime === null && bTime === null) return 0;
+    if (aTime === null) return 1;
+    if (bTime === null) return -1;
+    return bTime - aTime;
+  });
+}
+
+// Returns the index for `/blog`: one row per post in the curated list,
+// newest-first. No network, no parsing — the refresh script is responsible
 // for keeping `medium-list.json` and `lib/posts-data/` in sync with Medium.
 export async function getMediumPosts(): Promise<MediumPost[]> {
-  return readList().map((entry) => ({
+  return newestFirst(readList()).map((entry) => ({
     title: entry.title,
     link: entry.link,
     date: entry.date,
