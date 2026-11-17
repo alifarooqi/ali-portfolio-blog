@@ -12,8 +12,15 @@
 //      matches, do nothing (no file write, no list mutation).
 //   4. If the hash differs (new post OR Medium content changed), write
 //      `lib/posts-data/<slug>.json` with the new content and update the list
-//      entry in place, preserving its position.
-//   5. Append new slugs (not yet in the list) to the end of `posts`.
+//      entry in place.
+//   5. Add new slugs (not yet in the list) to `posts`.
+//   6. Write `posts` newest-first by `date`.
+//
+// Ordering note: `getMediumPosts()` in lib/medium.ts sorts newest-first at
+// read time, so the blog index is correct even if this file's array order
+// drifts. Writing the snapshot in display order too keeps diffs readable — a
+// new post appears as an insertion at the top rather than an append at the
+// bottom, which is exactly the confusion that made new posts render last.
 //
 // Items in the list whose slug is NOT in the live feed are kept (history is
 // never pruned by this script — solves Medium's ~10-item RSS cap from rotting
@@ -85,8 +92,29 @@ function readList() {
   }
 }
 
+// Epoch millis for an entry's `date`, or `null` when missing/unparseable so
+// those entries sort to the end.
+function timestampOf(entry) {
+  const parsed = Date.parse(entry?.date ?? "");
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+// Newest-first, matching the order `getMediumPosts()` serves (lib/medium.ts is
+// the authoritative sort; this one only keeps the committed file in the same
+// order). Stable, so equal or missing dates keep their relative order.
+function newestFirst(entries) {
+  return [...entries].sort((a, b) => {
+    const aTime = timestampOf(a);
+    const bTime = timestampOf(b);
+    if (aTime === null && bTime === null) return 0;
+    if (aTime === null) return 1;
+    if (bTime === null) return -1;
+    return bTime - aTime;
+  });
+}
+
 function writeList(list) {
-  fs.writeFileSync(LIST_PATH, JSON.stringify({ posts: list }, null, 2));
+  fs.writeFileSync(LIST_PATH, JSON.stringify({ posts: newestFirst(list) }, null, 2));
 }
 
 function writePostFile(slug, postFile) {
