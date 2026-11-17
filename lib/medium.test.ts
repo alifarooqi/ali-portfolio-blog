@@ -39,7 +39,7 @@ beforeEach(() => {
 });
 
 describe("getMediumPosts", () => {
-  it("returns one MediumPost per item in the curated list, in stored order", async () => {
+  it("maps one MediumPost per item in the curated list", async () => {
     mockList.current = {
       posts: [
         {
@@ -84,6 +84,57 @@ describe("getMediumPosts", () => {
         slug: "b-2",
       },
     ]);
+  });
+
+  // The refresh script appends new slugs to the end of the array, and manually
+  // backfilled entries get pasted there too, so the blog index must not depend
+  // on stored order. This is the regression from issue #126: a newly published
+  // post sat at the bottom of /blog until the next refresh shuffled the file.
+  it("returns posts newest-first even when the list is stored oldest-first", async () => {
+    mockList.current = {
+      posts: [
+        { slug: "oldest", hash: "h1", date: "2023-05-01T00:00:00.000Z" },
+        { slug: "middle", hash: "h2", date: "2024-06-01T00:00:00.000Z" },
+        { slug: "newest", hash: "h3", date: "2026-11-17T04:51:15.000Z" },
+      ],
+    };
+
+    const { getMediumPosts } = await import("./medium");
+    const posts = await getMediumPosts();
+
+    expect(posts.map((post) => post.slug)).toEqual(["newest", "middle", "oldest"]);
+  });
+
+  it("sorts entries with a missing or invalid date to the end", async () => {
+    mockList.current = {
+      posts: [
+        { slug: "undated", hash: "h1" },
+        { slug: "older", hash: "h2", date: "2024-01-01T00:00:00.000Z" },
+        { slug: "garbage-date", hash: "h3", date: "not-a-date" },
+        { slug: "newer", hash: "h4", date: "2025-01-01T00:00:00.000Z" },
+      ],
+    };
+
+    const { getMediumPosts } = await import("./medium");
+    const posts = await getMediumPosts();
+
+    // Stable: undated then garbage-date, in their stored relative order.
+    expect(posts.map((post) => post.slug)).toEqual(["newer", "older", "undated", "garbage-date"]);
+  });
+
+  it("keeps stored order for entries published at the same timestamp", async () => {
+    const date = "2024-01-01T00:00:00.000Z";
+    mockList.current = {
+      posts: [
+        { slug: "first", hash: "h1", date },
+        { slug: "second", hash: "h2", date },
+      ],
+    };
+
+    const { getMediumPosts } = await import("./medium");
+    const posts = await getMediumPosts();
+
+    expect(posts.map((post) => post.slug)).toEqual(["first", "second"]);
   });
 
   it("returns [] when the list is empty", async () => {

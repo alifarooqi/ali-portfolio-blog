@@ -85,7 +85,9 @@ const listEntry = {
 };
 
 console.log(`Wrote ${path.relative(ROOT, target)}`);
-console.log("\nPaste this entry at the end of the `posts` array in lib/medium-list.json:\n");
+console.log(
+  "\nPaste this entry into the `posts` array in lib/medium-list.json (position doesn't matter — `getMediumPosts()` serves newest-first, and re-running the refresh script rewrites the array in that order):\n",
+);
 console.log(JSON.stringify(listEntry, null, 2));
 console.log("\nAfter saving medium-list.json, re-run scripts/refresh-feed.mjs to confirm the merge is a no-op:");
 console.log("  MEDIUM_USERNAME=ali_farooqi node .agents/skills/medium-feed-refresh/scripts/refresh-feed.mjs");
